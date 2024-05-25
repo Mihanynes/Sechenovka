@@ -1,4 +1,4 @@
-module github.com/wpcodevo/golang-fiber-jwt
+module Sechenovka
 
 go 1.22
 
@@ -9,8 +9,13 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.19.0
-	gorm.io/driver/postgres v1.5.7
+	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.10
+)
+
+require (
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
 
 require (
@@ -19,11 +24,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect

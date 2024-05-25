@@ -1,14 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
+	"Sechenovka/initializers"
+	"Sechenovka/models"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt"
-	"github.com/wpcodevo/golang-fiber-jwt/initializers"
-	"github.com/wpcodevo/golang-fiber-jwt/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -40,7 +38,6 @@ func SignUpUser(c *fiber.Ctx) error {
 		Name:     payload.Name,
 		Email:    strings.ToLower(payload.Email),
 		Password: string(hashedPassword),
-		Photo:    &payload.Photo,
 	}
 
 	result := initializers.DB.Create(&newUser)
@@ -64,7 +61,6 @@ func SignInUser(c *fiber.Ctx) error {
 	errors := models.ValidateStruct(payload)
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
-
 	}
 
 	var user models.User
@@ -78,36 +74,7 @@ func SignInUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or Password"})
 	}
 
-	config, _ := initializers.LoadConfig(".")
-
-	tokenByte := jwt.New(jwt.SigningMethodHS256)
-
-	now := time.Now().UTC()
-	claims := tokenByte.Claims.(jwt.MapClaims)
-
-	claims["sub"] = user.ID
-	claims["role"] = user.Role
-	claims["exp"] = now.Add(config.JwtExpiresIn).Unix()
-	claims["iat"] = now.Unix()
-	claims["nbf"] = now.Unix()
-
-	tokenString, err := tokenByte.SignedString([]byte(config.JwtSecret))
-
-	if err != nil {
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": fmt.Sprintf("generating JWT Token failed: %v", err)})
-	}
-
-	c.Cookie(&fiber.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Path:     "/",
-		MaxAge:   config.JwtMaxAge * 60,
-		Secure:   false,
-		HTTPOnly: true,
-		Domain:   "localhost",
-	})
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "token": tokenString})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Signed in successfully"})
 }
 
 func LogoutUser(c *fiber.Ctx) error {
