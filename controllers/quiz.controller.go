@@ -27,6 +27,7 @@ func (qc *QuizController) GetQuestion() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		op := "controllers/GetQuestion"
 		var answer models.Answer
+
 		body := ctx.Body()
 		err := json.Unmarshal(body, &answer)
 		if err != nil {
