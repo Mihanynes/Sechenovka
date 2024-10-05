@@ -41,6 +41,7 @@
       next_question_text: "EOF"
     - answer: "Почти каждый день"
       points: 3
+      next_question_text: "EOF"
     - answer: "Однократно"
       points: 1
       next_question_text: "EOF"

@@ -6,7 +6,7 @@ import (
 	"Sechenovka/internal/handlers/middleware"
 	questionshandler "Sechenovka/internal/handlers/questions"
 	authservice "Sechenovka/internal/service/auth"
-	"Sechenovka/internal/service/history_saver"
+	"Sechenovka/internal/service/history"
 	questionservice "Sechenovka/internal/service/questions"
 	"Sechenovka/storage"
 	"github.com/gofiber/fiber/v2"
@@ -35,8 +35,8 @@ func main() {
 	authService := authservice.New(logger, db)
 	authHandler := authhandler.New(authService)
 
-	historyStorage := history_saver.NewStorage(db)
-	//historySaver := history_saver.NewSaver(historyStorage)
+	historyStorage := history.NewStorage(db)
+	//historySaver := history.NewSaver(historyStorage)
 
 	//queue := queue.NewProcessQueue(10, historySaver)
 
@@ -61,6 +61,7 @@ func main() {
 	micro.Route("/questions", func(router fiber.Router) {
 		router.Get("/start", questionsHandler.StartQuiz)
 		router.Get("/question", questionsHandler.GetQuestion)
+		router.Get("/score", questionsHandler.GetScore)
 	})
 
 	log.Fatal(app.Listen(":8080"))

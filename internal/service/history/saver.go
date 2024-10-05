@@ -1,4 +1,4 @@
-package history_saver
+package history
 
 import (
 	"Sechenovka/internal/queue"

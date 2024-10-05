@@ -45,7 +45,6 @@ func (q *ProcessQueue) Add(item Message) {
 	q.data <- item
 }
 
-// Close закрывает очередь и завершает обработку
 func (q *ProcessQueue) Close() {
 	close(q.data)
 	q.wg.Wait()

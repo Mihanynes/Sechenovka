@@ -1,9 +1,12 @@
 package question
 
-import "Sechenovka/internal/service/history_saver"
+import (
+	"Sechenovka/internal/service/history"
+	"errors"
+)
 
 type QuestionIn struct {
-	CorrelationID string `json:"correlation_id"`
+	CorrelationId string `json:"correlation_id"`
 	QuestionText  string `json:"next_question_text"`
 	Points        int    `json:"points"`
 	Answer        string `json:"answer"`
@@ -21,12 +24,37 @@ type Option struct {
 	NextQuestionText string `json:"next_question_text"`
 }
 
-func (q *QuestionIn) ToUserResponse() *history_saver.UserResponse {
-	return &history_saver.UserResponse{
-		Response: history_saver.Response{
+type ScoreResponse struct {
+	CorrelationId string `json:"correlation_id"`
+	Score         int    `json:"score"`
+}
+
+func (q *QuestionIn) Validate() error {
+	if q.QuestionText == "" {
+		return errors.New("question text is required")
+	}
+	if q.CorrelationId == "" {
+		return errors.New("correlation id is required")
+	}
+	if q.Answer == "" {
+		return errors.New("answer is required")
+	}
+	return nil
+}
+
+func (q *QuestionIn) ValidateCorrelationId() error {
+	if q.CorrelationId == "" {
+		return errors.New("correlation id is required")
+	}
+	return nil
+}
+
+func (q *QuestionIn) ToUserResponse() *history.UserResponse {
+	return &history.UserResponse{
+		Response: history.Response{
 			Answer: q.Answer,
 			Score:  q.Points,
 		},
-		CorrelationId: q.CorrelationID,
+		CorrelationId: q.CorrelationId,
 	}
 }

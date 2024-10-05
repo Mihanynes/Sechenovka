@@ -36,6 +36,9 @@ func (h *handler) GetQuestion(c *fiber.Ctx) error {
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
+	if err = questionIn.Validate(); err != nil {
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	err = h.historyStorage.SaveUserResponse(questionIn.ToUserResponse())
 	if err != nil {
@@ -48,6 +51,24 @@ func (h *handler) GetQuestion(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(modelToDto(question))
+}
+
+func (h *handler) GetScore(c *fiber.Ctx) error {
+	var questionIn dto.QuestionIn
+	err := c.BodyParser(&questionIn)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if err = questionIn.ValidateCorrelationId(); err != nil {
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	correlationId := questionIn.CorrelationId
+	score, err := h.historyStorage.GetUserScore(correlationId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"result": dto.ScoreResponse{Score: score, CorrelationId: correlationId}})
 }
 
 func modelToDto(question *models.Question) dto.QuestionOut {
