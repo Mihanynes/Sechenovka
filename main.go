@@ -1,9 +1,12 @@
 package main
 
 import (
+	"Sechenovka/config"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
+	questionshandler "Sechenovka/internal/handlers/questions"
 	authservice "Sechenovka/internal/service/auth"
+	questionservice "Sechenovka/internal/service/questions"
 	"Sechenovka/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -29,10 +32,21 @@ func main() {
 	authService := authservice.New(logger)
 	authHandler := authhandler.New(authService)
 
+	questionsConfig, err := config.GetQuestionsConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	questionsService := questionservice.New(questionsConfig)
+	questionsHandler := questionshandler.New(questionsService)
+
 	micro.Route("/auth", func(router fiber.Router) {
 		router.Post("/register", authHandler.Register)
 		router.Post("/login", authHandler.Login)
 		router.Get("/logout", middleware.BasicAuth, authHandler.LogoutUser)
+	})
+
+	micro.Route("/questions", func(router fiber.Router) {
+		router.Get("/question", questionsHandler.GetQuestion)
 	})
 
 	log.Fatal(app.Listen(":8080"))

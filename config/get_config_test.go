@@ -5,7 +5,7 @@ import (
 )
 
 func Test_ParseYAML(t *testing.T) {
-	questions, err := ParseYAML("./testdata/questions.yaml")
+	questions, err := parseYAML("./testdata/questions.yaml")
 	if err != nil {
 		t.Fatalf("Ошибка при парсинге YAML: %v", err)
 	}

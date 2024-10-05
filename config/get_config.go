@@ -6,7 +6,15 @@ import (
 	"os"
 )
 
-func ParseYAML(filename string) ([]*models.Question, error) {
+func GetQuestionsConfig() ([]*models.Question, error) {
+	config, err := parseYAML("config/questions_v2.yaml")
+	if err != nil {
+		return nil, err
+	}
+	return config, nil
+}
+
+func parseYAML(filename string) ([]*models.Question, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err

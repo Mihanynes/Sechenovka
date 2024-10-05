@@ -1,108 +1,121 @@
-questions:
-  - text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
-    options:
-      - answer: "да"
-        points: 0
-        next_question_text: "Когда возникают боли?"
-      - answer: "нет"
-        points: 0
-        next_question_text: "Есть ли у вас одышка?"
+- text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
+  options:
+    - answer: "да"
+      points: 0
+      next_question_text: "Когда возникают боли?"
+    - answer: "нет"
+      points: 0
+      next_question_text: "Есть ли у вас одышка?"
 
-  - text: "Когда возникают боли?"
-    options:
-      - answer: "При покое"
-        points: 2
-        next_question_text: "Как долго длится боль?"
-      - answer: "При ходьбе"
-        points: 1
-        next_question_text: "Как долго длится боль?"
-      - answer: "При поворотах тела"
-        points: 0
-        next_question_text: "Как долго длится боль?"
+- text: "Когда возникают боли?"
+  options:
+    - answer: "При покое"
+      points: 2
+      next_question_text: "Как долго длится боль?"
+    - answer: "При ходьбе"
+      points: 1
+      next_question_text: "Как долго длится боль?"
+    - answer: "При поворотах тела"
+      points: 0
+      next_question_text: "Как долго длится боль?"
 
-  - text: "Как долго длится боль?"
-    options:
-      - answer: "Больше часа"
-        points: 3
-        next_question_text: "Как часто они возникают?"
-      - answer: "15-60 минут"
-        points: 2
-        next_question_text: "Как часто они возникают?"
-      - answer: "Менее 15 минут"
-        points: 1
-        next_question_text: "Как часто они возникают?"
+- text: "Как долго длится боль?"
+  options:
+    - answer: "Больше часа"
+      points: 3
+      next_question_text: "Как часто они возникают?"
+    - answer: "15-60 минут"
+      points: 2
+      next_question_text: "Как часто они возникают?"
+    - answer: "Менее 15 минут"
+      points: 1
+      next_question_text: "Как часто они возникают?"
 
-  - text: "Как часто они возникают?"
-    options:
-      - answer: "Несколько раз в месяц"
-        points: 1
-      - answer: "Несколько раз в неделю"
-        points: 2
-      - answer: "Почти каждый день"
-        points: 3
-      - answer: "Однократно"
-        points: 1
+- text: "Как часто они возникают?"
+  options:
+    - answer: "Несколько раз в месяц"
+      points: 1
+      next_question_text: "EOF"
+    - answer: "Несколько раз в неделю"
+      points: 2
+      next_question_text: "EOF"
+    - answer: "Почти каждый день"
+      points: 3
+    - answer: "Однократно"
+      points: 1
+      next_question_text: "EOF"
 
-  - text: "Есть ли у вас одышка?"
-    options:
-      - answer: "да"
-        points: 0
-        next_question_text: "Выберите нужное"
-      - answer: "нет"
-        points: 0
-        next_question_text: "Есть ли у вас отеки?"
+- text: "Есть ли у вас одышка?"
+  options:
+    - answer: "да"
+      points: 0
+      next_question_text: "Выберите нужное"
+    - answer: "нет"
+      points: 0
+      next_question_text: "Есть ли у вас отеки?"
 
-  - text: "Выберите нужное"
-    options:
-      - answer: "Она усилилась?"
-        points: 2
-        next_question_text: "Есть ли у вас отеки?"
-      - answer: "Не изменилась?"
-        points: 0
-        next_question_text: "Есть ли у вас отеки?"
-      - answer: "Появилась вновь?"
-        points: 3
-        next_question_text: "Есть ли у вас отеки?"
+- text: "Выберите нужное"
+  options:
+    - answer: "Она усилилась?"
+      points: 2
+      next_question_text: "Есть ли у вас отеки?"
+    - answer: "Не изменилась?"
+      points: 0
+      next_question_text: "Есть ли у вас отеки?"
+    - answer: "Появилась вновь?"
+      points: 3
+      next_question_text: "Есть ли у вас отеки?"
 
-  - text: "Есть ли у вас отеки?"
-    options:
-      - answer: "да"
-        points: 0
-        next_question_text: "Выберите нужное (отеки)"
-      - answer: "нет"
-        points: 0
-        next_question_text: "Есть ли у вас кровоточивость?"
+- text: "Есть ли у вас отеки?"
+  options:
+    - answer: "да"
+      points: 0
+      next_question_text: "Выберите нужное (отеки)"
+    - answer: "нет"
+      points: 0
+      next_question_text: "Есть ли у вас кровоточивость?"
 
-  - text: "Выберите нужное (отеки)"
-    options:
-      - answer: "Они усилились?"
-        points: 2
-      - answer: "Не изменились?"
-        points: 0
-      - answer: "Появились вновь?"
-        points: 3
+- text: "Выберите нужное (отеки)"
+  options:
+    - answer: "Они усилились?"
+      points: 2
+      next_question_text: "EOF"
+    - answer: "Не изменились?"
+      points: 0
+      next_question_text: "EOF"
+    - answer: "Появились вновь?"
+      points: 3
+      next_question_text: "EOF"
 
-  - text: "Есть ли у вас кровоточивость?"
-    options:
-      - answer: "да"
-        points: 0
-        next_question_text: "Как она проявляется?"
-      - answer: "нет"
-        points: 0
+- text: "Есть ли у вас кровоточивость?"
+  options:
+    - answer: "да"
+      points: 0
+      next_question_text: "Как она проявляется?"
+    - answer: "нет"
+      points: 0
+      next_question_text: "EOF"
 
-  - text: "Как она проявляется? (Выберите несколько вариантов)"
-    options:
-      - answer: "Черный жидкий кал"
-        points: 5
-      - answer: "Кровь в кале"
-        points: 4
-      - answer: "Моча цвета мясных помоев"
-        points: 3
-      - answer: "Носовые кровотечения"
-        points: 2
-      - answer: "Беспричинное образование синяков на коже"
-        points: 1
-      - answer: "Кровянистые выделения из влагалища"
-        points: 2
-      - answer: "Иное"
-        points: 0
+- text: "Как она проявляется? (Выберите несколько вариантов)"
+  options:
+    - answer: "Черный жидкий кал"
+      points: 5
+      next_question_text: "EOF"
+    - answer: "Кровь в кале"
+      points: 4
+      next_question_text: "EOF"
+    - answer: "Моча цвета мясных помоев"
+      points: 3
+      next_question_text: "EOF"
+    - answer: "Носовые кровотечения"
+      points: 2
+      next_question_text: "EOF"
+    - answer: "Беспричинное образование синяков на коже"
+      points: 1
+      next_question_text: "EOF"
+    - answer: "Кровянистые выделения из влагалища"
+      points: 2
+      next_question_text: "EOF"
+    - answer: "Иное"
+      points: 0
+      next_question_text: "EOF"
