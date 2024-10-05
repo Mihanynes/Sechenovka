@@ -23,7 +23,7 @@ func main() {
 	app.Mount("/api", micro)
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",
+		AllowOrigins:     "http://localhost:8080",
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, DELETE",
 		AllowCredentials: true,
@@ -49,12 +49,15 @@ func main() {
 
 	middleware := middleware.New(db)
 
+	micro.Static("/", "./public/images/img.png")
+	micro.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")
+	})
 	micro.Route("/auth", func(router fiber.Router) {
 		router.Post("/register", authHandler.Register)
 		router.Post("/login", authHandler.Login)
 		router.Get("/logout", middleware.BasicAuth, authHandler.LogoutUser)
 	})
-
 	micro.Route("/questions", func(router fiber.Router) {
 		router.Get("/start", questionsHandler.StartQuiz)
 		router.Get("/question", questionsHandler.GetQuestion)
