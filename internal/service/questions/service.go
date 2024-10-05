@@ -17,15 +17,15 @@ func New(questions []*models.Question) *service {
 	}
 }
 
-func (s *service) GetOptionsByQuestionText(questionText string) (*models.Question, error) {
-	if questionText == "" {
-		return s.getOptionsByQuestionText(firstQuestion)
-	}
-	return s.getOptionsByQuestionText(questionText)
+func (s *service) GetFirstQuestion() (*models.Question, error) {
+	return s.GetOptionsByQuestionText(firstQuestion)
 }
 
 // Получение опций по тексту вопроса
-func (s *service) getOptionsByQuestionText(questionText string) (*models.Question, error) {
+func (s *service) GetOptionsByQuestionText(questionText string) (*models.Question, error) {
+	if questionText == "EOF" {
+		return &models.Question{Text: "Тест завершен"}, nil
+	}
 	for _, question := range s.questions {
 		if question.Text == questionText {
 			return question, nil

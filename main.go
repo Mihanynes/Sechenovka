@@ -5,7 +5,6 @@ import (
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
 	questionshandler "Sechenovka/internal/handlers/questions"
-	"Sechenovka/internal/queue"
 	authservice "Sechenovka/internal/service/auth"
 	"Sechenovka/internal/service/history_saver"
 	questionservice "Sechenovka/internal/service/questions"
@@ -37,16 +36,16 @@ func main() {
 	authHandler := authhandler.New(authService)
 
 	historyStorage := history_saver.NewStorage(db)
-	historySaver := history_saver.NewSaver(historyStorage)
+	//historySaver := history_saver.NewSaver(historyStorage)
 
-	queue := queue.NewProcessQueue(10, historySaver)
+	//queue := queue.NewProcessQueue(10, historySaver)
 
 	questionsConfig, err := config.GetQuestionsConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 	questionsService := questionservice.New(questionsConfig)
-	questionsHandler := questionshandler.New(questionsService, queue)
+	questionsHandler := questionshandler.New(questionsService, historyStorage)
 
 	middleware := middleware.New(db)
 
@@ -57,6 +56,7 @@ func main() {
 	})
 
 	micro.Route("/questions", func(router fiber.Router) {
+		router.Get("/start", questionsHandler.StartQuiz)
 		router.Get("/question", questionsHandler.GetQuestion)
 	})
 

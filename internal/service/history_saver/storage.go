@@ -15,7 +15,6 @@ func NewStorage(db *gorm.DB) *historyStorage {
 }
 
 func (s *historyStorage) SaveUserResponse(userResponse *UserResponse) error {
-
 	if err := s.db.Create(userResponse).Error; err != nil {
 		return err
 	}

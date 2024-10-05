@@ -5,14 +5,15 @@ import "Sechenovka/internal/service/history_saver"
 type QuestionIn struct {
 	UserID        int    `json:"user_id"`
 	CorrelationID string `json:"correlation_id"`
-	QuestionText  string `json:"question_text"`
+	QuestionText  string `json:"next_question_text"`
 	Points        int    `json:"points"`
 	Answer        string `json:"answer"`
 }
 
 type QuestionOut struct {
-	QuestionText string   `json:"question_text"`
-	Options      []Option `json:"options"`
+	QuestionText  string   `json:"question_text,omitempty"`
+	Options       []Option `json:"options,omitempty"`
+	CorrelationID string   `json:"correlation_id,omitempty"`
 }
 
 type Option struct {
