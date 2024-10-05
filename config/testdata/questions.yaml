@@ -1,0 +1,19 @@
+- text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
+  options:
+    - answer: "да"
+      points: 0
+      next_question_text: "Когда возникают боли?"
+    - answer: "нет"
+      points: 0
+
+- text: "Когда возникают боли?"
+  options:
+    - answer: "При покое"
+      points: 2
+      next_question_text: "Как долго длится боль?"
+    - answer: "При ходьбе"
+      points: 1
+      next_question_text: "Как долго длится боль?"
+    - answer: "При поворотах тела"
+      points: 0
+      next_question_text: "Как долго длится боль?"

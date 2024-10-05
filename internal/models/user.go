@@ -1,0 +1,9 @@
+package models
+
+type User struct {
+	Id       int    `gorm:"type:int;primaryKey"`
+	Username string `gorm:"type:varchar(100);not null"`
+	Email    string `gorm:"type:varchar(100);uniqueIndex;not null"`
+	Password string `gorm:"type:varchar(100);not null"`
+	Role     string `gorm:"type:varchar(50);default:'user';not null"`
+}

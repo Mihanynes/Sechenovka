@@ -1,30 +1,21 @@
 package main
 
 import (
-	"Sechenovka/controllers"
-	"Sechenovka/initializers"
-	"Sechenovka/lib"
-	"Sechenovka/middleware"
-	"fmt"
+	authhandler "Sechenovka/internal/handlers/auth"
+	"Sechenovka/internal/handlers/middleware"
+	authservice "Sechenovka/internal/service/auth"
+	"Sechenovka/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"log"
+	"log/slog"
+	"os"
 )
 
 func main() {
 	app := fiber.New()
 	micro := fiber.New()
-
-	quiz, err := lib.ReadYaml(lib.GetAbsolutePath("config/questions.yaml"))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	quizController := controllers.NewQuizController(quiz)
-
-	fmt.Println(quiz)
-
 	app.Mount("/api", micro)
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
@@ -34,17 +25,19 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
+	authService := authservice.New(logger)
+	authHandler := authhandler.New(authService)
+
 	micro.Route("/auth", func(router fiber.Router) {
-		router.Post("/register", controllers.SignUpUser)
-		router.Post("/login", controllers.SignInUser)
-		router.Get("/logout", middleware.BasicAuth, controllers.LogoutUser)
+		router.Post("/register", authHandler.Register)
+		router.Post("/login", authHandler.Login)
+		router.Get("/logout", middleware.BasicAuth, authHandler.LogoutUser)
 	})
 
-	micro.Post("/questions", middleware.BasicAuth, quizController.GetQuestion())
-
-	log.Fatal(app.Listen(":8000"))
+	log.Fatal(app.Listen(":8080"))
 }
 
 func init() {
-	initializers.ConnectDB()
+	storage.ConnectDB()
 }

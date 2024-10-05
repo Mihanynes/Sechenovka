@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"Sechenovka/models"
+	"Sechenovka/internal/models/quiz"
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
@@ -13,20 +13,20 @@ import (
 	"time"
 )
 
-const answersDBPath = "database/userAnswersDB/"
+const answersDBPath = "storage/user_answers/"
 
 type QuizController struct {
-	Quiz *models.Quiz
+	Quiz *quiz.Quiz
 }
 
-func NewQuizController(q *models.Quiz) *QuizController {
+func NewQuizController(q *quiz.Quiz) *QuizController {
 	return &QuizController{Quiz: q}
 }
 
 func (qc *QuizController) GetQuestion() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		op := "controllers/GetQuestion"
-		var answer models.Answer
+		op := "handlers/GetQuestion"
+		var answer quiz.Answer
 
 		body := ctx.Body()
 		err := json.Unmarshal(body, &answer)
@@ -42,8 +42,8 @@ func (qc *QuizController) GetQuestion() fiber.Handler {
 
 		nextQuestionId := answer.NextQuestionId
 		currentQuestionId := answer.QuestionId
-		currentQuestionText := models.GetQuestionById(qc.Quiz, currentQuestionId).Question.QuestionText
-		if nextQuestionId == -1 {
+		currentQuestionText := quiz.GetQuestionById(qc.Quiz, currentQuestionId).Question.QuestionText
+		if currentQuestionId == -1 {
 			err = appendAnswerToYAMLFile(currentQuestionText, answer, userAnswersDBPath)
 			if err != nil {
 				log.Println(op + err.Error())
@@ -52,15 +52,15 @@ func (qc *QuizController) GetQuestion() fiber.Handler {
 			return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "data": "Test is over"})
 		}
 
-		nextQuestion := models.GetQuestionById(qc.Quiz, nextQuestionId)
+		nextQuestion := quiz.GetQuestionById(qc.Quiz, nextQuestionId)
 		if nextQuestion == nil {
 			return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"status": "fail", "message": "Question not found"})
 		}
 
 		if currentQuestionId == 0 {
-			initTest := models.Test{
+			initTest := quiz.Test{
 				Timestamp: time.Now().Format(time.RFC3339),
-				Questions: []models.QA{},
+				Questions: []quiz.QA{},
 			}
 
 			err = initYAMLFile(initTest, userAnswersDBPath)
@@ -81,11 +81,11 @@ func (qc *QuizController) GetQuestion() fiber.Handler {
 	}
 }
 
-func appendAnswerToYAMLFile(questionText string, answer models.Answer, fileName string) error {
-	return appendToYAMLFile(fileName, func(data *models.Data) {
+func appendAnswerToYAMLFile(questionText string, answer quiz.Answer, fileName string) error {
+	return appendToYAMLFile(fileName, func(data *quiz.Data) {
 		lastTestIndex := len(data.History) - 1
 		if lastTestIndex >= 0 {
-			data.History[lastTestIndex].Questions = append(data.History[lastTestIndex].Questions, models.QA{
+			data.History[lastTestIndex].Questions = append(data.History[lastTestIndex].Questions, quiz.QA{
 				QuestionText: questionText,
 				AnswerText:   answer.AnswerText,
 				AnswerScore:  answer.AnswerScore,
@@ -94,13 +94,13 @@ func appendAnswerToYAMLFile(questionText string, answer models.Answer, fileName 
 	})
 }
 
-func initYAMLFile(initTest models.Test, fileName string) error {
+func initYAMLFile(initTest quiz.Test, fileName string) error {
 	yamlData, err := ioutil.ReadFile(fileName)
 	if err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("ошибка чтения файла: %w", err)
 	}
 
-	var data models.Data
+	var data quiz.Data
 	if yamlData != nil {
 		err := yaml.Unmarshal(yamlData, &data)
 		if err != nil {
@@ -123,7 +123,7 @@ func initYAMLFile(initTest models.Test, fileName string) error {
 	return nil
 }
 
-func appendToYAMLFile(fileName string, modify func(*models.Data)) error {
+func appendToYAMLFile(fileName string, modify func(*quiz.Data)) error {
 	data, err := readYAMLFile(fileName)
 	if err != nil {
 		return err
@@ -138,8 +138,8 @@ func appendToYAMLFile(fileName string, modify func(*models.Data)) error {
 	return ioutil.WriteFile(fileName, yamlData, 0644)
 }
 
-func readYAMLFile(fileName string) (models.Data, error) {
-	var data models.Data
+func readYAMLFile(fileName string) (quiz.Data, error) {
+	var data quiz.Data
 	yamlFile, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		if os.IsNotExist(err) {
