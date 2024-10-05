@@ -5,7 +5,9 @@ import (
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
 	questionshandler "Sechenovka/internal/handlers/questions"
+	"Sechenovka/internal/queue"
 	authservice "Sechenovka/internal/service/auth"
+	"Sechenovka/internal/service/history_saver"
 	questionservice "Sechenovka/internal/service/questions"
 	"Sechenovka/storage"
 	"github.com/gofiber/fiber/v2"
@@ -28,16 +30,25 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	db := storage.ConnectDB()
+
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-	authService := authservice.New(logger)
+	authService := authservice.New(logger, db)
 	authHandler := authhandler.New(authService)
+
+	historyStorage := history_saver.NewStorage(db)
+	historySaver := history_saver.NewSaver(historyStorage)
+
+	queue := queue.NewProcessQueue(10, historySaver)
 
 	questionsConfig, err := config.GetQuestionsConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 	questionsService := questionservice.New(questionsConfig)
-	questionsHandler := questionshandler.New(questionsService)
+	questionsHandler := questionshandler.New(questionsService, queue)
+
+	middleware := middleware.New(db)
 
 	micro.Route("/auth", func(router fiber.Router) {
 		router.Post("/register", authHandler.Register)
@@ -50,8 +61,4 @@ func main() {
 	})
 
 	log.Fatal(app.Listen(":8080"))
-}
-
-func init() {
-	storage.ConnectDB()
 }

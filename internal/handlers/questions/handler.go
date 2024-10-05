@@ -3,17 +3,18 @@ package questions
 import (
 	dto "Sechenovka/internal/dto/question"
 	"Sechenovka/internal/models"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 )
 
 type handler struct {
 	questionService questionService
+	historyQueue    historyQueue
 }
 
-func New(questionService questionService) *handler {
+func New(questionService questionService, historyQueue historyQueue) *handler {
 	return &handler{
 		questionService: questionService,
+		historyQueue:    historyQueue,
 	}
 }
 
@@ -23,7 +24,9 @@ func (h *handler) GetQuestion(c *fiber.Ctx) error {
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	fmt.Println("input", questionIn.QuestionText)
+
+	h.historyQueue.Add(questionIn.ToUserResponse())
+
 	question, err := h.questionService.GetOptionsByQuestionText(questionIn.QuestionText)
 
 	if err != nil {

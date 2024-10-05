@@ -2,15 +2,25 @@ package middleware
 
 import (
 	"Sechenovka/internal/models"
-	"Sechenovka/storage"
 	"encoding/base64"
+	"gorm.io/gorm"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func BasicAuth(c *fiber.Ctx) error {
+type middleware struct {
+	db *gorm.DB
+}
+
+func New(db *gorm.DB) *middleware {
+	return &middleware{
+		db: db,
+	}
+}
+
+func (m *middleware) BasicAuth(c *fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
 		c.Set("WWW-Authenticate", `Basic realm="Restricted"`)
@@ -33,7 +43,7 @@ func BasicAuth(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	result := storage.DB.First(&user, "email = ?", strings.ToLower(pair[0]))
+	result := m.db.First(&user, "email = ?", strings.ToLower(pair[0]))
 	if result.Error != nil || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pair[1])) != nil {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid email or password")
 	}
