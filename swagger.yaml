@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: Quiz and Auth API
+  description: API for user authentication and quiz management.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Local development server
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      description: Allows users to register.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirm:
+                  type: string
+              required:
+                - username
+                - email
+                - password
+                - password_confirm
+      responses:
+        '200':
+          description: Successfully registered
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /auth/login:
+    post:
+      summary: User login
+      description: Allows users to log in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "exampleUser"
+                password:
+                  type: string
+                  example: "password123"
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+
+  /auth/logout:
+    get:
+      summary: Logout the user
+      description: Logs the user out by expiring the session token.
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+
+  /questions/start:
+    get:
+      summary: Start a new quiz
+      description: Start the quiz and return the first question.
+      responses:
+        '200':
+          description: Quiz started, first question returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  question_text:
+                    type: string
+                    example: "What is the capital of France?"
+                  options:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        answer:
+                          type: string
+                          example: "Paris"
+                        points:
+                          type: integer
+                          example: 10
+                        next_question_text:
+                          type: string
+                          example: "What is the largest city in Germany?"
+                  correlation_id:
+                    type: string
+        '500':
+          description: Internal server error
+
+  /questions/question:
+    post:
+      summary: Get a question based on the previous answer
+      description: Get the next question based on the user's response to the current question.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correlation_id:
+                  type: string
+                next_question_text:
+                  type: string
+                points:
+                  type: integer
+                answer:
+                  type: string
+      responses:
+        '200':
+          description: Question returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  question_text:
+                    type: string
+                  options:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        answer:
+                          type: string
+                        points:
+                          type: integer
+                        next_question_text:
+                          type: string
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /questions/score:
+    post:
+      summary: Get the quiz score
+      description: Get the user's total score based on their responses.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correlation_id:
+                  type: string
+      responses:
+        '200':
+          description: Score returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: integer
+                  correlation_id:
+                    type: string
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    QuestionIn:
+      type: object
+      properties:
+        correlation_id:
+          type: string
+        next_question_text:
+          type: string
+        points:
+          type: integer
+        answer:
+          type: string
+
+    QuestionOut:
+      type: object
+      properties:
+        question_text:
+          type: string
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              answer:
+                type: string
+              points:
+                type: integer
+              next_question_text:
+                type: string
+        correlation_id:
+          type: string
+
+    Option:
+      type: object
+      properties:
+        answer:
+          type: string
+        points:
+          type: integer
+        next_question_text:
+          type: string
+
+    ScoreResponse:
+      type: object
+      properties:
+        score:
+          type: integer
+        correlation_id:
+          type: string

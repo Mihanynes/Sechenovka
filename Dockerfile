@@ -1,7 +1,10 @@
-FROM golang:alpine
+FROM golang:latest
+
+# Устанавливаем необходимые библиотеки
+RUN apt-get update && apt-get install -y gcc libsqlite3-dev
 
 WORKDIR /app
-ADD go.mod .
+COPY go.mod ./
 COPY . .
 RUN go build -o main main.go
 

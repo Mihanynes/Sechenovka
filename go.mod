@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.4
+	github.com/google/uuid v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.19.0
@@ -20,7 +21,6 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
