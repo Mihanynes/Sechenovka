@@ -2,7 +2,7 @@ package questions
 
 import (
 	dto "Sechenovka/internal/dto/question"
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -71,7 +71,7 @@ func (h *handler) GetScore(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"result": dto.ScoreResponse{Score: score, CorrelationId: correlationId}})
 }
 
-func modelToDto(question *models.Question) dto.QuestionOut {
+func modelToDto(question *model.Question) dto.QuestionOut {
 	var out dto.QuestionOut
 	out.QuestionText = question.Text
 	for _, option := range question.Options {

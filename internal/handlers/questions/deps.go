@@ -1,14 +1,14 @@
 package questions
 
 import (
-	"Sechenovka/internal/models"
-	"Sechenovka/internal/queue"
+	"Sechenovka/internal/model"
 	"Sechenovka/internal/service/history"
+	"Sechenovka/internal/utils/queue"
 )
 
 type questionService interface {
-	GetFirstQuestion() (*models.Question, error)
-	GetOptionsByQuestionText(questionText string) (*models.Question, error)
+	GetFirstQuestion() (*model.Question, error)
+	GetOptionsByQuestionText(questionText string) (*model.Question, error)
 }
 
 type historyQueue interface {

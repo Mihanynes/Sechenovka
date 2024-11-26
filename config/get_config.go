@@ -1,12 +1,12 @@
 package config
 
 import (
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"gopkg.in/yaml.v3"
 	"os"
 )
 
-func GetQuestionsConfig() ([]*models.Question, error) {
+func GetQuestionsConfig() ([]*model.Question, error) {
 	config, err := parseYAML("config/questions_v2.yaml")
 	if err != nil {
 		return nil, err
@@ -14,14 +14,14 @@ func GetQuestionsConfig() ([]*models.Question, error) {
 	return config, nil
 }
 
-func parseYAML(filename string) ([]*models.Question, error) {
+func parseYAML(filename string) ([]*model.Question, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	var questions []*models.Question
+	var questions []*model.Question
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(&questions); err != nil {
 		return nil, err

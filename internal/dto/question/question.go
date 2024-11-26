@@ -1,7 +1,7 @@
 package question
 
 import (
-	"Sechenovka/internal/service/history"
+	"Sechenovka/internal/model"
 	"errors"
 )
 
@@ -49,9 +49,9 @@ func (q *QuestionIn) ValidateCorrelationId() error {
 	return nil
 }
 
-func (q *QuestionIn) ToUserResponse() *history.UserResponse {
-	return &history.UserResponse{
-		Response: history.Response{
+func (q *QuestionIn) ToUserResponse() *model.UserResponse {
+	return &model.UserResponse{
+		Response: model.Response{
 			Answer: q.Answer,
 			Score:  q.Points,
 		},

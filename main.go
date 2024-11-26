@@ -2,13 +2,13 @@ package main
 
 import (
 	"Sechenovka/config"
+	"Sechenovka/db"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
 	questionshandler "Sechenovka/internal/handlers/questions"
 	authservice "Sechenovka/internal/service/auth"
-	"Sechenovka/internal/service/history"
 	questionservice "Sechenovka/internal/service/questions"
-	"Sechenovka/storage"
+	"Sechenovka/internal/storage/user_history"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -29,13 +29,13 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	db := storage.ConnectDB()
+	db := db.ConnectDB()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
 	authService := authservice.New(logger, db)
 	authHandler := authhandler.New(authService)
 
-	historyStorage := history.NewStorage(db)
+	historyStorage := user_history.New(db)
 	//historySaver := history.NewSaver(historyStorage)
 
 	//queue := queue.NewProcessQueue(10, historySaver)

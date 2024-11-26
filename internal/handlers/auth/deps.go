@@ -1,8 +1,8 @@
 package auth
 
-import "Sechenovka/internal/models"
+import "Sechenovka/internal/model"
 
 type authService interface {
 	Login(username, password string) error
-	Register(user *models.User) error
+	Register(user *model.User) error
 }

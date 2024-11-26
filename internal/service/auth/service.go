@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func New(log *slog.Logger, db *gorm.DB) *service {
 }
 
 func (s *service) Login(username string, password string) error {
-	var userFromDB models.User
+	var userFromDB model.User
 
 	result := s.db.First(&userFromDB, "username = ?", username)
 
@@ -37,7 +37,7 @@ func (s *service) Login(username string, password string) error {
 	return nil
 }
 
-func (s *service) Register(user *models.User) error {
+func (s *service) Register(user *model.User) error {
 	userWithHashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		s.log.Error("error while hashing password", err)

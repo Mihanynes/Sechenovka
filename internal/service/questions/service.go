@@ -1,30 +1,30 @@
 package questions
 
 import (
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"fmt"
 )
 
 const firstQuestion = "Есть ли у вас боль или дискомфорт в грудной клетке?"
 
 type service struct {
-	questions []*models.Question
+	questions []*model.Question
 }
 
-func New(questions []*models.Question) *service {
+func New(questions []*model.Question) *service {
 	return &service{
 		questions: questions,
 	}
 }
 
-func (s *service) GetFirstQuestion() (*models.Question, error) {
+func (s *service) GetFirstQuestion() (*model.Question, error) {
 	return s.GetOptionsByQuestionText(firstQuestion)
 }
 
-// Получение опций по тексту вопроса
-func (s *service) GetOptionsByQuestionText(questionText string) (*models.Question, error) {
+// GetOptionsByQuestionText Получение опций ответа по тексту вопроса
+func (s *service) GetOptionsByQuestionText(questionText string) (*model.Question, error) {
 	if questionText == "EOF" {
-		return &models.Question{Text: "Тест завершен"}, nil
+		return &model.Question{Text: "Тест завершен"}, nil
 	}
 	for _, question := range s.questions {
 		if question.Text == questionText {

@@ -2,7 +2,7 @@ package auth
 
 import (
 	dto "Sechenovka/internal/dto/user"
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -26,12 +26,12 @@ func (h *handler) Register(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "user successfully registered"})
 }
 
-func DtoToModel(user dto.RegisterIn) *models.User {
+func DtoToModel(user dto.RegisterIn) *model.User {
 	var role string
 	if user.UserName == "mihanynes" {
 		role = "admin"
 	}
-	return &models.User{
+	return &model.User{
 		Username: user.UserName,
 		Email:    user.Email,
 		Password: user.Password,

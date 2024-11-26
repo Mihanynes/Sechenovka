@@ -1,8 +1,9 @@
-package storage
+package db
 
 import (
-	"Sechenovka/internal/models"
-	"Sechenovka/internal/service/history"
+	"Sechenovka/internal/model"
+	"Sechenovka/internal/storage/user_history"
+	"Sechenovka/internal/storage/users_result"
 	"log"
 	"os"
 
@@ -22,9 +23,9 @@ func ConnectDB() *gorm.DB {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("Running Migrations")
-	err = db.AutoMigrate(&models.User{}, &history.UserResponse{})
+	err = db.AutoMigrate(&model.User{}, &user_history.UserResponse{}, &users_result.UserResult{})
 	if err != nil {
-		log.Fatal("Migration Failed:  \n", err.Error())
+		log.Fatal("Migration Failed:\n", err.Error())
 		os.Exit(1)
 	}
 

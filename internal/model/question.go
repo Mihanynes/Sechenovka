@@ -1,4 +1,4 @@
-package models
+package model
 
 // Опция ответа на вопрос
 type Option struct {

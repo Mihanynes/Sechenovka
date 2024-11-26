@@ -1,7 +1,7 @@
 package questions
 
 import (
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"testing"
 )
 
@@ -9,13 +9,13 @@ func Test_GetOptionsByQuestionText(t *testing.T) {
 	testCases := []struct {
 		name            string
 		questionText    string
-		expectedOptions []models.Option
+		expectedOptions []model.Option
 		expectedError   bool
 	}{
 		{
 			name:         "Существующий вопрос: Когда возникают боли?",
 			questionText: "Когда возникают боли?",
-			expectedOptions: []models.Option{
+			expectedOptions: []model.Option{
 				{Answer: "При покое", Points: 2, NextQuestionText: "Как долго длится боль?"},
 				{Answer: "При ходьбе", Points: 1, NextQuestionText: "Как долго длится боль?"},
 				{Answer: "При поворотах тела", Points: 0, NextQuestionText: "Как долго длится боль?"},
@@ -25,7 +25,7 @@ func Test_GetOptionsByQuestionText(t *testing.T) {
 		{
 			name:         "Существующий вопрос: Есть ли у вас боль или дискомфорт в грудной клетке?",
 			questionText: "Есть ли у вас боль или дискомфорт в грудной клетке?",
-			expectedOptions: []models.Option{
+			expectedOptions: []model.Option{
 				{Answer: "да", Points: 0, NextQuestionText: "Когда возникают боли?"},
 				{Answer: "нет", Points: 0},
 			},
@@ -69,17 +69,17 @@ func Test_GetOptionsByQuestionText(t *testing.T) {
 	}
 }
 
-var fakeQuestions = []*models.Question{
+var fakeQuestions = []*model.Question{
 	{
 		Text: "Есть ли у вас боль или дискомфорт в грудной клетке?",
-		Options: []models.Option{
+		Options: []model.Option{
 			{Answer: "да", Points: 0, NextQuestionText: "Когда возникают боли?"},
 			{Answer: "нет", Points: 0},
 		},
 	},
 	{
 		Text: "Когда возникают боли?",
-		Options: []models.Option{
+		Options: []model.Option{
 			{Answer: "При покое", Points: 2, NextQuestionText: "Как долго длится боль?"},
 			{Answer: "При ходьбе", Points: 1, NextQuestionText: "Как долго длится боль?"},
 			{Answer: "При поворотах тела", Points: 0, NextQuestionText: "Как долго длится боль?"},

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"Sechenovka/internal/models"
+	"Sechenovka/internal/model"
 	"encoding/base64"
 	"gorm.io/gorm"
 	"strings"
@@ -42,7 +42,7 @@ func (m *middleware) BasicAuth(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid auth header")
 	}
 
-	var user models.User
+	var user model.User
 	result := m.db.First(&user, "email = ?", strings.ToLower(pair[0]))
 	if result.Error != nil || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pair[1])) != nil {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid email or password")
