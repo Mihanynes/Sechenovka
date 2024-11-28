@@ -2,8 +2,8 @@ package db
 
 import (
 	"Sechenovka/internal/model"
-	"Sechenovka/internal/storage/user_history"
-	"Sechenovka/internal/storage/users_result"
+	"Sechenovka/internal/storage/user_responses"
+	"Sechenovka/internal/storage/user_statistic"
 	"log"
 	"os"
 
@@ -13,7 +13,7 @@ import (
 )
 
 func ConnectDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("./storage/userAuth.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("./db/master.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database! \n", err.Error())
 		os.Exit(1)
@@ -23,7 +23,7 @@ func ConnectDB() *gorm.DB {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("Running Migrations")
-	err = db.AutoMigrate(&model.User{}, &user_history.UserResponse{}, &users_result.UserResult{})
+	err = db.AutoMigrate(&model.User{}, &user_responses.UserResponse{}, &user_statistic.UserResult{})
 	if err != nil {
 		log.Fatal("Migration Failed:\n", err.Error())
 		os.Exit(1)

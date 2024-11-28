@@ -2,6 +2,7 @@ package model
 
 type UserResponse struct {
 	UserId        int
+	QuestionText  string
 	Response      Response
 	CorrelationId string
 }

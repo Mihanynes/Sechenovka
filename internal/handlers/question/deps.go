@@ -1,8 +1,7 @@
-package questions
+package question
 
 import (
 	"Sechenovka/internal/model"
-	"Sechenovka/internal/service/history"
 	"Sechenovka/internal/utils/queue"
 )
 
@@ -16,6 +15,5 @@ type historyQueue interface {
 }
 
 type historyStorage interface {
-	SaveUserResponse(userResponse *history.UserResponse) error
 	GetUserScore(correlationId string) (int, error)
 }

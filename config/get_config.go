@@ -7,7 +7,7 @@ import (
 )
 
 func GetQuestionsConfig() ([]*model.Question, error) {
-	config, err := parseYAML("config/questions_v2.yaml")
+	config, err := parseYAML("config/questions.yaml")
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package questions
+package question_config
 
 import (
 	"Sechenovka/internal/model"

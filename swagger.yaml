@@ -183,7 +183,7 @@ paths:
   /questions/score:
     post:
       summary: Get the quiz score
-      description: Get the user's total score based on their responses.
+      description: Get the user's total score based on their user_response.
       requestBody:
         required: true
         content:

@@ -1,28 +1,57 @@
 package config
 
 import (
+	"Sechenovka/internal/model"
+	"Sechenovka/internal/utils/pointer"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func Test_ParseYAML(t *testing.T) {
-	questions, err := parseYAML("./testdata/questions.yaml")
+	questions, err := parseYAML("./testdata/question.yaml")
 	if err != nil {
 		t.Fatalf("Ошибка при парсинге YAML: %v", err)
 	}
 
-	// Проверка количества вопросов
-	if len(questions) != 2 {
-		t.Fatalf("Ожидали 2 вопроса, получили %d", len(questions))
+	expectedQuestions := []*model.Question{
+		{
+			Text:        "Есть ли у вас боль или дискомфорт в грудной клетке?",
+			ScoreToFail: nil, // Поле не указано в YAML, поэтому здесь nil
+			Options: []model.Option{
+				{
+					Answer:           "да",
+					Points:           0,
+					NextQuestionText: "Когда возникают боли?",
+				},
+				{
+					Answer:           "нет",
+					Points:           0,
+					NextQuestionText: "",
+				},
+			},
+		},
+		{
+			Text:        "Когда возникают боли?",
+			ScoreToFail: pointer.Get(2),
+			Options: []model.Option{
+				{
+					Answer:           "При покое",
+					Points:           2,
+					NextQuestionText: "Как долго длится боль?",
+				},
+				{
+					Answer:           "При ходьбе",
+					Points:           1,
+					NextQuestionText: "Как долго длится боль?",
+				},
+				{
+					Answer:           "При поворотах тела",
+					Points:           0,
+					NextQuestionText: "Как долго длится боль?",
+				},
+			},
+		},
 	}
 
-	// Проверка текстов вопросов
-	expectedQuestions := []string{
-		"Есть ли у вас боль или дискомфорт в грудной клетке?",
-		"Когда возникают боли?",
-	}
-	for i, q := range questions {
-		if q.Text != expectedQuestions[i] {
-			t.Errorf("Ожидали вопрос '%s', получили '%s'", expectedQuestions[i], q.Text)
-		}
-	}
+	require.ElementsMatch(t, expectedQuestions, questions)
 }

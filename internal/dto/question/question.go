@@ -24,11 +24,6 @@ type Option struct {
 	NextQuestionText string `json:"next_question_text"`
 }
 
-type ScoreResponse struct {
-	CorrelationId string `json:"correlation_id"`
-	Score         int    `json:"score"`
-}
-
 func (q *QuestionIn) Validate() error {
 	if q.QuestionText == "" {
 		return errors.New("question text is required")

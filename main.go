@@ -5,10 +5,12 @@ import (
 	"Sechenovka/db"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
-	questionshandler "Sechenovka/internal/handlers/questions"
-	authservice "Sechenovka/internal/service/auth"
-	questionservice "Sechenovka/internal/service/questions"
-	"Sechenovka/internal/storage/user_history"
+	questions_handler "Sechenovka/internal/handlers/question"
+	user_response_handler "Sechenovka/internal/handlers/user_response"
+	auth_service "Sechenovka/internal/service/auth"
+	question_service "Sechenovka/internal/service/question_config"
+	user_response_service "Sechenovka/internal/service/user_response"
+	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -32,20 +34,19 @@ func main() {
 	db := db.ConnectDB()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-	authService := authservice.New(logger, db)
+	authService := auth_service.New(logger, db)
 	authHandler := authhandler.New(authService)
 
-	historyStorage := user_history.New(db)
-	//historySaver := history.NewSaver(historyStorage)
-
-	//queue := queue.NewProcessQueue(10, historySaver)
-
-	questionsConfig, err := config.GetQuestionsConfig()
+	initConfig, err := config.GetQuestionsConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	questionsService := questionservice.New(questionsConfig)
-	questionsHandler := questionshandler.New(questionsService, historyStorage)
+	questionsConfigService := question_service.New(initConfig)
+	questionsHandler := questions_handler.New(questionsConfigService)
+
+	userResponseStorage := user_respons_storage.New(db)
+	userResponseService := user_response_service.New(userResponseStorage, questionsConfigService)
+	userResponseHandler := user_response_handler.New(userResponseService)
 
 	middleware := middleware.New(db)
 
@@ -56,12 +57,14 @@ func main() {
 	micro.Route("/auth", func(router fiber.Router) {
 		router.Post("/register", authHandler.Register)
 		router.Post("/login", authHandler.Login)
-		router.Get("/logout", middleware.BasicAuth, authHandler.LogoutUser)
+		router.Post("/logout", middleware.BasicAuth, authHandler.LogoutUser)
 	})
-	micro.Route("/questions", func(router fiber.Router) {
-		router.Get("/start", questionsHandler.StartQuiz)
-		router.Get("/question", questionsHandler.GetQuestion)
-		router.Get("/score", questionsHandler.GetScore)
+	micro.Route("/question", func(router fiber.Router) {
+		router.Post("/start", questionsHandler.StartQuiz)
+		router.Post("/question", questionsHandler.GetQuestion)
+	})
+	micro.Route("/response", func(router fiber.Router) {
+		router.Post("/save", userResponseHandler.SaveUserResponse)
 	})
 
 	log.Fatal(app.Listen(":8080"))

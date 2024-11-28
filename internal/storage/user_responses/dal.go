@@ -1,4 +1,4 @@
-package user_history
+package user_responses
 
 import "time"
 

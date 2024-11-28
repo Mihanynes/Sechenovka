@@ -7,6 +7,7 @@
       points: 0
 
 - text: "Когда возникают боли?"
+  score_to_fail: 2
   options:
     - answer: "При покое"
       points: 2
