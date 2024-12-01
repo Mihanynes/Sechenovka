@@ -17,6 +17,15 @@ func New(db *gorm.DB) *storage {
 	}
 }
 
+func (s *storage) GetUser(snils string) (*User, error) {
+	userFromDB := User{}
+	result := s.db.First(&userFromDB, "snils = ?", snils)
+	if result.Error != nil {
+		return nil, errors.New("user not found")
+	}
+	return &userFromDB, nil
+}
+
 func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
 	userToSave := User{
 		UserId:     userId,

@@ -2,38 +2,31 @@ package auth
 
 import (
 	"Sechenovka/internal/model"
-	"Sechenovka/internal/storage/user_info"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 	"log/slog"
 )
 
 type service struct {
 	userStorage userStorage
 	log         *slog.Logger
-	db          *gorm.DB
 }
 
-func New(userStorage userStorage, log *slog.Logger, db *gorm.DB) *service {
+func New(userStorage userStorage, log *slog.Logger) *service {
 	return &service{
 		userStorage: userStorage,
 		log:         log,
-		db:          db,
 	}
 }
 
 func (s *service) Login(snils string, password string) (uuid.UUID, error) {
-	var userFromDB user_info.User
-
-	result := s.db.First(&userFromDB, "snils = ?", snils)
-
-	if result.Error != nil {
-		return uuid.Nil, errors.New("user not found")
+	userFromDB, err := s.userStorage.GetUser(snils)
+	if err != nil {
+		return uuid.Nil, err
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(userFromDB.Password), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(userFromDB.Password), []byte(password))
 	if err != nil {
 		return uuid.Nil, errors.New("wrong password")
 	}
