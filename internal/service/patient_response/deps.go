@@ -6,7 +6,7 @@ import (
 
 type userResponsesStorage interface {
 	SaveUserResponse(userResponse *model.UserResponse) error
-	GetUserScore(userId int, correlationId string) (int, error)
+	GetUserTotalScore(userId int, correlationId string) (int, error)
 }
 
 type questionsConfig interface {

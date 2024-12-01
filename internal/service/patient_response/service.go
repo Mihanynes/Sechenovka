@@ -21,7 +21,7 @@ func (s *service) SaveUserResponse(userResponse *model.UserResponse) (bool, erro
 		return false, err
 	}
 
-	currentTotalScore, err := s.userResponsesStorage.GetUserScore(userResponse.CorrelationId)
+	currentTotalScore, err := s.userResponsesStorage.GetUserTotalScore(userResponse.UserId, userResponse.CorrelationId)
 	if err != nil {
 		return false, err
 	}

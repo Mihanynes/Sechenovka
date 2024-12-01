@@ -28,7 +28,7 @@ func (s *storage) SaveUserResponse(userResponse *model.UserResponse) error {
 }
 
 // GetUserScore Метод для получения суммы score по correlationId
-func (s *storage) GetUserScore(userId int, correlationId string) (int, error) {
+func (s *storage) GetUserTotalScore(userId int, correlationId string) (int, error) {
 	var totalScore int64
 
 	err := s.db.Model(&UserResponse{}).
