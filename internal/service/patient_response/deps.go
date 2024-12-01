@@ -1,4 +1,4 @@
-package user_response
+package patient_response
 
 import (
 	"Sechenovka/internal/model"

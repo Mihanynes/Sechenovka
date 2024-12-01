@@ -5,11 +5,13 @@ import (
 	"Sechenovka/db"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
+	"Sechenovka/internal/handlers/patient"
 	questions_handler "Sechenovka/internal/handlers/questions"
 	user_response_handler "Sechenovka/internal/handlers/user_response"
 	auth_service "Sechenovka/internal/service/auth"
+	"Sechenovka/internal/service/patient_info"
+	user_response_service "Sechenovka/internal/service/patient_response"
 	question_service "Sechenovka/internal/service/question_config"
-	user_response_service "Sechenovka/internal/service/user_response"
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"github.com/gofiber/fiber/v2"
@@ -35,14 +37,18 @@ func main() {
 	db := db.ConnectDB()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-	userStorage := user.New(db)
-	authService := auth_service.New(userStorage, logger)
-	authHandler := authhandler.New(authService)
-
 	initConfig, err := config.GetQuestionsConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	userStorage := user.New(db)
+	authService := auth_service.New(userStorage, logger)
+	authHandler := authhandler.New(authService)
+
+	patientInfoService := patient_info.New(userStorage)
+	patientInfoHandler := patient.NewHandler(patientInfoService)
+
 	questionsConfigService := question_service.New(initConfig)
 	questionsHandler := questions_handler.New(questionsConfigService)
 
@@ -65,8 +71,11 @@ func main() {
 		router.Post("/start", questionsHandler.StartQuiz)
 		router.Post("/questions", questionsHandler.GetQuestion)
 	})
-	micro.Route("/response", func(router fiber.Router) {
+	micro.Route("user/response", func(router fiber.Router) {
 		router.Post("/save", userResponseHandler.SaveUserResponse)
+	})
+	micro.Route("/user/info", func(router fiber.Router) {
+		router.Post("/patient", patientInfoHandler.GetPatientInfo)
 	})
 
 	log.Fatal(app.Listen(":8080"))

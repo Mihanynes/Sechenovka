@@ -26,6 +26,15 @@ func (s *storage) GetUserBySnils(snils string) (*User, error) {
 	return &userFromDB, nil
 }
 
+func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
+	userFromDB := User{}
+	result := s.db.First(&userFromDB, "userId = ?", userId)
+	if result.Error != nil {
+		return nil, errors.New("user not found")
+	}
+	return &userFromDB, nil
+}
+
 func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
 	userToSave := User{
 		UserId:     userId,
