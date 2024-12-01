@@ -1,10 +1,15 @@
 package questions
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/gofiber/fiber/v2"
+)
 
 func (h *handler) GetQuestion(c *fiber.Ctx) error {
 	var questionIn QuestionIn
-	err := c.BodyParser(&questionIn)
+	err := json.Unmarshal(c.Body(), &questionIn)
+	fmt.Println(questionIn)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

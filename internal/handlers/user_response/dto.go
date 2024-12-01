@@ -1,13 +1,28 @@
 package user_response
 
+import (
+	"errors"
+	"github.com/google/uuid"
+)
+
 type SaveUserResponseIn struct {
-	UserId        int    `json:"user_id"`
-	QuestionText  string `json:"question_text"`
-	CorrelationId string `json:"correlation_id"`
-	ResponseScore int    `json:"response_score"`
+	UserId        uuid.UUID `json:"user_id"`
+	QuestionText  string    `json:"question_text"`
+	CorrelationId string    `json:"correlation_id"`
+	ResponseScore int       `json:"response_score"`
 }
 
 type GetUserScoreIn struct {
-	UserId        int    `json:"user_id"`
-	CorrelationId string `json:"correlation_id"`
+	UserId        uuid.UUID `json:"user_id"`
+	CorrelationId string    `json:"correlation_id"`
+}
+
+func (q *SaveUserResponseIn) Validate() error {
+	if q.QuestionText == "" {
+		return errors.New("questions text is required")
+	}
+	if q.CorrelationId == "" {
+		return errors.New("correlation id is required")
+	}
+	return nil
 }

@@ -22,7 +22,7 @@ func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 
 func dtoToModel(in SaveUserResponseIn) *model.UserResponse {
 	return &model.UserResponse{
-		UserId:       in.UserId,
+		UserId:       model.UserId(in.UserId),
 		QuestionText: in.QuestionText,
 		Response: model.Response{
 			Score: in.ResponseScore,

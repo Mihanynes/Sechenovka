@@ -1,15 +1,12 @@
 package questions
 
 import (
-	"Sechenovka/internal/model"
 	"errors"
+	"strings"
 )
 
 type QuestionIn struct {
-	CorrelationId string `json:"correlation_id"`
-	QuestionText  string `json:"next_question_text"`
-	Points        int    `json:"points"`
-	Answer        string `json:"answer"`
+	QuestionText string `json:"question_text"`
 }
 
 type QuestionOut struct {
@@ -25,31 +22,8 @@ type Option struct {
 }
 
 func (q *QuestionIn) Validate() error {
-	if q.QuestionText == "" {
+	if strings.TrimSpace(q.QuestionText) == "" {
 		return errors.New("questions text is required")
 	}
-	if q.CorrelationId == "" {
-		return errors.New("correlation id is required")
-	}
-	if q.Answer == "" {
-		return errors.New("answer is required")
-	}
 	return nil
-}
-
-func (q *QuestionIn) ValidateCorrelationId() error {
-	if q.CorrelationId == "" {
-		return errors.New("correlation id is required")
-	}
-	return nil
-}
-
-func (q *QuestionIn) ToUserResponse() *model.UserResponse {
-	return &model.UserResponse{
-		Response: model.Response{
-			AnswerText: q.Answer,
-			Score:      q.Points,
-		},
-		CorrelationId: q.CorrelationId,
-	}
 }

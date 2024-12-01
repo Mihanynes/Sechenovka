@@ -1,11 +1,13 @@
 package user_responses
 
-import "time"
+import (
+	"time"
+)
 
 // Основная структура для сохранения данных в БД
 type UserResponse struct {
-	Id     int `gorm:"type:int;primaryKey"`
-	UserId int `gorm:"index;not null"`
+	Id     int    `gorm:"type:int;primaryKey"`
+	UserId string `gorm:"index;not null"`
 	//QuestionId    int       `gorm:"type:int;not null"`
 	Response      Response  `gorm:"embedded;embeddedPrefix:response_"` // Ответ пользователя с оценкой
 	CorrelationId string    `gorm:"type:varchar(36)"`                  // Correlation ID для отслеживания запросов

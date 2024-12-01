@@ -2,13 +2,14 @@ package auth
 
 import (
 	"Sechenovka/internal/model"
+	"encoding/json"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (h *handler) Register(c *fiber.Ctx) error {
 	var userIn RegisterIn
 
-	if err := c.BodyParser(&userIn); err != nil {
+	if err := json.Unmarshal(c.Body(), &userIn); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 

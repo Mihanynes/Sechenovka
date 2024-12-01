@@ -43,6 +43,7 @@ func (s *service) Register(user *model.User) error {
 	user.Password = string(userWithHashedPassword)
 	generatedUserId := uuid.New()
 	if err := s.userStorage.SaveUser(user, generatedUserId); err != nil {
+		s.log.Error("error while saving user", err)
 		return err
 	}
 	return nil

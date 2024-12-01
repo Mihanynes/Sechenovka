@@ -2,7 +2,7 @@ package user
 
 type User struct {
 	UserId     string `gorm:"type:text;primaryKey"` // UUID как текст
-	UserName   string `gorm:"type:text;uniqueIndex;not null"`
+	Username   string `gorm:"type:varchar;uniqueIndex;not null"`
 	FirstName  string `gorm:"type:varchar;not null"`
 	LastName   string `gorm:"type:varchar;not null"`
 	MiddleName string `gorm:"type:varchar;not null"`

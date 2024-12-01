@@ -1,7 +1,7 @@
 package model
 
 type UserResponse struct {
-	UserId        int
+	UserId        UserId
 	QuestionId    int
 	QuestionText  string
 	Response      Response

@@ -68,8 +68,8 @@ func main() {
 		router.Post("/logout", middleware.BasicAuth, authHandler.LogoutUser)
 	})
 	micro.Route("/questions", func(router fiber.Router) {
-		router.Post("/start", questionsHandler.StartQuiz)
-		router.Post("/questions", questionsHandler.GetQuestion)
+		router.Post("/start", middleware.BasicAuth, questionsHandler.StartQuiz)
+		router.Post("/get", questionsHandler.GetQuestion)
 	})
 	micro.Route("user/response", func(router fiber.Router) {
 		router.Post("/save", userResponseHandler.SaveUserResponse)

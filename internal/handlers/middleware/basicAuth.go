@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"Sechenovka/internal/model"
-	"encoding/base64"
+	"fmt"
 	"gorm.io/gorm"
 	"strings"
 
@@ -29,23 +29,20 @@ func (m *middleware) BasicAuth(c *fiber.Ctx) error {
 
 	authValue := strings.SplitN(authHeader, " ", 2)
 	if len(authValue) != 2 || authValue[0] != "Basic" {
-		return c.Status(fiber.StatusUnauthorized).SendString("Invalid auth header")
+		return c.Status(fiber.StatusUnauthorized).SendString("Authorization header format must be Basic: %v")
 	}
 
-	payload, err := base64.StdEncoding.DecodeString(authValue[1])
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).SendString("Invalid auth header")
-	}
+	payload := strings.TrimSpace(authValue[1])
 
 	pair := strings.SplitN(string(payload), ":", 2)
 	if len(pair) != 2 {
-		return c.Status(fiber.StatusUnauthorized).SendString("Invalid auth header")
+		return c.Status(fiber.StatusUnauthorized).SendString(fmt.Sprintf("Invalid auth header, must have 2 words: %v", authValue))
 	}
 
 	var user model.User
-	result := m.db.First(&user, "email = ?", strings.ToLower(pair[0]))
+	result := m.db.First(&user, "username = ?", strings.ToLower(pair[0]))
 	if result.Error != nil || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pair[1])) != nil {
-		return c.Status(fiber.StatusUnauthorized).SendString("Invalid email or password")
+		return c.Status(fiber.StatusUnauthorized).SendString("Invalid username or password")
 	}
 
 	c.Locals("user", user)

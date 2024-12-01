@@ -1,6 +1,9 @@
 package user_response
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"Sechenovka/internal/model"
+	"github.com/gofiber/fiber/v2"
+)
 
 func (h *handler) GetUserScore(c *fiber.Ctx) error {
 	var getUserScoreIn GetUserScoreIn
@@ -9,7 +12,7 @@ func (h *handler) GetUserScore(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	score, err := h.userResponseStorage.GetUserTotalScore(getUserScoreIn.UserId, getUserScoreIn.CorrelationId)
+	score, err := h.userResponseStorage.GetUserTotalScore(model.UserId(getUserScoreIn.UserId), getUserScoreIn.CorrelationId)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
