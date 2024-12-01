@@ -8,5 +8,5 @@ import (
 
 type userStorage interface {
 	SaveUser(user *model.User, userId uuid.UUID) error
-	GetUser(snils string) (*user_info.User, error)
+	GetUserBySnils(snils string) (*user_info.User, error)
 }

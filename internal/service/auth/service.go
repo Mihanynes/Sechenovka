@@ -21,7 +21,7 @@ func New(userStorage userStorage, log *slog.Logger) *service {
 }
 
 func (s *service) Login(snils string, password string) (uuid.UUID, error) {
-	userFromDB, err := s.userStorage.GetUser(snils)
+	userFromDB, err := s.userStorage.GetUserBySnils(snils)
 	if err != nil {
 		return uuid.Nil, err
 	}
