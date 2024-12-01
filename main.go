@@ -10,6 +10,7 @@ import (
 	auth_service "Sechenovka/internal/service/auth"
 	question_service "Sechenovka/internal/service/question_config"
 	user_response_service "Sechenovka/internal/service/user_response"
+	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -34,7 +35,8 @@ func main() {
 	db := db.ConnectDB()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-	authService := auth_service.New(logger, db)
+	userStorage := user.New(db)
+	authService := auth_service.New(userStorage, logger)
 	authHandler := authhandler.New(authService)
 
 	initConfig, err := config.GetQuestionsConfig()

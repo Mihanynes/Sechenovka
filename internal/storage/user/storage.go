@@ -1,4 +1,4 @@
-package user_info
+package user
 
 import (
 	"Sechenovka/internal/model"
