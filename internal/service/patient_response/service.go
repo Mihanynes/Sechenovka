@@ -1,6 +1,8 @@
 package patient_response
 
-import "Sechenovka/internal/model"
+import (
+	"Sechenovka/internal/model"
+)
 
 type service struct {
 	userResponsesStorage userResponsesStorage

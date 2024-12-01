@@ -2,12 +2,14 @@ package model
 
 type UserResponse struct {
 	UserId        int
+	QuestionId    int
 	QuestionText  string
 	Response      Response
 	CorrelationId string
 }
 
 type Response struct {
-	Answer string
-	Score  int
+	AnswerId   int
+	AnswerText string
+	Score      int
 }

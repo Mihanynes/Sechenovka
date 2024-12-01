@@ -50,7 +50,7 @@ func (s *storage) GetPatientsByDoctorId(doctorID uuid.UUID) ([]User, error) {
 
 func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
 	userToSave := User{
-		UserId:     userId,
+		UserId:     userId.String(),
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
 		MiddleName: user.MiddleName,

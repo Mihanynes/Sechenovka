@@ -47,8 +47,8 @@ func (q *QuestionIn) ValidateCorrelationId() error {
 func (q *QuestionIn) ToUserResponse() *model.UserResponse {
 	return &model.UserResponse{
 		Response: model.Response{
-			Answer: q.Answer,
-			Score:  q.Points,
+			AnswerText: q.Answer,
+			Score:      q.Points,
 		},
 		CorrelationId: q.CorrelationId,
 	}

@@ -18,9 +18,11 @@ func New(db *gorm.DB) *storage {
 func (s *storage) SaveUserResponse(userResponse *model.UserResponse) error {
 	dal := &UserResponse{
 		UserId: userResponse.UserId,
+
 		Response: Response{
-			Answer: userResponse.Response.Answer,
-			Score:  userResponse.Response.Score,
+			AnswerText: userResponse.Response.AnswerText,
+			//AnswerId: userResponse.Response.AnswerId,
+			Score: userResponse.Response.Score,
 		},
 		CorrelationId: userResponse.CorrelationId,
 	}
@@ -42,4 +44,25 @@ func (s *storage) GetUserTotalScore(userId int, correlationId string) (int, erro
 	}
 
 	return int(totalScore), nil
+}
+
+func (s *storage) GetUserResponses(userId model.UserId) ([]*model.UserResponse, error) {
+	userResponses := make([]UserResponse, 0)
+	err := s.db.Where("user_id = ?", userId).Find(&userResponses).Error
+	if err != nil {
+		return nil, err
+	}
+	res := make([]*model.UserResponse, len(userResponses))
+	for _, userResponse := range userResponses {
+		res = append(res, &model.UserResponse{
+			UserId: userResponse.UserId,
+			//QuestionId: userResponse.QuestionId,
+			Response: model.Response{
+				//AnswerId: userResponse.Response.AnswerId,
+				Score: userResponse.Response.Score,
+			},
+			CorrelationId: "",
+		})
+	}
+	return res, nil
 }

@@ -20,15 +20,15 @@ func New(userStorage userStorage, log *slog.Logger) *service {
 	}
 }
 
-func (s *service) Login(snils string, password string) (uuid.UUID, error) {
+func (s *service) Login(snils string, password string) (string, error) {
 	userFromDB, err := s.userStorage.GetUserBySnils(snils)
 	if err != nil {
-		return uuid.Nil, err
+		return "", err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(userFromDB.Password), []byte(password))
 	if err != nil {
-		return uuid.Nil, errors.New("wrong password")
+		return "", errors.New("wrong password")
 	}
 
 	return userFromDB.UserId, nil

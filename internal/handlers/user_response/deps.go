@@ -7,5 +7,5 @@ type userResponseService interface {
 }
 
 type userResponseStorage interface {
-	GetUserScore(userId int, correlationId string) (int, error)
+	GetUserTotalScore(userId int, correlationId string) (int, error)
 }

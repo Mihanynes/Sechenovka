@@ -9,7 +9,7 @@ func (h *handler) GetUserScore(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	score, err := h.userResponseStorage.GetUserScore(getUserScoreIn.UserId, getUserScoreIn.CorrelationId)
+	score, err := h.userResponseStorage.GetUserTotalScore(getUserScoreIn.UserId, getUserScoreIn.CorrelationId)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
