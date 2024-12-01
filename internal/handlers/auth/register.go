@@ -27,9 +27,12 @@ func (h *handler) Register(c *fiber.Ctx) error {
 
 func DtoToModel(user RegisterIn) *model.User {
 	return &model.User{
-		Username: user.UserName,
-		Email:    user.Email,
-		Password: user.Password,
-		IsAdmin:  user.IsAdmin,
+		FirstName:  user.FirstName,
+		MiddleName: user.MiddleName,
+		LastName:   user.LastName,
+		Snils:      user.Snils,
+		Email:      user.Email,
+		Password:   user.Password,
+		IsAdmin:    user.IsAdmin,
 	}
 }

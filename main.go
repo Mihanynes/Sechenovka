@@ -46,7 +46,7 @@ func main() {
 
 	userResponseStorage := user_respons_storage.New(db)
 	userResponseService := user_response_service.New(userResponseStorage, questionsConfigService)
-	userResponseHandler := user_response_handler.New(userResponseService)
+	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage)
 
 	middleware := middleware.New(db)
 

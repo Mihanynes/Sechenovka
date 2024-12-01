@@ -1,0 +1,40 @@
+package user_info
+
+import (
+	"Sechenovka/internal/model"
+	"errors"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type storage struct {
+	db *gorm.DB
+}
+
+func New(db *gorm.DB) *storage {
+	return &storage{
+		db: db,
+	}
+}
+
+func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
+	userToSave := User{
+		UserId:     userId,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		MiddleName: user.MiddleName,
+		Snils:      user.Snils,
+		Email:      user.Email,
+		Password:   user.Password,
+		IsAdmin:    user.IsAdmin,
+	}
+	result := s.db.Create(&userToSave)
+
+	if result.Error != nil && errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+		return errors.New("user already exists")
+	}
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

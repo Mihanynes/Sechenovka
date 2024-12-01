@@ -2,6 +2,7 @@ package auth
 
 import (
 	"Sechenovka/internal/model"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -9,14 +10,16 @@ import (
 )
 
 type service struct {
-	log *slog.Logger
-	db  *gorm.DB
+	userStorage userStorage
+	log         *slog.Logger
+	db          *gorm.DB
 }
 
-func New(log *slog.Logger, db *gorm.DB) *service {
+func New(userStorage userStorage, log *slog.Logger, db *gorm.DB) *service {
 	return &service{
-		log: log,
-		db:  db,
+		userStorage: userStorage,
+		log:         log,
+		db:          db,
 	}
 }
 
@@ -44,16 +47,6 @@ func (s *service) Register(user *model.User) error {
 		return err
 	}
 	user.Password = string(userWithHashedPassword)
-
-	result := s.db.Create(&user)
-
-	if result.Error != nil && errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-		s.log.Warn("user already exists")
-		return errors.New("user already exists")
-	}
-	if result.Error != nil {
-		s.log.Error("saving user error", result.Error)
-		return result.Error
-	}
-	return nil
+	generatedUserId := uuid.New()
+	return s.userStorage.SaveUser(user, generatedUserId)
 }
