@@ -15,6 +15,7 @@ type LoginOut struct {
 }
 
 type RegisterIn struct {
+	Username        string `json:"username"`
 	FirstName       string `json:"name"`
 	MiddleName      string `json:"middle_name"`
 	LastName        string `json:"last_name"`

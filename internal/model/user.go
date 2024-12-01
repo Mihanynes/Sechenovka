@@ -3,6 +3,7 @@ package model
 import "github.com/google/uuid"
 
 type User struct {
+	Username   string
 	FirstName  string
 	MiddleName string
 	LastName   string

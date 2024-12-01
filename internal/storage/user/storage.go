@@ -17,9 +17,9 @@ func New(db *gorm.DB) *storage {
 	}
 }
 
-func (s *storage) GetUserBySnils(snils string) (*User, error) {
+func (s *storage) GetUserByUsername(username string) (*User, error) {
 	userFromDB := User{}
-	result := s.db.First(&userFromDB, "snils = ?", snils)
+	result := s.db.First(&userFromDB, "username = ?", username)
 	if result.Error != nil {
 		return nil, errors.New("user not found")
 	}

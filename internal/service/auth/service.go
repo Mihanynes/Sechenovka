@@ -20,8 +20,8 @@ func New(userStorage userStorage, log *slog.Logger) *service {
 	}
 }
 
-func (s *service) Login(snils string, password string) (string, error) {
-	userFromDB, err := s.userStorage.GetUserBySnils(snils)
+func (s *service) Login(username string, password string) (string, error) {
+	userFromDB, err := s.userStorage.GetUserByUsername(username)
 	if err != nil {
 		return "", err
 	}
