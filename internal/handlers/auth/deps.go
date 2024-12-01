@@ -1,8 +1,11 @@
 package auth
 
-import "Sechenovka/internal/model"
+import (
+	"Sechenovka/internal/model"
+	"github.com/google/uuid"
+)
 
 type authService interface {
-	Login(username, password string) error
+	Login(snils string, password string) (uuid.UUID, error)
 	Register(user *model.User) error
 }
