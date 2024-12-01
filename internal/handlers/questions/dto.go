@@ -1,4 +1,4 @@
-package question
+package questions
 
 import (
 	"Sechenovka/internal/model"
@@ -26,7 +26,7 @@ type Option struct {
 
 func (q *QuestionIn) Validate() error {
 	if q.QuestionText == "" {
-		return errors.New("question text is required")
+		return errors.New("questions text is required")
 	}
 	if q.CorrelationId == "" {
 		return errors.New("correlation id is required")

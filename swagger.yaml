@@ -104,10 +104,10 @@ paths:
   /questions/start:
     get:
       summary: Start a new quiz
-      description: Start the quiz and return the first question.
+      description: Start the quiz and return the first questions.
       responses:
         '200':
-          description: Quiz started, first question returned
+          description: Quiz started, first questions returned
           content:
             application/json:
               schema:
@@ -137,8 +137,8 @@ paths:
 
   /questions/question:
     post:
-      summary: Get a question based on the previous answer
-      description: Get the next question based on the user's response to the current question.
+      summary: Get a questions based on the previous answer
+      description: Get the next questions based on the user's response to the current questions.
       requestBody:
         required: true
         content:

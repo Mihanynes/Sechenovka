@@ -6,3 +6,8 @@ type SaveUserResponseIn struct {
 	CorrelationId string `json:"correlation_id"`
 	ResponseScore int    `json:"response_score"`
 }
+
+type GetUserScoreIn struct {
+	UserId        int    `json:"user_id"`
+	CorrelationId string `json:"correlation_id"`
+}

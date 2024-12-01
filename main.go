@@ -5,7 +5,7 @@ import (
 	"Sechenovka/db"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
-	questions_handler "Sechenovka/internal/handlers/question"
+	questions_handler "Sechenovka/internal/handlers/questions"
 	user_response_handler "Sechenovka/internal/handlers/user_response"
 	auth_service "Sechenovka/internal/service/auth"
 	question_service "Sechenovka/internal/service/question_config"
@@ -59,9 +59,9 @@ func main() {
 		router.Post("/login", authHandler.Login)
 		router.Post("/logout", middleware.BasicAuth, authHandler.LogoutUser)
 	})
-	micro.Route("/question", func(router fiber.Router) {
+	micro.Route("/questions", func(router fiber.Router) {
 		router.Post("/start", questionsHandler.StartQuiz)
-		router.Post("/question", questionsHandler.GetQuestion)
+		router.Post("/questions", questionsHandler.GetQuestion)
 	})
 	micro.Route("/response", func(router fiber.Router) {
 		router.Post("/save", userResponseHandler.SaveUserResponse)

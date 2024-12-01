@@ -24,19 +24,17 @@ func (s *storage) SaveUserResponse(userResponse *model.UserResponse) error {
 		},
 		CorrelationId: userResponse.CorrelationId,
 	}
-	if err := s.db.Create(dal).Error; err != nil {
-		return err
-	}
-	return nil
+	return s.db.Create(dal).Error
 }
 
 // GetUserScore Метод для получения суммы score по correlationId
-func (s *storage) GetUserScore(correlationId string) (int, error) {
+func (s *storage) GetUserScore(userId int, correlationId string) (int, error) {
 	var totalScore int64
 
 	err := s.db.Model(&UserResponse{}).
 		Select("SUM(response_score)").
 		Where("correlation_id = ?", correlationId).
+		Where("user_id = ?", userId).
 		Scan(&totalScore).Error
 
 	if err != nil {

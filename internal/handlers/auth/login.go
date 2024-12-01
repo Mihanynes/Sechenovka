@@ -1,12 +1,11 @@
 package auth
 
 import (
-	dto "Sechenovka/internal/dto/user"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (h *handler) Login(c *fiber.Ctx) error {
-	var userIn dto.LoginIn
+	var userIn LoginIn
 
 	if err := c.BodyParser(&userIn); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
