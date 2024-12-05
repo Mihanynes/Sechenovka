@@ -24,15 +24,21 @@ import (
 
 func main() {
 	app := fiber.New()
-	micro := fiber.New()
-	app.Mount("/api", micro)
-	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:8080",
+		AllowOrigins:     "*",
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, DELETE",
 		AllowCredentials: true,
 	}))
+	micro := fiber.New()
+	micro.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods:     "GET, POST, DELETE",
+		AllowCredentials: true,
+	}))
+	app.Mount("/api", micro)
+	app.Use(logger.New())
 
 	db := db.ConnectDB()
 
