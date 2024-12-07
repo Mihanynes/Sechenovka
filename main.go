@@ -28,14 +28,14 @@ func main() {
 		AllowOrigins:     "*",
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, DELETE",
-		AllowCredentials: true,
+		AllowCredentials: false,
 	}))
 	micro := fiber.New()
 	micro.Use(cors.New(cors.Config{
 		AllowOrigins:     "*",
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, DELETE",
-		AllowCredentials: true,
+		AllowCredentials: false,
 	}))
 	app.Mount("/api", micro)
 	app.Use(logger.New())
