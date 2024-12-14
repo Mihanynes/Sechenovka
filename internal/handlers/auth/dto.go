@@ -37,7 +37,7 @@ func (r *RegisterIn) Validate() error {
 		return errors.New("email is required")
 	}
 	if len(r.Password) < 8 {
-		return errors.New("password is required")
+		return errors.New("password must be at least 8 characters")
 	}
 	if r.PasswordConfirm != r.Password {
 		return errors.New("different passwords")
