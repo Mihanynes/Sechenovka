@@ -1,14 +1,17 @@
 package model
 
-type Question struct {
-	Text        string   `yaml:"text"`
-	ScoreToFail *int     `yaml:"score_to_fail"`
-	Options     []Option `yaml:"options"`
+type Option struct {
+	AnswerText     string `yaml:"answer_text"`
+	AnswerID       int    `yaml:"answer_id"`
+	QuestionID     int    `yaml:"question_id"`
+	Points         int    `yaml:"points"`
+	NextQuestionID int    `yaml:"next_question_id,omitempty"`
+	IsEnded        bool   `yaml:"is_ended,omitempty"`
 }
 
-// Опция ответа на вопрос
-type Option struct {
-	Answer           string `yaml:"answer"`
-	Points           int    `yaml:"points"`
-	NextQuestionText string `yaml:"next_question_text,omitempty"` // Ссылка на текст следующего вопроса (если есть)
+type Question struct {
+	QuestionText string    `yaml:"question_text"`
+	QuestionID   int       `yaml:"question_id"`
+	ScoreToFail  int       `yaml:"score_to_fail,omitempty"`
+	Options      []*Option `yaml:"options"`
 }
