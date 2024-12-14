@@ -16,7 +16,7 @@ func (h *handler) GetQuestion(c *fiber.Ctx) error {
 	if err = questionIn.Validate(); err != nil {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
-	question, err := h.questionService.GetOptionsByQuestionText(questionIn.QuestionText)
+	question, err := h.questionService.GetOptionsByQuestionId(questionIn.QuestionId)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

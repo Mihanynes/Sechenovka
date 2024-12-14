@@ -11,5 +11,5 @@ type userResponsesStorage interface {
 }
 
 type questionsConfig interface {
-	GetOptionsByQuestionText(questionText string) (*model.Question, error)
+	GetOptionsByQuestionId(questionId int) (*model.Question, error)
 }

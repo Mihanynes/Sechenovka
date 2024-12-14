@@ -14,37 +14,37 @@ func Test_ParseYAML(t *testing.T) {
 	//expectedQuestions := []*model.Question{
 	//	{
 	//		QuestionText: "Есть ли у вас боль или дискомфорт в грудной клетке?",
-	//		QuestionID:   1,
+	//		QuestionId:   1,
 	//		Options: []*model.Option{
 	//			{
 	//				AnswerText:     "да",
-	//				AnswerID:       1,
-	//				QuestionID:     1,
+	//				AnswerId:       1,
+	//				QuestionId:     1,
 	//				Points:         0,
-	//				NextQuestionID: 2,
+	//				NextQuestionId: 2,
 	//			},
 	//			{
 	//				AnswerText:     "нет",
-	//				AnswerID:       2,
-	//				QuestionID:     1,
+	//				AnswerId:       2,
+	//				QuestionId:     1,
 	//				Points:         0,
-	//				NextQuestionID: 2,
+	//				NextQuestionId: 2,
 	//			},
 	//		},
 	//	},
 	//	{
-	//		QuestionID:   2,
+	//		QuestionId:   2,
 	//		QuestionText: "Когда возникают боли?",
 	//		Options: []*model.Option{
 	//			{
 	//				AnswerText:     "При покое",
 	//				Points:         0,
-	//				NextQuestionID: 3,
+	//				NextQuestionId: 3,
 	//			},
 	//			{
 	//				AnswerText:     "При ходьбе",
 	//				Points:         1,
-	//				NextQuestionID: 4,
+	//				NextQuestionId: 4,
 	//			},
 	//			{
 	//				AnswerText: "При поворотах тела",

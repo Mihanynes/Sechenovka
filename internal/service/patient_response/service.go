@@ -28,7 +28,7 @@ func (s *service) SaveUserResponse(userResponse *model.UserResponse) (bool, erro
 		return false, err
 	}
 
-	question, err := s.questionsConfig.GetOptionsByQuestionText(userResponse.QuestionText)
+	question, err := s.questionsConfig.GetOptionsByQuestionId(userResponse.QuestionId)
 	if err != nil {
 		return false, err
 	}

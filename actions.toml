@@ -1,0 +1,9 @@
+[[actions]]
+on = ["fmt"]
+runner="docker@avito/actions-golang:1.23"
+run = "fmt"
+
+[[actions]]
+on = ["lint", "ci-lint"]
+runner="docker@avito/actions-golang:1.23"
+run = "lint v1.61"

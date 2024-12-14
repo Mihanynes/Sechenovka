@@ -2,28 +2,29 @@ package questions
 
 import (
 	"errors"
-	"strings"
 )
 
 type QuestionIn struct {
-	QuestionText string `json:"question_text"`
+	QuestionId int `json:"question_id"`
 }
 
 type QuestionOut struct {
 	QuestionText  string   `json:"question_text,omitempty"`
 	Options       []Option `json:"options,omitempty"`
-	CorrelationID string   `json:"correlation_id,omitempty"`
+	CorrelationId string   `json:"correlation_id,omitempty"`
 }
 
 type Option struct {
-	Answer           string `json:"answer"`
-	Points           int    `json:"points"`
-	NextQuestionText string `json:"next_question_text"`
+	AnswerText     string `json:"answer_text"`
+	AnswerId       int    `json:"answer_id"`
+	Points         int    `json:"points"`
+	NextQuestionId int    `json:"next_question_id"`
+	IsEnded        bool   `json:"is_ended,omitempty"`
 }
 
 func (q *QuestionIn) Validate() error {
-	if strings.TrimSpace(q.QuestionText) == "" {
-		return errors.New("questions text is required")
+	if q.QuestionId <= 0 {
+		return errors.New("wrong question id")
 	}
 	return nil
 }
