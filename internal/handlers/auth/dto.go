@@ -19,6 +19,7 @@ type RegisterIn struct {
 	FirstName       string `json:"first_name"`
 	MiddleName      string `json:"middle_name"`
 	LastName        string `json:"last_name"`
+	Phone           string `json:"phone"`
 	Email           string `json:"email"`
 	Snils           string `json:"snils"`
 	Password        string `json:"password"`
@@ -26,7 +27,7 @@ type RegisterIn struct {
 	IsAdmin         bool   `json:"is_admin"`
 }
 
-func (r *RegisterIn) Validate() error {
+func (r *RegisterIn) ValidateUser() error {
 	if r.FirstName == "" {
 		return errors.New("name is required")
 	}
@@ -35,6 +36,22 @@ func (r *RegisterIn) Validate() error {
 	}
 	if r.Email == "" {
 		return errors.New("email is required")
+	}
+	if len(r.Password) < 8 {
+		return errors.New("password must be at least 8 characters")
+	}
+	if r.PasswordConfirm != r.Password {
+		return errors.New("different passwords")
+	}
+	return nil
+}
+
+func (r *RegisterIn) ValidateAdmin() error {
+	if r.FirstName == "" {
+		return errors.New("name is required")
+	}
+	if r.LastName == "" {
+		return errors.New("last name is required")
 	}
 	if len(r.Password) < 8 {
 		return errors.New("password must be at least 8 characters")

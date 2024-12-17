@@ -11,6 +11,7 @@ type User struct {
 	FirstName  string
 	MiddleName string
 	LastName   string
+	Phone      string
 	Snils      string
 	Email      string
 	Password   string
@@ -24,13 +25,20 @@ func (u UserId) String() string {
 }
 
 func UserIdFromCtx(c *fiber.Ctx) (UserId, error) {
-	rowUserId, ok := c.Locals("userId").(string) // Предполагается, что ID пользователя имеет тип uint
+	rowUserId, ok := c.Locals("userId").(string)
 	if !ok {
 		return UserId{}, errors.New("Failed to get userId from context")
 	}
 	return UserIdFromString(rowUserId), nil
 }
 
+func IsAdminFromCtx(c *fiber.Ctx) (bool, error) {
+	isAdmin, ok := c.Locals("isAdmin").(bool)
+	if !ok {
+		return false, errors.New("Failed to get isAdmin from context")
+	}
+	return isAdmin, nil
+}
 func UserIdFromString(s string) UserId {
 	return UserId(uuid.MustParse(s))
 }

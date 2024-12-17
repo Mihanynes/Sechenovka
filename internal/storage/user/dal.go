@@ -6,6 +6,7 @@ type User struct {
 	FirstName  string `gorm:"type:varchar;not null"`
 	LastName   string `gorm:"type:varchar;not null"`
 	MiddleName string `gorm:"type:varchar;not null"`
+	Phone      string `gorm:"type:varchar;not null"`
 	Snils      string `gorm:"type:varchar;uniqueIndex;not null"`
 	Email      string `gorm:"type:varchar(100);not null"`
 	Password   string `gorm:"type:varchar(100);not null"`

@@ -28,7 +28,7 @@ func (s *storage) GetUserByUsername(username string) (*User, error) {
 
 func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 	userFromDB := User{}
-	result := s.db.First(&userFromDB, "userId = ?", userId)
+	result := s.db.First(&userFromDB, "user_id = ?", userId.String())
 	if result.Error != nil {
 		return nil, errors.New("user not found")
 	}
@@ -55,6 +55,7 @@ func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
 		MiddleName: user.MiddleName,
+		Phone:      user.Phone,
 		Snils:      user.Snils,
 		Email:      user.Email,
 		Password:   user.Password,

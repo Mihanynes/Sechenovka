@@ -75,21 +75,22 @@ func main() {
 		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")
 	})
 	micro.Route("/auth", func(router fiber.Router) {
-		router.Post("/register", authHandler.Register)
+		router.Post("/register/user", middleware.AdminAuth, authHandler.RegisterUser)
+		router.Post("/register/admin", authHandler.RegisterAdmin)
 		router.Post("/login", authHandler.Login)
-		router.Post("/logout", middleware.BasicAuth, authHandler.LogoutUser)
+		//router.Post("/logout", middleware.UserAuth, authHandler.LogoutUser)
 	})
 	micro.Route("/questions", func(router fiber.Router) {
-		router.Post("/start", middleware.BasicAuth, questionsHandler.StartQuiz)
-		router.Post("/get", questionsHandler.GetQuestion)
+		router.Post("/start", middleware.UserAuth, questionsHandler.StartQuiz)
+		router.Post("/get", middleware.UserAuth, questionsHandler.GetQuestion)
 	})
 	micro.Route("user/response", func(router fiber.Router) {
-		router.Post("/save", middleware.BasicAuth, userResponseHandler.SaveUserResponse)
-		router.Post("/get", middleware.BasicAuth, userResponseHandler.GetUserResponses)
-		router.Post("/results", middleware.BasicAuth, userResponseHandler.GetUsersResult)
+		router.Post("/save", middleware.UserAuth, userResponseHandler.SaveUserResponse)
+		router.Post("/get", middleware.UserAuth, userResponseHandler.GetUserResponses)
+		router.Post("/results", middleware.AdminAuth, userResponseHandler.GetUsersResult)
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
-		router.Post("/patient", patientInfoHandler.GetPatientInfo)
+		router.Post("/patient", middleware.UserAuth, patientInfoHandler.GetPatientInfo)
 	})
 
 	log.Fatal(app.Listen(":8080"))

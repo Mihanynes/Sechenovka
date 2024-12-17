@@ -13,6 +13,18 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
 	}
 
+	userId, err := model.UserIdFromCtx(c)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	isAdmin, err := model.IsAdminFromCtx(c)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if userId.String() != dtoIn.UserId && !isAdmin {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "access denied"})
+	}
+
 	responses, err := h.userResponseStorage.GetUserResponsesByPassNum(model.UserIdFromString(dtoIn.UserId), dtoIn.PassNum)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
