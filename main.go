@@ -50,21 +50,21 @@ func main() {
 		log.Fatal(err)
 	}
 
+	//storage
 	userStorage := user.New(db)
+	userResultStorage := user_result.New(db)
+	doctorPatientStorage := doctor_patient.New(db)
+	userResponseStorage := user_respons_storage.New(db)
+
 	authService := auth_service.New(userStorage, logger)
-	authHandler := authhandler.New(authService)
 
 	patientInfoService := patient_info.New(userStorage)
 	patientInfoHandler := patient.NewHandler(patientInfoService)
 
-	questionsConfigService := question_service.New(initConfig)
+	questionsConfigService := question_service.New(initConfig, userResponseStorage)
 	questionsHandler := questions_handler.New(questionsConfigService)
 
-	userResultStorage := user_result.New(db)
-
-	doctorPatientStorage := doctor_patient.New(db)
-
-	userResponseStorage := user_respons_storage.New(db)
+	authHandler := authhandler.New(authService)
 	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService)
 	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage)
 

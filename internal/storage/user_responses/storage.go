@@ -52,3 +52,15 @@ func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, pas
 	}
 	return userResponses, nil
 }
+
+func (s *UserResponseStorage) GetLastUserResponse(userId model.UserId) (*UserResponse, error) {
+	var userResponse UserResponse
+	err := s.db.Where("user_id = ?", userId.String()).Order("created_at DESC").First(&userResponse).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &userResponse, nil
+}

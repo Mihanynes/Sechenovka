@@ -53,7 +53,7 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 	// Если пациент завершил тест
 	for _, option := range question.Options {
 		if option.AnswerId == responseId && option.IsEnded {
-			err = s.userResultStorage.SaveUserResult(userId, currentTotalScore, passNum, isFailed)
+			err = s.userResultStorage.UpdateUserResult(userId, currentTotalScore, passNum, isFailed)
 			if err != nil {
 				return false, err
 			}

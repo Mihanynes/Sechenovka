@@ -9,9 +9,9 @@ type QuestionIn struct {
 }
 
 type QuestionOut struct {
-	QuestionText  string   `json:"question_text,omitempty"`
-	Options       []Option `json:"options,omitempty"`
-	CorrelationId string   `json:"correlation_id,omitempty"`
+	QuestionText string   `json:"question_text,omitempty"`
+	Options      []Option `json:"options,omitempty"`
+	PassNum      int      `json:"pass_num,omitempty"`
 }
 
 type Option struct {
