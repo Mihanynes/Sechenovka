@@ -1,1 +1,45 @@
 package user_response
+
+import (
+	"Sechenovka/internal/model"
+	"encoding/json"
+	"github.com/gofiber/fiber/v2"
+)
+
+func (h *handler) GetUserResponses(c *fiber.Ctx) error {
+	dtoIn := GetUserResponsesIn{}
+	err := json.Unmarshal(c.Body(), &dtoIn)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
+	}
+
+	responses, err := h.userResponseStorage.GetUserResponsesByPassNum(model.UserIdFromString(dtoIn.UserId), dtoIn.PassNum)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	dtoOut := GetUserResponsesOutList{}
+	for _, response := range responses {
+		responseConfig, err := h.questionConfigService.GetOptionByResponseId(response.ResponseId)
+		if err != nil {
+			continue
+			//return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			//	"message": err.Error(),
+			//})
+		}
+		questionConfig, err := h.questionConfigService.GetQuestionByQuestionId(responseConfig.QuestionId)
+		if err != nil {
+			continue
+			//return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			//	"message": err.Error(),
+			//})
+		}
+		dtoOut.Responses = append(dtoOut.Responses, GetUserResponsesOut{
+			QuestionText:  questionConfig.QuestionText,
+			AnswerText:    responseConfig.AnswerText,
+			ResponseScore: responseConfig.Points,
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(dtoOut)
+}

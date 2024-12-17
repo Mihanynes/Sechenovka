@@ -14,14 +14,15 @@ func NewHandler(patientInfoService patientInfoService) *handler {
 }
 
 func (h *handler) GetPatientInfo(c *fiber.Ctx) error {
-	var getPatientInfoIn GetPatientInfoIn
-	err := c.BodyParser(&getPatientInfoIn)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-	patientInfo, err := h.patientInfoService.GetPatientInfo(model.UserId(getPatientInfoIn.UserId))
+	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
+
+	patientInfo, err := h.patientInfoService.GetPatientInfo(userId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
 	return c.JSON(fiber.Map{"patient_info": patientInfo})
 }

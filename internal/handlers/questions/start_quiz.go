@@ -13,6 +13,7 @@ func (h *handler) StartQuiz(c *fiber.Ctx) error {
 	}
 
 	out := modelToDto(question)
+	//TODO: passNum вместо CorrelationId
 	out.CorrelationId = uuid.New().String()
 	return c.Status(fiber.StatusOK).JSON(out)
 }
@@ -22,6 +23,7 @@ func modelToDto(question *model.Question) QuestionOut {
 	out.QuestionText = question.QuestionText
 	for _, option := range question.Options {
 		dtoOption := Option{
+			AnswerText:     option.AnswerText,
 			AnswerId:       option.AnswerId,
 			Points:         option.Points,
 			NextQuestionId: option.NextQuestionId,

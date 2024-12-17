@@ -12,21 +12,16 @@ func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
-	isFailed, err := h.userResponseService.SaveUserResponse(dtoToModel(dtoIn))
+
+	userId, err := model.UserIdFromCtx(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	isFailed, err := h.userResponseService.SaveUserResponse(userId, dtoIn.ResponseId, dtoIn.PassNum)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"isFailed": isFailed})
-}
-
-func dtoToModel(in SaveUserResponseIn) *model.UserResponse {
-	return &model.UserResponse{
-		UserId:       model.UserId(in.UserId),
-		QuestionText: in.QuestionText,
-		Response: model.Response{
-			Score: in.ResponseScore,
-		},
-		CorrelationId: in.CorrelationId,
-	}
 }

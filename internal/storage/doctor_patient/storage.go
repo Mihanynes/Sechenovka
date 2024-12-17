@@ -2,21 +2,20 @@ package doctor_patient
 
 import (
 	"Sechenovka/internal/model"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-type storage struct {
+type DoctorPatientsStorage struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) *storage {
-	return &storage{
+func New(db *gorm.DB) *DoctorPatientsStorage {
+	return &DoctorPatientsStorage{
 		db: db,
 	}
 }
 
-func (s *storage) GetPatientsIdsByDoctorId(doctorID uuid.UUID) ([]model.UserId, error) {
+func (s *DoctorPatientsStorage) GetPatientsIdsByDoctorId(doctorID model.UserId) ([]model.UserId, error) {
 	patients := make([]model.UserId, 0)
 	err := s.db.Model(DoctorPatient{}).
 		Select("patient_id").
@@ -26,4 +25,24 @@ func (s *storage) GetPatientsIdsByDoctorId(doctorID uuid.UUID) ([]model.UserId, 
 		return nil, err
 	}
 	return patients, nil
+}
+
+func (s *DoctorPatientsStorage) SaveDoctorPatientLink(doctorId, patientId model.UserId) error {
+	link := DoctorPatient{
+		DoctorId:  doctorId.String(),
+		PatientId: patientId.String(),
+	}
+	result := s.db.Create(&link)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (s *DoctorPatientsStorage) DeleteDoctorPatientLink(doctorID, patientID model.UserId) error {
+	result := s.db.Delete(&DoctorPatient{}, "doctor_id = ? AND patient_id = ?", doctorID, patientID)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

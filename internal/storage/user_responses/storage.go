@@ -6,25 +6,21 @@ import (
 	"gorm.io/gorm"
 )
 
-type storage struct {
+type UserResponseStorage struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) *storage {
-	return &storage{
+func New(db *gorm.DB) *UserResponseStorage {
+	return &UserResponseStorage{
 		db: db,
 	}
 }
 
-func (s *storage) SaveUserResponse(userResponse *model.UserResponse) error {
+func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, passNum int) error {
 	dal := &UserResponse{
-		UserId: userResponse.UserId.String(),
-		Response: Response{
-			AnswerText: userResponse.Response.AnswerText,
-			//AnswerId: userResponse.Response.AnswerId,
-			Score: userResponse.Response.Score,
-		},
-		CorrelationId: userResponse.CorrelationId,
+		UserId:     userId.String(),
+		ResponseId: responseId,
+		PassNum:    passNum,
 	}
 	if err := s.db.Create(dal).Error; err != nil {
 		return errors.Wrap(err, "SaveUserResponse[Storage]")
@@ -32,13 +28,12 @@ func (s *storage) SaveUserResponse(userResponse *model.UserResponse) error {
 	return nil
 }
 
-// GetUserScore Метод для получения суммы score по correlationId
-func (s *storage) GetUserTotalScore(userId model.UserId, correlationId string) (int, error) {
+func (s *UserResponseStorage) GetUserTotalScore(userId model.UserId, passNum int) (int, error) {
 	var totalScore int64
 
 	err := s.db.Model(&UserResponse{}).
-		Select("SUM(response_score)").
-		Where("correlation_id = ?", correlationId).
+		Select("SUM(pass_num)").
+		Where("pass_num = ?", passNum).
 		Where("user_id = ?", userId.String()).
 		Scan(&totalScore).Error
 
@@ -49,26 +44,11 @@ func (s *storage) GetUserTotalScore(userId model.UserId, correlationId string) (
 	return int(totalScore), nil
 }
 
-func (s *storage) GetUserResponses(userId model.UserId) ([]*model.UserResponse, error) {
+func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0)
-	err := s.db.Where("user_id = ?", userId).Find(&userResponses).Error
+	err := s.db.Where("user_id = ?", userId.String()).Where("pass_num = ?", passNum).Order("created_at ASC").Find(&userResponses).Error
 	if err != nil {
 		return nil, err
 	}
-	res := make([]*model.UserResponse, len(userResponses))
-	for _, userResponse := range userResponses {
-		res = append(
-			res,
-			&model.UserResponse{
-				UserId: model.UserIdFromString(userResponse.UserId),
-				//QuestionId: userResponse.QuestionId,
-				Response: model.Response{
-					//AnswerId: userResponse.Response.AnswerId,
-					Score: userResponse.Response.Score,
-				},
-				CorrelationId: "",
-			},
-		)
-	}
-	return res, nil
+	return userResponses, nil
 }

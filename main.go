@@ -12,8 +12,10 @@ import (
 	"Sechenovka/internal/service/patient_info"
 	user_response_service "Sechenovka/internal/service/patient_response"
 	question_service "Sechenovka/internal/service/question_config"
+	"Sechenovka/internal/storage/doctor_patient"
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
+	"Sechenovka/internal/storage/user_result"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -58,9 +60,13 @@ func main() {
 	questionsConfigService := question_service.New(initConfig)
 	questionsHandler := questions_handler.New(questionsConfigService)
 
+	userResultStorage := user_result.New(db)
+
+	doctorPatientStorage := doctor_patient.New(db)
+
 	userResponseStorage := user_respons_storage.New(db)
-	userResponseService := user_response_service.New(userResponseStorage, questionsConfigService)
-	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage)
+	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService)
+	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage)
 
 	middleware := middleware.New(db)
 
@@ -78,7 +84,9 @@ func main() {
 		router.Post("/get", questionsHandler.GetQuestion)
 	})
 	micro.Route("user/response", func(router fiber.Router) {
-		router.Post("/save", userResponseHandler.SaveUserResponse)
+		router.Post("/save", middleware.BasicAuth, userResponseHandler.SaveUserResponse)
+		router.Post("/get", middleware.BasicAuth, userResponseHandler.GetUserResponses)
+		router.Post("/results", middleware.BasicAuth, userResponseHandler.GetUsersResult)
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/patient", patientInfoHandler.GetPatientInfo)

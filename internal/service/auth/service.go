@@ -37,13 +37,13 @@ func (s *service) Login(username string, password string) (string, error) {
 func (s *service) Register(user *model.User) error {
 	userWithHashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		s.log.Error("error while hashing password", err)
+		s.log.Error("error while hashing password", err.Error())
 		return err
 	}
 	user.Password = string(userWithHashedPassword)
 	generatedUserId := uuid.New()
 	if err := s.userStorage.SaveUser(user, generatedUserId); err != nil {
-		s.log.Error("error while saving user", err)
+		s.log.Error("error while saving user", err.Error())
 		return err
 	}
 	return nil

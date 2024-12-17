@@ -1,11 +1,11 @@
 package model
 
 type UserResponse struct {
-	UserId        UserId
-	QuestionId    int
-	QuestionText  string
-	Response      Response
-	CorrelationId string
+	UserId       UserId
+	QuestionId   int
+	QuestionText string
+	Response     Response
+	PassNum      int
 }
 
 type Response struct {

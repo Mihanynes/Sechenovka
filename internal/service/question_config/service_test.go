@@ -36,8 +36,8 @@ package question_config
 //
 //	for _, tc := range testCases {
 //		t.Run(tc.name, func(t *testing.T) {
-//			service := New(fakeQuestions)
-//			options, err := service.GetOptionsByQuestionText(tc.questionText)
+//			QuestionConfigService := New(fakeQuestions)
+//			options, err := QuestionConfigService.GetOptionsByQuestionText(tc.questionText)
 //
 //			if (err != nil) != tc.expectedError {
 //				t.Errorf("Ожидали ошибку: %v, получили: %v", tc.expectedError, err)

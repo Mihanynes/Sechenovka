@@ -6,5 +6,5 @@ import (
 
 type questionService interface {
 	GetFirstQuestion() (*model.Question, error)
-	GetOptionsByQuestionId(questionId int) (*model.Question, error)
+	GetQuestionByQuestionId(questionId int) (*model.Question, error)
 }

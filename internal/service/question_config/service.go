@@ -7,26 +7,48 @@ import (
 
 const firstQuestion = 1
 
-type service struct {
+type QuestionConfigService struct {
 	questions []*model.Question
 }
 
-func New(questions []*model.Question) *service {
-	return &service{
+func New(questions []*model.Question) *QuestionConfigService {
+	return &QuestionConfigService{
 		questions: questions,
 	}
 }
 
-func (s *service) GetFirstQuestion() (*model.Question, error) {
-	return s.GetOptionsByQuestionId(firstQuestion)
+func (s *QuestionConfigService) GetFirstQuestion() (*model.Question, error) {
+	return s.GetQuestionByQuestionId(firstQuestion)
 }
 
 // GetOptionsByQuestionText Получение опций ответа по тексту вопроса
-func (s *service) GetOptionsByQuestionId(questionId int) (*model.Question, error) {
+func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int) (*model.Question, error) {
 	for _, question := range s.questions {
 		if question.QuestionId == questionId {
 			return question, nil
 		}
 	}
 	return nil, fmt.Errorf("вопрос с текстом '%v' не найден", questionId)
+}
+
+func (s *QuestionConfigService) GetQuestionByResponseId(responseId int) (*model.Question, error) {
+	for _, question := range s.questions {
+		for _, option := range question.Options {
+			if option.AnswerId == responseId {
+				return question, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("ответ с id '%v' не найден", responseId)
+}
+
+func (s *QuestionConfigService) GetOptionByResponseId(responseId int) (*model.Option, error) {
+	for _, question := range s.questions {
+		for _, option := range question.Options {
+			if option.AnswerId == responseId {
+				return option, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("ответ с id '%v' не найден", responseId)
 }
