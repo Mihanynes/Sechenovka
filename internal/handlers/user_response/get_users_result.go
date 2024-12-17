@@ -3,16 +3,15 @@ package user_response
 import (
 	"Sechenovka/internal/model"
 	"Sechenovka/internal/storage/user_result"
-	"encoding/json"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (h *handler) GetUsersResult(c *fiber.Ctx) error {
-	var getUserScoreIn GetUsersResultIn
-	err := json.Unmarshal(c.Body(), &getUserScoreIn)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
-	}
+	//var getUserScoreIn GetUsersResultIn
+	//err := json.Unmarshal(c.Body(), &getUserScoreIn)
+	//if err != nil {
+	//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
+	//}
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
