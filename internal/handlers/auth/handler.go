@@ -1,11 +1,13 @@
 package auth
 
 type handler struct {
-	authService authService
+	authService          authService
+	doctorPatientStorage doctorPatientStorage
 }
 
-func New(authService authService) *handler {
+func New(authService authService, doctorPatientStorage doctorPatientStorage) *handler {
 	return &handler{
-		authService: authService,
+		authService:          authService,
+		doctorPatientStorage: doctorPatientStorage,
 	}
 }

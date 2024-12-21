@@ -6,5 +6,9 @@ import (
 
 type authService interface {
 	Login(username string, password string) (string, error)
-	Register(user *model.User) error
+	Register(user *model.User) (*model.UserId, error)
+}
+
+type doctorPatientStorage interface {
+	SaveDoctorPatientLink(doctorId, patientId model.UserId) error
 }

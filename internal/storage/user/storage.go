@@ -3,7 +3,6 @@ package user
 import (
 	"Sechenovka/internal/model"
 	"errors"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -35,20 +34,20 @@ func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 	return &userFromDB, nil
 }
 
-func (s *storage) GetPatientsByDoctorId(doctorID uuid.UUID) ([]User, error) {
-	var patients []User
-	err := s.db.Table("users").
-		Select("users.*").
-		Joins("join doctor_patients on doctor_patients.patient_id = users.user_id").
-		Where("doctor_patients.doctor_id = ?", doctorID).
-		Find(&patients).Error
-	if err != nil {
-		return nil, errors.New("could not retrieve patients: " + err.Error())
-	}
-	return patients, nil
-}
+//func (s *storage) GetPatientsByDoctorId(doctorID model.UserId) ([]User, error) {
+//	var patients []User
+//	err := s.db.Table("users").
+//		Select("users.*").
+//		Joins("join doctor_patients on doctor_patients.patient_id = users.user_id").
+//		Where("doctor_patients.doctor_id = ?", doctorID).
+//		Find(&patients).Error
+//	if err != nil {
+//		return nil, errors.New("could not retrieve patients: " + err.Error())
+//	}
+//	return patients, nil
+//}
 
-func (s *storage) SaveUser(user *model.User, userId uuid.UUID) error {
+func (s *storage) SaveUser(user *model.User, userId model.UserId) error {
 	userToSave := User{
 		UserId:     userId.String(),
 		Username:   user.Username,

@@ -34,17 +34,18 @@ func (s *service) Login(username string, password string) (string, error) {
 	return userFromDB.UserId, nil
 }
 
-func (s *service) Register(user *model.User) error {
+func (s *service) Register(user *model.User) (*model.UserId, error) {
 	userWithHashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		s.log.Error("error while hashing password", err.Error())
-		return err
+		return nil, err
 	}
 	user.Password = string(userWithHashedPassword)
-	generatedUserId := uuid.New()
+	generatedUserId := model.UserId(uuid.New())
+
 	if err := s.userStorage.SaveUser(user, generatedUserId); err != nil {
 		s.log.Error("error while saving user", err.Error())
-		return err
+		return nil, err
 	}
-	return nil
+	return &generatedUserId, nil
 }

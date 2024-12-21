@@ -64,7 +64,7 @@ func main() {
 	questionsConfigService := question_service.New(initConfig, userResponseStorage)
 	questionsHandler := questions_handler.New(questionsConfigService)
 
-	authHandler := authhandler.New(authService)
+	authHandler := authhandler.New(authService, doctorPatientStorage)
 	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService)
 	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage)
 
