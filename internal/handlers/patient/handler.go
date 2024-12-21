@@ -24,5 +24,5 @@ func (h *handler) GetPatientInfo(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.JSON(fiber.Map{"patient_info": patientInfo})
+	return c.JSON(patientInfo)
 }

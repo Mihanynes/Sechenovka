@@ -70,7 +70,7 @@ func main() {
 
 	middleware := middleware.New(db)
 
-	micro.Static("/", "./public/images/img.png")
+	micro.Static("/static", "./public/images/img.png")
 	micro.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")
 	})
