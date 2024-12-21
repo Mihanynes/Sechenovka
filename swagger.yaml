@@ -63,7 +63,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterIn'
+              $ref: '#/components/schemas/RegisterUserIn'
       responses:
         '200':
           description: Успешная регистрация пользователя.
@@ -93,7 +93,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterIn'
+              $ref: '#/components/schemas/RegisterAdminIn'
       responses:
         '200':
           description: Успешная регистрация администратора.
@@ -322,7 +322,7 @@ components:
           description: Уникальный идентификатор пользователя.
           example: "123e4567-e89b-12d3-a456-426614174000"
 
-    RegisterIn:
+    RegisterUserIn:
       type: object
       properties:
         username:
@@ -352,15 +352,44 @@ components:
         password_confirm:
           type: string
           example: "11111111"
-        is_admin:
-          type: boolean
-          example: false
       required:
         - first_name
         - last_name
         - email
         - password
         - password_confirm
+
+    RegisterAdminIn:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "mihanynes"
+        first_name:
+          type: string
+          example: "misha"
+        middle_name:
+          type: string
+          example: "andreevich"
+        last_name:
+          type: string
+          example: "petrov"
+        password:
+          type: string
+          example: "11111111"
+        password_confirm:
+          type: string
+          example: "11111111"
+        admin_token:
+          type: string
+          example: "sechenovka"
+    required:
+      - username
+      - first_name
+      - last_name
+      - password
+      - password_confirm
+      - admin_token
 
     GetPatientInfoIn:
       type: object

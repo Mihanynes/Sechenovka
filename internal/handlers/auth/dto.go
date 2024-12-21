@@ -14,7 +14,7 @@ type LoginOut struct {
 	UserId uuid.UUID `json:"userId"  validate:"required"`
 }
 
-type RegisterIn struct {
+type RegisterUserIn struct {
 	Username        string `json:"username"`
 	FirstName       string `json:"first_name"`
 	MiddleName      string `json:"middle_name"`
@@ -24,10 +24,19 @@ type RegisterIn struct {
 	Snils           string `json:"snils"`
 	Password        string `json:"password"`
 	PasswordConfirm string `json:"password_confirm"`
-	IsAdmin         bool   `json:"is_admin"`
 }
 
-func (r *RegisterIn) ValidateUser() error {
+type RegisterAdminIn struct {
+	Username        string `json:"username"`
+	FirstName       string `json:"first_name"`
+	MiddleName      string `json:"middle_name"`
+	LastName        string `json:"last_name"`
+	Password        string `json:"password"`
+	PasswordConfirm string `json:"password_confirm"`
+	AdminToken      string `json:"admin_token"`
+}
+
+func (r *RegisterUserIn) ValidateUser() error {
 	if r.FirstName == "" {
 		return errors.New("name is required")
 	}
@@ -46,7 +55,7 @@ func (r *RegisterIn) ValidateUser() error {
 	return nil
 }
 
-func (r *RegisterIn) ValidateAdmin() error {
+func (r *RegisterAdminIn) ValidateAdmin() error {
 	if r.FirstName == "" {
 		return errors.New("name is required")
 	}
@@ -58,6 +67,9 @@ func (r *RegisterIn) ValidateAdmin() error {
 	}
 	if r.PasswordConfirm != r.Password {
 		return errors.New("different passwords")
+	}
+	if r.AdminToken != "sechenovka" {
+		return errors.New("admin token is required")
 	}
 	return nil
 }
