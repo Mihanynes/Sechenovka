@@ -31,5 +31,6 @@ func (s *service) GetPatientInfo(userId model.UserId) (*model.PatientInfo, error
 		LastName:   user.LastName,
 		Snils:      user.Snils,
 		Email:      user.Email,
+		Phone:      user.Phone,
 	}, err
 }

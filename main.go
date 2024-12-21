@@ -26,6 +26,7 @@ import (
 
 func main() {
 	app := fiber.New()
+
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "*",
 		AllowHeaders:     "Origin, Content-Type, Accept",
@@ -71,6 +72,7 @@ func main() {
 	middleware := middleware.New(db)
 
 	micro.Static("/static", "./public/images/img.png")
+
 	micro.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")
 	})

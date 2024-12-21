@@ -6,4 +6,5 @@ type PatientInfo struct {
 	LastName   string `json:"last_name"`
 	Snils      string `json:"snils"`
 	Email      string `json:"email"`
+	Phone      string `json:"phone"`
 }
