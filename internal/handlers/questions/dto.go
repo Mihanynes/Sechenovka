@@ -15,8 +15,8 @@ type QuestionOut struct {
 }
 
 type Option struct {
-	AnswerText     string `json:"answer_text"`
-	AnswerId       int    `json:"answer_id"`
+	AnswerText     string `json:"response_text"`
+	AnswerId       int    `json:"response_id"`
 	Points         int    `json:"points"`
 	NextQuestionId int    `json:"next_question_id"`
 	IsEnded        bool   `json:"is_ended,omitempty"`
