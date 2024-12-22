@@ -7,7 +7,7 @@ type User struct {
 	LastName   string `gorm:"type:varchar;not null"`
 	MiddleName string `gorm:"type:varchar;not null"`
 	Phone      string `gorm:"type:varchar"`
-	Snils      string `gorm:"type:varchar;uniqueIndex;not null"`
+	Snils      string `gorm:"type:varchar;not null"`
 	Email      string `gorm:"type:varchar(100);not null"`
 	Password   string `gorm:"type:varchar(100);not null"`
 	IsAdmin    bool   `gorm:"default:false;not null"`

@@ -7,6 +7,8 @@ import (
 	"Sechenovka/internal/storage/user_result"
 )
 
+const isEnded = true
+
 type service struct {
 	userResponsesStorage *user_respons_storage.UserResponseStorage
 	userResultStorage    *user_result.UserResultStorage
@@ -25,7 +27,7 @@ func New(
 	}
 }
 
-// SaveUserResponse возвращает true первым аргументом, если пациент перешел порог баллов
+// SaveUserResponse возвращает true первым аргументом, если пациент перешел завершил тест
 func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int) (bool, error) {
 	err := s.userResponsesStorage.SaveUserResponse(userId, responseId, passNum)
 	if err != nil {
@@ -57,6 +59,7 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 			if err != nil {
 				return false, err
 			}
+			return isEnded, nil
 		}
 	}
 

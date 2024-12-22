@@ -19,7 +19,6 @@ type Option struct {
 	AnswerId       int    `json:"answer_id"`
 	Points         int    `json:"points"`
 	NextQuestionId int    `json:"next_question_id"`
-	IsEnded        bool   `json:"is_ended,omitempty"`
 }
 
 func (q *QuestionIn) Validate() error {

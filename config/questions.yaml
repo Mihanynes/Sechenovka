@@ -1,5 +1,6 @@
 - question_text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
   question_id: 1
+  img_name: 1
   options:
     - answer_text: "да"
       answer_id: 1
@@ -14,6 +15,7 @@
 
 - question_text: "Когда возникают боли?"
   question_id: 2
+  img_name: 2
   options:
     - answer_text: "При покое"
       answer_id: 3
@@ -33,6 +35,7 @@
 
 - question_text: "Как долго длится боль?"
   question_id: 3
+  img_name: 3
   options:
     - answer_text: "Больше часа"
       answer_id: 6
@@ -52,6 +55,7 @@
 
 - question_text: "Как часто они возникают?"
   question_id: 4
+  img_name: 4
   score_to_fail: 3
   options:
     - answer_text: "Несколько раз в месяц"
@@ -77,6 +81,7 @@
 
 - question_text: "Есть ли у вас одышка?"
   question_id: 5
+  img_name: 5
   score_to_fail: 2
   options:
     - answer_text: "да"
@@ -92,6 +97,7 @@
 
 - question_text: "Выберите нужное"
   question_id: 6
+  img_name: 6
   options:
     - answer_text: "Она усилилась?"
       answer_id: 15
@@ -111,6 +117,7 @@
 
 - question_text: "Есть ли у вас отеки?"
   question_id: 7
+  img_name: 7
   score_to_fail: 2
   options:
     - answer_text: "да"
@@ -126,6 +133,7 @@
 
 - question_text: "Выберите нужное (отеки)"
   question_id: 8
+  img_name: 8
   options:
     - answer_text: "Они усилились?"
       answer_id: 20
@@ -145,6 +153,7 @@
 
 - question_text: "Есть ли у вас кровоточивость?"
   question_id: 9
+  img_name: 9
   options:
     - answer_text: "да"
       answer_id: 23
@@ -159,6 +168,7 @@
 
 - question_text: "Как она проявляется? (Выберите несколько вариантов)"
   question_id: 10
+  img_name: 10
   score_to_fail: 2
   options:
     - answer_text: "Черный жидкий кал"
