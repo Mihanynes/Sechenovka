@@ -92,6 +92,7 @@ func main() {
 		router.Post("/results", middleware.AdminAuth, userResponseHandler.GetUsersResult)
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
+		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
 		router.Post("/patient", middleware.UserAuth, patientInfoHandler.GetPatientInfo)
 	})
 

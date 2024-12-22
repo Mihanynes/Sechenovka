@@ -3,6 +3,7 @@ package patient_info
 import (
 	"Sechenovka/internal/model"
 	"errors"
+	"fmt"
 )
 
 type service struct {
@@ -32,5 +33,6 @@ func (s *service) GetPatientInfo(userId model.UserId) (*model.PatientInfo, error
 		Snils:      user.Snils,
 		Email:      user.Email,
 		Phone:      user.Phone,
+		Avatar:     fmt.Sprintf("%s.jpg", user.UserId),
 	}, err
 }

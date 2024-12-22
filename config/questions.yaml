@@ -1,6 +1,6 @@
 - question_text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
   question_id: 1
-  img_name: "cXVlc3Rpb246MQ=="
+  img_name: "cXVlc3Rpb246MQ==.png"
   options:
     - answer_text: "да"
       answer_id: 1
