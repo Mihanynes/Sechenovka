@@ -35,7 +35,7 @@ func toDto(usersResult []user_result.UserResult) GetUsersResultOutList {
 			UserId:    userResult.UserId,
 			FirstName: "",
 			LastName:  "",
-			UserScore: userResult.Score,
+			UserScore: userResult.TotalScore,
 			IsFailed:  false,
 		}
 	}
