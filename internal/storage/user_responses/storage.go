@@ -28,21 +28,21 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 	return nil
 }
 
-func (s *UserResponseStorage) GetUserTotalScore(userId model.UserId, passNum int) (int, error) {
-	var totalScore int64
-
-	err := s.db.Model(&UserResponse{}).
-		Select("SUM(pass_num)").
-		Where("pass_num = ?", passNum).
-		Where("user_id = ?", userId.String()).
-		Scan(&totalScore).Error
-
-	if err != nil {
-		return 0, err
-	}
-
-	return int(totalScore), nil
-}
+//func (s *UserResponseStorage) GetUserTotalScore(userId model.UserId, passNum int) (int, error) {
+//	var totalScore int64
+//
+//	err := s.db.Model(&UserResponse{}).
+//		Select("SUM(pass_num)").
+//		Where("pass_num = ?", passNum).
+//		Where("user_id = ?", userId.String()).
+//		Scan(&totalScore).Error
+//
+//	if err != nil {
+//		return 0, err
+//	}
+//
+//	return int(totalScore), nil
+//}
 
 func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0)

@@ -34,7 +34,12 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 		return false, err
 	}
 
-	currentTotalScore, err := s.userResponsesStorage.GetUserTotalScore(userId, passNum)
+	prevUserResponses, err := s.userResponsesStorage.GetUserResponsesByPassNum(userId, passNum)
+	if err != nil {
+		return false, err
+	}
+
+	currentTotalScore, err := s.countCurrentScore(prevUserResponses)
 	if err != nil {
 		return false, err
 	}
@@ -64,4 +69,16 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 	}
 
 	return isFailed, nil
+}
+
+func (s *service) countCurrentScore(prevUserResponses []user_respons_storage.UserResponse) (int, error) {
+	currentScore := 0
+	for _, resp := range prevUserResponses {
+		respConf, err := s.questionsConfig.GetOptionByResponseId(resp.ResponseId)
+		if err != nil {
+			return 0, err
+		}
+		currentScore += respConf.Points
+	}
+	return currentScore, nil
 }
