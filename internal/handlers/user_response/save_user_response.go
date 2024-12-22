@@ -18,10 +18,10 @@ func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	is_ended, err := h.userResponseService.SaveUserResponse(userId, dtoIn.ResponseId, dtoIn.PassNum)
+	isEnded, err := h.userResponseService.SaveUserResponse(userId, dtoIn.ResponseId, dtoIn.PassNum)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"is_ended": is_ended})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"is_ended": isEnded})
 }

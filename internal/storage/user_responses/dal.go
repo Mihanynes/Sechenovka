@@ -8,6 +8,6 @@ import (
 type UserResponse struct {
 	gorm.Model
 	UserId     string `gorm:"index;not null"`
-	ResponseId int    `gorm:"index;type:int"`
+	ResponseId int    `gorm:"type:int"`
 	PassNum    int    `gorm:"type:int"`
 }

@@ -25,6 +25,7 @@ func (h *handler) StartQuiz(c *fiber.Ctx) error {
 func modelToDto(question *model.Question) QuestionOut {
 	var out QuestionOut
 	out.QuestionText = question.QuestionText
+	out.ImgName = question.ImgName
 	out.Options = make([]Option, 0)
 	for _, option := range question.Options {
 		dtoOption := Option{

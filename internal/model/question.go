@@ -12,6 +12,7 @@ type Option struct {
 type Question struct {
 	QuestionText string    `yaml:"question_text"`
 	QuestionId   int       `yaml:"question_id"`
+	ImgName      string    `yaml:"img_name"`
 	ScoreToFail  *int      `yaml:"score_to_fail,omitempty"`
 	Options      []*Option `yaml:"options"`
 }
