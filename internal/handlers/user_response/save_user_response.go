@@ -25,5 +25,3 @@ func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"is_ended": isEnded})
 }
-
-func
