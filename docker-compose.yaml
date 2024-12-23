@@ -6,6 +6,7 @@ services:
     container_name: go_app
     volumes:
       - ./data:/app/data
+      - ./public:/app/public
     environment:
       - DATABASE_PATH=/app/data/storage.db
     ports:
