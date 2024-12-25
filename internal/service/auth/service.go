@@ -31,7 +31,7 @@ func (s *service) Login(username string, password string) (string, error) {
 		return "", errors.New("wrong password")
 	}
 
-	return userFromDB.UserId, nil
+	return userFromDB.UserID, nil
 }
 
 func (s *service) Register(user *model.User) (*model.UserId, error) {

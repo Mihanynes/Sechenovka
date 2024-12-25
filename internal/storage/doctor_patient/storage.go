@@ -29,8 +29,8 @@ func (s *DoctorPatientsStorage) GetPatientsIdsByDoctorId(doctorID model.UserId) 
 
 func (s *DoctorPatientsStorage) SaveDoctorPatientLink(doctorId, patientId model.UserId) error {
 	link := DoctorPatient{
-		DoctorId:  doctorId.String(),
-		PatientId: patientId.String(),
+		DoctorID:  doctorId.String(),
+		PatientID: patientId.String(),
 	}
 	result := s.db.Create(&link)
 	if result.Error != nil {

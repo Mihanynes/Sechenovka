@@ -34,7 +34,7 @@ func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 	return &userFromDB, nil
 }
 
-//func (s *storage) GetPatientsByDoctorId(doctorID model.UserId) ([]User, error) {
+//func (s *storage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
 //	var patients []User
 //	err := s.db.Table("users").
 //		Select("users.*").
@@ -49,7 +49,7 @@ func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 
 func (s *storage) SaveUser(user *model.User, userId model.UserId) error {
 	userToSave := User{
-		UserId:     userId.String(),
+		UserID:     userId.String(),
 		Username:   user.Username,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,

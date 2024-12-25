@@ -33,6 +33,6 @@ func (s *service) GetPatientInfo(userId model.UserId) (*model.PatientInfo, error
 		Snils:      user.Snils,
 		Email:      user.Email,
 		Phone:      user.Phone,
-		Avatar:     fmt.Sprintf("%s.jpg", user.UserId),
+		Avatar:     fmt.Sprintf("%s.jpg", user.UserID),
 	}, err
 }

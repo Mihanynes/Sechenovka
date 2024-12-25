@@ -18,7 +18,7 @@ func New(db *gorm.DB) *UserResponseStorage {
 
 func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, passNum int) error {
 	dal := &UserResponse{
-		UserId:     userId.String(),
+		UserID:     userId.String(),
 		ResponseId: responseId,
 		PassNum:    passNum,
 	}
@@ -28,7 +28,7 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 	return nil
 }
 
-//func (s *UserResponseStorage) GetUserTotalScore(userId model.UserId, passNum int) (int, error) {
+//func (s *UserResponseStorage) GetUserTotalScore(userId model.UserID, passNum int) (int, error) {
 //	var totalScore int64
 //
 //	err := s.db.Model(&UserResponse{}).

@@ -51,7 +51,7 @@ func (m *middleware) UserAuth(c *fiber.Ctx) error {
 	}
 
 	// Сохраняем только userId в контекст
-	c.Locals("userId", user.UserId)
+	c.Locals("userId", user.UserID)
 	c.Locals("isAdmin", user.IsAdmin)
 	return c.Next()
 }
@@ -89,7 +89,7 @@ func (m *middleware) AdminAuth(c *fiber.Ctx) error {
 	}
 
 	// Сохраняем только userId в контекст
-	c.Locals("userId", user.UserId)
+	c.Locals("userId", user.UserID)
 	c.Locals("isAdmin", true)
 	return c.Next()
 }
