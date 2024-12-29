@@ -2,15 +2,15 @@ package user_response
 
 import (
 	"Sechenovka/internal/model"
-	"encoding/json"
 	"github.com/gofiber/fiber/v2"
+	"strconv"
 )
 
 func (h *handler) GetUserResponses(c *fiber.Ctx) error {
-	dtoIn := GetUserResponsesIn{}
-	err := json.Unmarshal(c.Body(), &dtoIn)
+	dtoUserId := c.Get("UserId")
+	dtoPassNum, err := strconv.Atoi(c.Get("PassNum"))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
+		return err
 	}
 
 	userId, err := model.UserIdFromCtx(c)
@@ -21,11 +21,11 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	if userId.String() != dtoIn.UserId && !isAdmin {
+	if userId.String() != dtoUserId && !isAdmin {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "access denied"})
 	}
 
-	responses, err := h.userResponseStorage.GetUserResponsesByPassNum(model.UserIdFromString(dtoIn.UserId), dtoIn.PassNum)
+	responses, err := h.userResponseStorage.GetUserResponsesByPassNum(model.UserIdFromString(dtoUserId), dtoPassNum)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),

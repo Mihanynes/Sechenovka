@@ -6,17 +6,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type storage struct {
+type UserInfoStorage struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) *storage {
-	return &storage{
+func New(db *gorm.DB) *UserInfoStorage {
+	return &UserInfoStorage{
 		db: db,
 	}
 }
 
-func (s *storage) GetUserByUsername(username string) (*User, error) {
+func (s *UserInfoStorage) GetUserByUsername(username string) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "username = ?", username)
 	if result.Error != nil {
@@ -25,7 +25,7 @@ func (s *storage) GetUserByUsername(username string) (*User, error) {
 	return &userFromDB, nil
 }
 
-func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
+func (s *UserInfoStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "user_id = ?", userId.String())
 	if result.Error != nil {
@@ -34,7 +34,7 @@ func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 	return &userFromDB, nil
 }
 
-//func (s *storage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
+//func (s *UserInfoStorage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
 //	var patients []User
 //	err := s.db.Table("users").
 //		Select("users.*").
@@ -47,7 +47,7 @@ func (s *storage) GetUserByUserId(userId model.UserId) (*User, error) {
 //	return patients, nil
 //}
 
-func (s *storage) SaveUser(user *model.User, userId model.UserId) error {
+func (s *UserInfoStorage) SaveUser(user *model.User, userId model.UserId) error {
 	userToSave := User{
 		UserID:     userId.String(),
 		Username:   user.Username,

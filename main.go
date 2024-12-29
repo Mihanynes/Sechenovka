@@ -67,7 +67,7 @@ func main() {
 
 	authHandler := authhandler.New(authService, doctorPatientStorage)
 	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService)
-	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage)
+	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage, userStorage)
 
 	middleware := middleware.New(db)
 
@@ -88,12 +88,12 @@ func main() {
 	})
 	micro.Route("/user/response", func(router fiber.Router) {
 		router.Post("/save", middleware.UserAuth, userResponseHandler.SaveUserResponse)
-		router.Post("/get", middleware.UserAuth, userResponseHandler.GetUserResponses)
+		router.Get("/get", middleware.UserAuth, userResponseHandler.GetUserResponses)
 		router.Get("/results", middleware.AdminAuth, userResponseHandler.GetUsersResult)
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
-		router.Post("/patient", middleware.UserAuth, patientInfoHandler.GetPatientInfo)
+		router.Get("/patient", middleware.UserAuth, patientInfoHandler.GetPatientInfo)
 	})
 
 	log.Fatal(app.Listen(":8080"))
