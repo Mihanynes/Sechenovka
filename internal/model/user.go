@@ -42,3 +42,11 @@ func IsAdminFromCtx(c *fiber.Ctx) (bool, error) {
 func UserIdFromString(s string) UserId {
 	return UserId(uuid.MustParse(s))
 }
+
+func ConvertUserIdsToStrings(ids []UserId) []string {
+	strIds := make([]string, len(ids))
+	for i, id := range ids {
+		strIds[i] = id.String()
+	}
+	return strIds
+}

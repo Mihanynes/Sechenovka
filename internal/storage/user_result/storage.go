@@ -33,7 +33,7 @@ func (s *UserResultStorage) UpdateUserResult(userId model.UserId, passNum int, u
 
 func (s *UserResultStorage) GetUsersResults(userIds []model.UserId) ([]UserResult, error) {
 	var userResults []UserResult
-	err := s.db.Where("user_id IN ?", userIds).Find(&userResults).Order("created_at DESC").Error
+	err := s.db.Where("user_id IN ?", model.ConvertUserIdsToStrings(userIds)).Find(&userResults).Order("created_at DESC").Error
 	if err != nil {
 		return nil, err
 	}
