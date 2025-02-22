@@ -21,7 +21,7 @@ func ConnectDB() *gorm.DB {
 	}
 
 	//DB.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
-	db.Logger = logger.Default.LogMode(logger.Info)
+	db.Logger = logger.Default.LogMode(logger.Error)
 
 	log.Println("Running Migrations")
 	err = db.AutoMigrate(&user.User{}, &user_responses.UserResponse{}, &user_result.UserResult{}, &doctor_patient.DoctorPatient{})

@@ -9,10 +9,11 @@ type QuestionIn struct {
 }
 
 type QuestionOut struct {
-	QuestionText string   `json:"question_text,omitempty"`
-	ImgName      string   `json:"img_name"`
-	Options      []Option `json:"options,omitempty"`
-	PassNum      int      `json:"pass_num,omitempty"`
+	QuestionText     string   `json:"question_text,omitempty"`
+	ImgName          string   `json:"img_name"`
+	Options          []Option `json:"options,omitempty"`
+	PassNum          int      `json:"pass_num,omitempty"`
+	IsMultipleChoice bool     `json:"is_multiple_choice,omitempty"`
 }
 
 type Option struct {

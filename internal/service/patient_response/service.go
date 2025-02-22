@@ -5,9 +5,8 @@ import (
 	question_service "Sechenovka/internal/service/question_config"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
+	"errors"
 )
-
-const isEnded = true
 
 type service struct {
 	userResponsesStorage *user_respons_storage.UserResponseStorage
@@ -28,10 +27,25 @@ func New(
 }
 
 // SaveUserResponse возвращает true первым аргументом, если пациент перешел завершил тест
-func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int) (bool, error) {
-	err := s.userResponsesStorage.SaveUserResponse(userId, responseId, passNum)
+func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, passNum int) (bool, error) {
+	if len(responseIds) == 0 {
+		return false, errors.New("no responses to save")
+	}
+	question, err := s.questionsConfig.GetQuestionByResponseId(responseIds[0])
 	if err != nil {
 		return false, err
+	}
+
+	if !question.IsMultipleChoice && len(responseIds) > 1 {
+		return false, errors.New("wrong number of responses")
+	}
+
+	for _, responseId := range responseIds {
+		err := s.userResponsesStorage.SaveUserResponse(userId, responseId, passNum)
+		if err != nil {
+			return false, err
+		}
+
 	}
 
 	prevUserResponses, err := s.userResponsesStorage.GetUserResponsesByPassNum(userId, passNum)
@@ -44,32 +58,25 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 		return false, err
 	}
 
-	question, err := s.questionsConfig.GetQuestionByResponseId(responseId)
-	if err != nil {
-		return false, err
-	}
-
 	// Если пациент перешел порог, то надо отсылать уведомление
-	var isFailed bool
 	if question.ScoreToFail != nil && currentTotalScore >= *question.ScoreToFail {
-		isFailed = true
-		err = s.userResultStorage.UpdateUserResult(userId, currentTotalScore, passNum, isFailed)
-		return isFailed, nil
+		err = s.userResultStorage.SaveUserResult(userId, currentTotalScore, passNum, true)
+		return true, nil
 		// TODO: тут бы послать уведомление врачу, что пациенту плохо
 	}
 
 	// Если пациент завершил тест
 	for _, option := range question.Options {
-		if option.AnswerId == responseId && option.IsEnded {
-			err = s.userResultStorage.UpdateUserResult(userId, currentTotalScore, passNum, isFailed)
+		if option.AnswerId == responseIds[0] && option.IsEnded {
+			err = s.userResultStorage.SaveUserResult(userId, currentTotalScore, passNum, false)
 			if err != nil {
 				return false, err
 			}
-			return isEnded, nil
+			return true, nil
 		}
 	}
 
-	return isFailed, nil
+	return false, nil
 }
 
 func (s *service) countCurrentScore(prevUserResponses []user_respons_storage.UserResponse) (int, error) {

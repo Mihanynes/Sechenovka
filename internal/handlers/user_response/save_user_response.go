@@ -19,7 +19,7 @@ func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	isEnded, err := h.userResponseService.SaveUserResponse(userId, dtoIn.ResponseId, dtoIn.PassNum)
+	isEnded, err := h.userResponseService.SaveUserResponses(userId, dtoIn.ResponseIds, dtoIn.PassNum)
 	if err != nil {
 		log.Error(err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

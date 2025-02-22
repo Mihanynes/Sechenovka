@@ -49,10 +49,16 @@ func (s *UserStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 
 func (s *UserStorage) SaveUser(user *model.User, userId model.UserId) error {
 	userToSave := User{
-		UserID:   userId.String(),
-		Username: user.Username,
-		Password: user.Password,
-		IsAdmin:  user.IsAdmin,
+		UserID:     userId.String(),
+		Username:   user.Username,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		MiddleName: user.MiddleName,
+		Phone:      user.Phone,
+		Snils:      user.Snils,
+		Email:      user.Email,
+		Password:   user.Password,
+		IsAdmin:    user.IsAdmin,
 	}
 	result := s.db.Create(&userToSave)
 

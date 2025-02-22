@@ -23,7 +23,7 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 		PassNum:    passNum,
 	}
 	if err := s.db.Create(dal).Error; err != nil {
-		return errors.Wrap(err, "SaveUserResponse[Storage]")
+		return errors.Wrap(err, "SaveUserResponses[Storage]")
 	}
 	return nil
 }

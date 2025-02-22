@@ -5,13 +5,13 @@ import (
 )
 
 type SaveUserResponseIn struct {
-	ResponseId int `json:"response_id"`
-	PassNum    int `json:"pass_num"`
+	ResponseIds []int `json:"response_ids"`
+	PassNum     int   `json:"pass_num"`
 }
 
 func (q *SaveUserResponseIn) Validate() error {
-	if q.ResponseId == 0 {
-		return errors.New("response id is required")
+	if len(q.ResponseIds) == 0 {
+		return errors.New("response ids is required")
 	}
 	if q.PassNum == 0 {
 		return errors.New("pass num is required")

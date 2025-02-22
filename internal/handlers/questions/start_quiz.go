@@ -27,6 +27,7 @@ func modelToDto(question *model.Question) QuestionOut {
 	out.QuestionText = question.QuestionText
 	out.ImgName = question.ImgName
 	out.Options = make([]Option, 0)
+	out.IsMultipleChoice = question.IsMultipleChoice
 	for _, option := range question.Options {
 		dtoOption := Option{
 			AnswerText:     option.AnswerText,

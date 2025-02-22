@@ -170,6 +170,7 @@
   question_id: 10
   img_name: "cXVlc3Rpb246MTA="
   score_to_fail: 2
+  multiple_choice: true
   options:
     - answer_text: "Черный жидкий кал"
       answer_id: 25

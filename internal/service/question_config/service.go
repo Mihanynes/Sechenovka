@@ -50,6 +50,7 @@ func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId) (int, 
 
 	// Если текущий вопрос завершен, возвращаем первый вопрос с passNum + 1
 	question, err := s.GetQuestionByQuestionId(firstQuestion)
+
 	if err != nil {
 		return 0, nil, err
 	}
