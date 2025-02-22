@@ -71,7 +71,9 @@ func main() {
 
 	middleware := middleware.New(db)
 
-	app.Static("/public", "./public/images")
+	app.Static("/public/questions", "./public/questions")
+	app.Static("/public/avatars", "./public/avatars")
+	//app.Static("/public/avatars", "./public/ava")
 
 	micro.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")

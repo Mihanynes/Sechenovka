@@ -31,14 +31,14 @@ func (h *handler) GetUsersResult(c *fiber.Ctx) error {
 func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutList {
 	results := make([]GetUsersResultOut, len(usersResult))
 	for i, userResult := range usersResult {
-		userId := userResult.UserId
+		userId := userResult.UserID
 		userInfo, err := h.userInfoStorage.GetUserByUserId(model.UserIdFromString(userId))
 		if err != nil {
 			continue
 		}
 
 		results[i] = GetUsersResultOut{
-			UserId:    userResult.UserId,
+			UserId:    userResult.UserID,
 			FirstName: userInfo.FirstName,
 			LastName:  userInfo.LastName,
 			UserScore: userResult.TotalScore,

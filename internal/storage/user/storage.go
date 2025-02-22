@@ -6,17 +6,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserInfoStorage struct {
+type UserStorage struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) *UserInfoStorage {
-	return &UserInfoStorage{
+func New(db *gorm.DB) *UserStorage {
+	return &UserStorage{
 		db: db,
 	}
 }
 
-func (s *UserInfoStorage) GetUserByUsername(username string) (*User, error) {
+func (s *UserStorage) GetUserByUsername(username string) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "username = ?", username)
 	if result.Error != nil {
@@ -25,7 +25,7 @@ func (s *UserInfoStorage) GetUserByUsername(username string) (*User, error) {
 	return &userFromDB, nil
 }
 
-func (s *UserInfoStorage) GetUserByUserId(userId model.UserId) (*User, error) {
+func (s *UserStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "user_id = ?", userId.String())
 	if result.Error != nil {
@@ -34,7 +34,7 @@ func (s *UserInfoStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 	return &userFromDB, nil
 }
 
-//func (s *UserInfoStorage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
+//func (s *UserStorage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
 //	var patients []User
 //	err := s.db.Table("users").
 //		Select("users.*").
@@ -47,18 +47,12 @@ func (s *UserInfoStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 //	return patients, nil
 //}
 
-func (s *UserInfoStorage) SaveUser(user *model.User, userId model.UserId) error {
+func (s *UserStorage) SaveUser(user *model.User, userId model.UserId) error {
 	userToSave := User{
-		UserID:     userId.String(),
-		Username:   user.Username,
-		FirstName:  user.FirstName,
-		LastName:   user.LastName,
-		MiddleName: user.MiddleName,
-		Phone:      user.Phone,
-		Snils:      user.Snils,
-		Email:      user.Email,
-		Password:   user.Password,
-		IsAdmin:    user.IsAdmin,
+		UserID:   userId.String(),
+		Username: user.Username,
+		Password: user.Password,
+		IsAdmin:  user.IsAdmin,
 	}
 	result := s.db.Create(&userToSave)
 

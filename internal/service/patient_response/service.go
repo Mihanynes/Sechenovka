@@ -53,6 +53,7 @@ func (s *service) SaveUserResponse(userId model.UserId, responseId, passNum int)
 	var isFailed bool
 	if question.ScoreToFail != nil && currentTotalScore >= *question.ScoreToFail {
 		isFailed = true
+		err = s.userResultStorage.UpdateUserResult(userId, currentTotalScore, passNum, isFailed)
 		return isFailed, nil
 		// TODO: тут бы послать уведомление врачу, что пациенту плохо
 	}

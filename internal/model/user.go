@@ -43,6 +43,14 @@ func UserIdFromString(s string) UserId {
 	return UserId(uuid.MustParse(s))
 }
 
+func UserIdFromStrings(s []string) []UserId {
+	res := make([]UserId, len(s))
+	for i, user := range s {
+		res[i] = UserIdFromString(user)
+	}
+	return res
+}
+
 func ConvertUserIdsToStrings(ids []UserId) []string {
 	strIds := make([]string, len(ids))
 	for i, id := range ids {

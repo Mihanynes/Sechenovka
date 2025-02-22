@@ -16,7 +16,7 @@ func New(db *gorm.DB) *UserResultStorage {
 }
 func (s *UserResultStorage) CreateUserResult(userId model.UserId, passNum int) error {
 	dal := UserResult{
-		UserId:  userId.String(),
+		UserID:  userId.String(),
 		PassNum: passNum,
 	}
 	return s.db.Create(&dal).Error
@@ -33,9 +33,12 @@ func (s *UserResultStorage) UpdateUserResult(userId model.UserId, passNum int, u
 
 func (s *UserResultStorage) GetUsersResults(userIds []model.UserId) ([]UserResult, error) {
 	var userResults []UserResult
-	err := s.db.Where("user_id IN ?", model.ConvertUserIdsToStrings(userIds)).Find(&userResults).Order("created_at DESC").Error
+	userIdsStr := model.ConvertUserIdsToStrings(userIds)
+
+	err := s.db.Where("user_id IN ?", userIdsStr).Find(&userResults).Order("created_at DESC").Error
 	if err != nil {
 		return nil, err
 	}
+
 	return userResults, nil
 }

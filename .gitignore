@@ -20,3 +20,5 @@ logs.txt
 secret.md
 # app.env
 tmp
+
+actions.toml

@@ -14,7 +14,7 @@ type handler struct {
 	questionConfigService *question_service.QuestionConfigService
 	doctorPatientsStorage *doctor_patient.DoctorPatientsStorage
 	userResultStorage     *user_result.UserResultStorage
-	userInfoStorage       *user.UserInfoStorage
+	userInfoStorage       *user.UserStorage
 }
 
 func New(
@@ -23,7 +23,7 @@ func New(
 	questionConfigService *question_service.QuestionConfigService,
 	doctorPatientsStoragee *doctor_patient.DoctorPatientsStorage,
 	userResultStorage *user_result.UserResultStorage,
-	userInfoStorage *user.UserInfoStorage,
+	userInfoStorage *user.UserStorage,
 ) *handler {
 	return &handler{
 		userResponseService:   userResponseService,

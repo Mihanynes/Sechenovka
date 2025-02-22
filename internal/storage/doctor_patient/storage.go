@@ -16,15 +16,15 @@ func New(db *gorm.DB) *DoctorPatientsStorage {
 }
 
 func (s *DoctorPatientsStorage) GetPatientsIdsByDoctorId(doctorID model.UserId) ([]model.UserId, error) {
-	patients := make([]model.UserId, 0)
+	var patients []string
 	err := s.db.Model(DoctorPatient{}).
 		Select("patient_id").
-		Where("doctor_id = ?", doctorID).
+		Where("doctor_id = ?", doctorID.String()).
 		Find(&patients).Error
 	if err != nil {
 		return nil, err
 	}
-	return patients, nil
+	return model.UserIdFromStrings(patients), nil
 }
 
 func (s *DoctorPatientsStorage) SaveDoctorPatientLink(doctorId, patientId model.UserId) error {
