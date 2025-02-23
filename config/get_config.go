@@ -6,8 +6,10 @@ import (
 	"os"
 )
 
+const testPath = "config/questions.yaml"
+
 func GetQuestionsConfig() ([]*model.Question, error) {
-	config, err := parseYAML("config/questions.yaml")
+	config, err := parseYAML(testPath)
 	if err != nil {
 		return nil, err
 	}
