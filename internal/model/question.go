@@ -15,5 +15,5 @@ type Question struct {
 	ImgName          string    `yaml:"img_name"`
 	ScoreToFail      *int      `yaml:"score_to_fail,omitempty"`
 	Options          []*Option `yaml:"options"`
-	IsMultipleChoice bool      `yaml:"multiple_choice,omitempty"`
+	IsMultipleChoice bool      `yaml:"multiple_choice"`
 }

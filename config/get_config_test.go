@@ -55,6 +55,6 @@ func Test_ParseYAML(t *testing.T) {
 	//	},
 	//}
 
-	fmt.Println(questions[0].IsMultipleChoice)
+	fmt.Println(questions[1].IsMultipleChoice)
 	//require.ElementsMatch(t, expectedQuestions, questions)
 }

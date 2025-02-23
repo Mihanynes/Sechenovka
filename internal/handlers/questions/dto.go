@@ -13,7 +13,7 @@ type QuestionOut struct {
 	ImgName          string   `json:"img_name"`
 	Options          []Option `json:"options,omitempty"`
 	PassNum          int      `json:"pass_num,omitempty"`
-	IsMultipleChoice bool     `json:"is_multiple_choice,omitempty"`
+	IsMultipleChoice bool     `json:"is_multiple_choice"`
 }
 
 type Option struct {
