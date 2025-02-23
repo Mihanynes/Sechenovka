@@ -2,6 +2,7 @@ package user_response
 
 import (
 	"errors"
+	"time"
 )
 
 type SaveUserResponseIn struct {
@@ -43,9 +44,11 @@ type GetUsersResultOutList struct {
 }
 
 type GetUsersResultOut struct {
-	UserId    string `json:"user_id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	UserScore int    `json:"user_score"`
-	IsFailed  bool   `json:"is_failed"`
+	UserId    string    `json:"user_id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	UserScore int       `json:"user_score"`
+	IsFailed  bool      `json:"is_failed"`
+	PassNum   int       `json:"pass_num"`
+	PassTime  time.Time `json:"pass_time"`
 }

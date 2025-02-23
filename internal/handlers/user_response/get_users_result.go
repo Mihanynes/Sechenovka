@@ -7,18 +7,25 @@ import (
 )
 
 func (h *handler) GetUsersResult(c *fiber.Ctx) error {
-	//var getUserScoreIn GetUsersResultIn
-	//err := json.Unmarshal(c.Body(), &getUserScoreIn)
-	//if err != nil {
-	//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error(), "body": string(c.Body())})
-	//}
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	patientIds, err := h.doctorPatientsStorage.GetPatientsIdsByDoctorId(userId)
+
+	var patientIds []model.UserId
+
+	isAdmin, err := model.IsAdminFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	if isAdmin {
+		patientIds, err = h.doctorPatientsStorage.GetPatientsIdsByDoctorId(userId)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+	} else {
+		patientIds = append(patientIds, userId)
 	}
 
 	userResults, err := h.userResultStorage.GetUsersResults(patientIds)
@@ -42,7 +49,9 @@ func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutL
 			FirstName: userInfo.FirstName,
 			LastName:  userInfo.LastName,
 			UserScore: userResult.TotalScore,
-			IsFailed:  false,
+			IsFailed:  userResult.IsFailed,
+			PassNum:   userResult.PassNum,
+			PassTime:  userResult.UpdatedAt,
 		}
 	}
 	return GetUsersResultOutList{

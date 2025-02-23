@@ -91,7 +91,7 @@ func main() {
 	micro.Route("/user/response", func(router fiber.Router) {
 		router.Post("/save", middleware.UserAuth, userResponseHandler.SaveUserResponse)
 		router.Get("/get", middleware.UserAuth, userResponseHandler.GetUserResponses)
-		router.Get("/results", middleware.AdminAuth, userResponseHandler.GetUsersResult)
+		router.Get("/results", middleware.UserAuth, userResponseHandler.GetUsersResult)
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
