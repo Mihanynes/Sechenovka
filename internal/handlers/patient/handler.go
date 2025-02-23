@@ -9,6 +9,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+const avatarPath = "public/avatars"
+
 type handler struct {
 	patientInfoService patientInfoService
 }
@@ -58,7 +60,7 @@ func (h *handler) UploadAvatar(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error getting current directory " + err.Error())
 	}
 
-	publicPath := filepath.Join(basePath, "public", "images")
+	publicPath := filepath.Join(basePath, avatarPath)
 
 	// Создание директории, если ее нет
 	if _, err := os.Stat(publicPath); os.IsNotExist(err) {
