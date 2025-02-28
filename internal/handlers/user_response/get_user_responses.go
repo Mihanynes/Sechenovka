@@ -7,8 +7,8 @@ import (
 )
 
 func (h *handler) GetUserResponses(c *fiber.Ctx) error {
-	dtoUserId := c.Get("UserId")
-	dtoPassNum, err := strconv.Atoi(c.Get("PassNum"))
+	dtoUserId := c.Query("UserId")
+	dtoPassNum, err := strconv.Atoi(c.Query("PassNum"))
 	if err != nil {
 		return err
 	}
