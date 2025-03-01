@@ -1,4 +1,4 @@
-package question_config
+package quiz
 
 import (
 	"Sechenovka/internal/model"
@@ -7,19 +7,19 @@ import (
 
 const firstQuestion = 1
 
-type QuestionConfigService struct {
+type Service struct {
 	quizConfig          map[int][]*model.Question
 	userResponseStorage userResponseStorage
 }
 
-func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage) *QuestionConfigService {
-	return &QuestionConfigService{
+func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage) *Service {
+	return &Service{
 		quizConfig:          quizConfig,
 		userResponseStorage: userResponseStorage,
 	}
 }
 
-func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *model.Question, error) {
+func (s *Service) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *model.Question, error) {
 	res, err := s.userResponseStorage.GetLastUserResponse(userId, quizId)
 	if err != nil {
 		return 0, nil, err
@@ -58,7 +58,7 @@ func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId, quizId
 }
 
 // GetOptionsByQuestionText Получение опций ответа по тексту вопроса
-func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int, quizId int) (*model.Question, error) {
+func (s *Service) GetQuestionByQuestionId(questionId int, quizId int) (*model.Question, error) {
 	questions, ok := s.quizConfig[quizId]
 	if !ok {
 		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
@@ -72,7 +72,7 @@ func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int, quizId i
 	return nil, fmt.Errorf("вопрос с текстом '%v' не найден", questionId)
 }
 
-func (s *QuestionConfigService) GetQuestionByResponseId(responseId int, quizId int) (*model.Question, error) {
+func (s *Service) GetQuestionByResponseId(responseId int, quizId int) (*model.Question, error) {
 	questions, ok := s.quizConfig[quizId]
 	if !ok {
 		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
@@ -88,7 +88,7 @@ func (s *QuestionConfigService) GetQuestionByResponseId(responseId int, quizId i
 	return nil, fmt.Errorf("ответ с id '%v' не найден", responseId)
 }
 
-func (s *QuestionConfigService) GetOptionByResponseId(responseId int, quizId int) (*model.Option, error) {
+func (s *Service) GetOptionByResponseId(responseId int, quizId int) (*model.Option, error) {
 	questions, ok := s.quizConfig[quizId]
 	if !ok {
 		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)

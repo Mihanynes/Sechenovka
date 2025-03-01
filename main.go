@@ -6,12 +6,12 @@ import (
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
 	"Sechenovka/internal/handlers/patient"
-	questions_handler "Sechenovka/internal/handlers/questions"
+	questions_handler "Sechenovka/internal/handlers/quiz"
 	user_response_handler "Sechenovka/internal/handlers/user_response"
 	auth_service "Sechenovka/internal/service/auth"
 	"Sechenovka/internal/service/patient_info"
 	user_response_service "Sechenovka/internal/service/patient_response"
-	question_service "Sechenovka/internal/service/question_config"
+	question_service "Sechenovka/internal/service/quiz"
 	"Sechenovka/internal/storage/doctor_patient"
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
@@ -109,6 +109,7 @@ func main() {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
 		router.Get("/get", middleware.UserAuth, patientInfoHandler.GetUserInfo)
 	})
+	micro.Get("/quiz/list", middleware.UserAuth, questionsHandler.GetQuizList)
 
 	log.Fatal(app.Listen(":8080"))
 }

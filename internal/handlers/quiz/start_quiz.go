@@ -1,4 +1,4 @@
-package questions
+package quiz
 
 import (
 	"Sechenovka/internal/model"

@@ -1,4 +1,4 @@
-package questions
+package quiz
 
 import (
 	"fmt"

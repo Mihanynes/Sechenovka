@@ -2,7 +2,7 @@ package patient_response
 
 import (
 	"Sechenovka/internal/model"
-	question_service "Sechenovka/internal/service/question_config"
+	question_service "Sechenovka/internal/service/quiz"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
 	"errors"
@@ -11,13 +11,13 @@ import (
 type service struct {
 	userResponsesStorage *user_respons_storage.UserResponseStorage
 	userResultStorage    *user_result.UserResultStorage
-	questionsConfig      *question_service.QuestionConfigService
+	questionsConfig      *question_service.Service
 }
 
 func New(
 	storage *user_respons_storage.UserResponseStorage,
 	userResultStorage *user_result.UserResultStorage,
-	questionsConfig *question_service.QuestionConfigService,
+	questionsConfig *question_service.Service,
 ) *service {
 	return &service{
 		userResponsesStorage: storage,

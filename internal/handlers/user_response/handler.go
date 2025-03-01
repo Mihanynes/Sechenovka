@@ -1,7 +1,7 @@
 package user_response
 
 import (
-	question_service "Sechenovka/internal/service/question_config"
+	question_service "Sechenovka/internal/service/quiz"
 	"Sechenovka/internal/storage/doctor_patient"
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
@@ -11,7 +11,7 @@ import (
 type handler struct {
 	userResponseService   userResponseService
 	userResponseStorage   *user_respons_storage.UserResponseStorage
-	questionConfigService *question_service.QuestionConfigService
+	questionConfigService *question_service.Service
 	doctorPatientsStorage *doctor_patient.DoctorPatientsStorage
 	userResultStorage     *user_result.UserResultStorage
 	userInfoStorage       *user.UserStorage
@@ -20,7 +20,7 @@ type handler struct {
 func New(
 	userResponseService userResponseService,
 	userResponseStorage *user_respons_storage.UserResponseStorage,
-	questionConfigService *question_service.QuestionConfigService,
+	questionConfigService *question_service.Service,
 	doctorPatientsStoragee *doctor_patient.DoctorPatientsStorage,
 	userResultStorage *user_result.UserResultStorage,
 	userInfoStorage *user.UserStorage,

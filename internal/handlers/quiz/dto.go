@@ -1,4 +1,6 @@
-package questions
+package quiz
+
+import "time"
 
 type QuestionOut struct {
 	QuestionText     string   `json:"question_text,omitempty"`
@@ -13,4 +15,16 @@ type Option struct {
 	AnswerId       int    `json:"response_id"`
 	Points         int    `json:"points"`
 	NextQuestionId int    `json:"next_question_id"`
+}
+
+type QuizList struct {
+	List []Quiz `json:"list"`
+}
+
+type Quiz struct {
+	QuizId      int       `json:"quiz_id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	IsAvailable bool      `json:"is_available"`
+	NextTimeCan time.Time `json:"next_time_can"`
 }

@@ -6,10 +6,16 @@ import (
 	"os"
 )
 
+const (
+	SelfCheckQuiz         = 1
+	RecommendationsQuiz   = 2
+	TakingMedicationsQuiz = 3
+)
+
 var PathQuizIdMap = map[string]int{
-	"config/self_check.yaml":         1,
-	"config/recomendations.yaml":     2,
-	"config/taking_medications.yaml": 3,
+	"config/quiz_questions/self_check.yaml":         SelfCheckQuiz,
+	"config/quiz_questions/recommendations.yaml":    RecommendationsQuiz,
+	"config/quiz_questions/taking_medications.yaml": TakingMedicationsQuiz,
 }
 
 func GetQuestionsConfig() (map[int][]*model.Question, error) {

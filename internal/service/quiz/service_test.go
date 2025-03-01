@@ -1,4 +1,4 @@
-package question_config
+package quiz
 
 //func Test_GetOptionsByQuestionText(t *testing.T) {
 //	testCases := []struct {
@@ -36,8 +36,8 @@ package question_config
 //
 //	for _, tc := range testCases {
 //		t.Run(tc.name, func(t *testing.T) {
-//			QuestionConfigService := New(fakeQuestions)
-//			options, err := QuestionConfigService.GetOptionsByQuestionText(tc.questionText)
+//			Service := New(fakeQuestions)
+//			options, err := Service.GetOptionsByQuestionText(tc.questionText)
 //
 //			if (err != nil) != tc.expectedError {
 //				t.Errorf("Ожидали ошибку: %v, получили: %v", tc.expectedError, err)
