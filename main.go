@@ -98,7 +98,7 @@ func main() {
 	})
 	micro.Route("/questions", func(router fiber.Router) {
 		router.Post("/start", middleware.UserAuth, questionsHandler.StartQuiz)
-		router.Post("/get", middleware.UserAuth, questionsHandler.GetQuestion)
+		router.Get("/get", middleware.UserAuth, questionsHandler.GetQuestion)
 	})
 	micro.Route("/user/response", func(router fiber.Router) {
 		router.Post("/save", middleware.UserAuth, userResponseHandler.SaveUserResponse)

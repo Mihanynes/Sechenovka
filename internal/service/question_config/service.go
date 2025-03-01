@@ -8,40 +8,40 @@ import (
 const firstQuestion = 1
 
 type QuestionConfigService struct {
-	questions           []*model.Question
+	quizConfig          map[int][]*model.Question
 	userResponseStorage userResponseStorage
 }
 
-func New(questions []*model.Question, userResponseStorage userResponseStorage) *QuestionConfigService {
+func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage) *QuestionConfigService {
 	return &QuestionConfigService{
-		questions:           questions,
+		quizConfig:          quizConfig,
 		userResponseStorage: userResponseStorage,
 	}
 }
 
-func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId) (int, *model.Question, error) {
-	res, err := s.userResponseStorage.GetLastUserResponse(userId)
+func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *model.Question, error) {
+	res, err := s.userResponseStorage.GetLastUserResponse(userId, quizId)
 	if err != nil {
 		return 0, nil, err
 	}
 
 	if res == nil {
 		// Если последнего ответа нет, возвращаем первый вопрос с passNum 1
-		question, err := s.GetQuestionByQuestionId(firstQuestion)
+		question, err := s.GetQuestionByQuestionId(firstQuestion, quizId)
 		if err != nil {
 			return 0, nil, err
 		}
 		return 1, question, nil
 	}
 
-	resp, err := s.GetOptionByResponseId(res.ResponseId)
+	resp, err := s.GetOptionByResponseId(res.ResponseId, quizId)
 	if err != nil {
 		return 0, nil, err
 	}
 
 	if !resp.IsEnded {
 		// Если текущий вопрос не завершен, возвращаем следующий вопрос с текущим passNum
-		nextQuestion, err := s.GetQuestionByQuestionId(resp.NextQuestionId)
+		nextQuestion, err := s.GetQuestionByQuestionId(resp.NextQuestionId, quizId)
 		if err != nil {
 			return 0, nil, err
 		}
@@ -49,7 +49,7 @@ func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId) (int, 
 	}
 
 	// Если текущий вопрос завершен, возвращаем первый вопрос с passNum + 1
-	question, err := s.GetQuestionByQuestionId(firstQuestion)
+	question, err := s.GetQuestionByQuestionId(firstQuestion, quizId)
 
 	if err != nil {
 		return 0, nil, err
@@ -58,8 +58,13 @@ func (s *QuestionConfigService) GetFirstUserQuestion(userId model.UserId) (int, 
 }
 
 // GetOptionsByQuestionText Получение опций ответа по тексту вопроса
-func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int) (*model.Question, error) {
-	for _, question := range s.questions {
+func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int, quizId int) (*model.Question, error) {
+	questions, ok := s.quizConfig[quizId]
+	if !ok {
+		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
+	}
+
+	for _, question := range questions {
 		if question.QuestionId == questionId {
 			return question, nil
 		}
@@ -67,8 +72,13 @@ func (s *QuestionConfigService) GetQuestionByQuestionId(questionId int) (*model.
 	return nil, fmt.Errorf("вопрос с текстом '%v' не найден", questionId)
 }
 
-func (s *QuestionConfigService) GetQuestionByResponseId(responseId int) (*model.Question, error) {
-	for _, question := range s.questions {
+func (s *QuestionConfigService) GetQuestionByResponseId(responseId int, quizId int) (*model.Question, error) {
+	questions, ok := s.quizConfig[quizId]
+	if !ok {
+		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
+	}
+
+	for _, question := range questions {
 		for _, option := range question.Options {
 			if option.AnswerId == responseId {
 				return question, nil
@@ -78,8 +88,13 @@ func (s *QuestionConfigService) GetQuestionByResponseId(responseId int) (*model.
 	return nil, fmt.Errorf("ответ с id '%v' не найден", responseId)
 }
 
-func (s *QuestionConfigService) GetOptionByResponseId(responseId int) (*model.Option, error) {
-	for _, question := range s.questions {
+func (s *QuestionConfigService) GetOptionByResponseId(responseId int, quizId int) (*model.Option, error) {
+	questions, ok := s.quizConfig[quizId]
+	if !ok {
+		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
+	}
+
+	for _, question := range questions {
 		for _, option := range question.Options {
 			if option.AnswerId == responseId {
 				return option, nil

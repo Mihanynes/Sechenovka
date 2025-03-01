@@ -9,7 +9,8 @@ import (
 type UserResponse struct {
 	gorm.Model
 	UserID     string    `gorm:"index;not null"`
-	ResponseId int       `gorm:"type:int"`
-	PassNum    int       `gorm:"type:int"`
+	ResponseId int       `gorm:"type:int;not null"`
+	PassNum    int       `gorm:"type:int;not null"`
+	QuizId     int       `gorm:"type:int;not null"`
 	User       user.User `gorm:"references:UserID"`
 }

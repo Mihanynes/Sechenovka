@@ -6,14 +6,20 @@ import (
 	"os"
 )
 
-const testPath = "config/questions.yaml"
+var PathQuizIdMap = map[string]int{
+	"config/questions.yaml": 1,
+}
 
-func GetQuestionsConfig() ([]*model.Question, error) {
-	config, err := parseYAML(testPath)
-	if err != nil {
-		return nil, err
+func GetQuestionsConfig() (map[int][]*model.Question, error) {
+	generalConfig := make(map[int][]*model.Question)
+	for path, quizId := range PathQuizIdMap {
+		config, err := parseYAML(path)
+		if err != nil {
+			return nil, err
+		}
+		generalConfig[quizId] = config
 	}
-	return config, nil
+	return generalConfig, nil
 }
 
 func parseYAML(filename string) ([]*model.Question, error) {

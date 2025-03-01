@@ -4,16 +4,26 @@ import (
 	"Sechenovka/internal/model"
 	"Sechenovka/internal/storage/user_result"
 	"github.com/gofiber/fiber/v2"
+	"strconv"
 )
 
 func (h *handler) GetUsersResult(c *fiber.Ctx) error {
+	quizIdString := c.Query("QuizId")
+	if quizIdString == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "QuizId is required"})
+	}
+
+	quizId, err := strconv.Atoi(quizIdString)
+	if err != nil || quizId <= 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "QuizId is invalid"})
+	}
+
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	var patientIds []model.UserId
-
 	isAdmin, err := model.IsAdminFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
@@ -28,7 +38,7 @@ func (h *handler) GetUsersResult(c *fiber.Ctx) error {
 		patientIds = append(patientIds, userId)
 	}
 
-	userResults, err := h.userResultStorage.GetUsersResults(patientIds)
+	userResults, err := h.userResultStorage.GetUsersResults(patientIds, quizId)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

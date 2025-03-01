@@ -2,6 +2,7 @@ package auth
 
 import (
 	"Sechenovka/internal/model"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
@@ -37,14 +38,14 @@ func (s *service) Login(username string, password string) (string, error) {
 func (s *service) Register(user *model.User) (*model.UserId, error) {
 	userWithHashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		s.log.Error("error while hashing password", err.Error())
+		err = fmt.Errorf("error while hashing password %v", err.Error())
 		return nil, err
 	}
 	user.Password = string(userWithHashedPassword)
 	generatedUserId := model.UserId(uuid.New())
 
 	if err := s.userStorage.SaveUser(user, generatedUserId); err != nil {
-		s.log.Error("error while saving user", err.Error())
+		err = fmt.Errorf("error while saving user %v", err.Error())
 		return nil, err
 	}
 	return &generatedUserId, nil

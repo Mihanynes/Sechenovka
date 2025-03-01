@@ -5,6 +5,6 @@ import (
 )
 
 type questionService interface {
-	GetFirstUserQuestion(userId model.UserId) (int, *model.Question, error)
-	GetQuestionByQuestionId(questionId int) (*model.Question, error)
+	GetFirstUserQuestion(userId model.UserId, quizId int) (int, *model.Question, error)
+	GetQuestionByQuestionId(questionId int, quizId int) (*model.Question, error)
 }

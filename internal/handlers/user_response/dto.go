@@ -8,6 +8,7 @@ import (
 type SaveUserResponseIn struct {
 	ResponseIds []int `json:"response_ids"`
 	PassNum     int   `json:"pass_num"`
+	QuizId      int   `json:"quiz_id"`
 }
 
 func (q *SaveUserResponseIn) Validate() error {

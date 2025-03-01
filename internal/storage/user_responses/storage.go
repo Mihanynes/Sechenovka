@@ -16,11 +16,12 @@ func New(db *gorm.DB) *UserResponseStorage {
 	}
 }
 
-func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, passNum int) error {
+func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, passNum int, quizId int) error {
 	dal := &UserResponse{
 		UserID:     userId.String(),
 		ResponseId: responseId,
 		PassNum:    passNum,
+		QuizId:     quizId,
 	}
 	if err := s.db.Create(dal).Error; err != nil {
 		return errors.Wrap(err, "SaveUserResponses[Storage]")
@@ -44,18 +45,23 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 //	return int(totalScore), nil
 //}
 
-func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int) ([]UserResponse, error) {
+func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int, quizId int) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0)
-	err := s.db.Where("user_id = ?", userId.String()).Where("pass_num = ?", passNum).Order("created_at ASC").Find(&userResponses).Error
+	err := s.db.Where("user_id = ?", userId.String()).
+		Where("pass_num = ?", passNum).
+		Where("quiz_id = ?", quizId).
+		Order("created_at ASC").Find(&userResponses).Error
 	if err != nil {
 		return nil, err
 	}
 	return userResponses, nil
 }
 
-func (s *UserResponseStorage) GetLastUserResponse(userId model.UserId) (*UserResponse, error) {
+func (s *UserResponseStorage) GetLastUserResponse(userId model.UserId, quizId int) (*UserResponse, error) {
 	var userResponse UserResponse
-	err := s.db.Where("user_id = ?", userId.String()).Order("created_at DESC").First(&userResponse).Error
+	err := s.db.Where("user_id = ?", userId.String()).
+		Where("quiz_id = ?", quizId).
+		Order("created_at DESC").First(&userResponse).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
