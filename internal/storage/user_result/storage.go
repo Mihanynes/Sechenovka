@@ -26,12 +26,11 @@ func (s *UserResultStorage) SaveUserResult(userId model.UserId, userScore int, p
 	return s.db.Create(&dal).Error
 }
 
-func (s *UserResultStorage) GetUsersResults(userIds []model.UserId, quizId int) ([]UserResult, error) {
+func (s *UserResultStorage) GetUsersResults(userIds []model.UserId) ([]UserResult, error) {
 	var userResults []UserResult
 	userIdsStr := model.ConvertUserIdsToStrings(userIds)
 
 	err := s.db.Where("user_id IN ?", userIdsStr).
-		Where("quiz_id = ?", quizId).
 		Find(&userResults).Order("created_at DESC").Error
 	if err != nil {
 		return nil, err

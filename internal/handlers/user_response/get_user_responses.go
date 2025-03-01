@@ -69,6 +69,7 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 			//})
 		}
 		dtoOut.Responses = append(dtoOut.Responses, GetUserResponsesOut{
+			QuizId:        quizId,
 			QuestionText:  questionConfig.QuestionText,
 			AnswerText:    responseConfig.AnswerText,
 			ResponseScore: responseConfig.Points,

@@ -48,7 +48,7 @@ func (h *handler) GetUsersResult(c *fiber.Ctx) error {
 		patientIds = append(patientIds, userId)
 	}
 
-	userResults, err := h.userResultStorage.GetUsersResults(patientIds, quizId)
+	userResults, err := h.userResultStorage.GetUsersResults(patientIds)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -68,6 +68,7 @@ func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutL
 			UserId:    userResult.UserID,
 			FirstName: userInfo.FirstName,
 			LastName:  userInfo.LastName,
+			QuizId:    userResult.QuizId,
 			UserScore: userResult.TotalScore,
 			IsFailed:  userResult.IsFailed,
 			PassNum:   userResult.PassNum,
