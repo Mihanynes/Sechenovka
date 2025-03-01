@@ -16,15 +16,30 @@ import (
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/logger"
+	httpLogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"log"
-	"log/slog"
+	slog "log/slog"
 	"os"
+	"runtime/debug"
 )
 
 func main() {
+	var err error
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
+	defer func() {
+		if panicErr := recover(); panicErr != nil {
+			logger.Error(fmt.Sprintf("recover panic: %+v\n%s", panicErr, debug.Stack()))
+
+		}
+
+		if err != nil {
+			logger.Error(err.Error())
+		}
+	}()
+
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
@@ -41,14 +56,13 @@ func main() {
 		AllowCredentials: false,
 	}))
 	app.Mount("/api", micro)
-	app.Use(logger.New())
+	app.Use(httpLogger.New())
 
 	db := db.ConnectDB()
 
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
 	initConfig, err := config.GetQuestionsConfig()
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(err.Error())
 	}
 
 	//storage
@@ -73,7 +87,6 @@ func main() {
 
 	app.Static("/public/questions", "./public/questions")
 	app.Static("/public/avatars", "./public/avatars")
-	//app.Static("/public/avatars", "./public/ava")
 
 	micro.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Добро пожаловать! Перейдите по /api/, чтобы увидеть изображения.")
@@ -82,7 +95,6 @@ func main() {
 		router.Post("/register/user", middleware.AdminAuth, authHandler.RegisterUser)
 		router.Post("/register/admin", authHandler.RegisterAdmin)
 		router.Post("/login", authHandler.Login)
-		//router.Post("/logout", middleware.UserAuth, authHandler.LogoutUser)
 	})
 	micro.Route("/questions", func(router fiber.Router) {
 		router.Post("/start", middleware.UserAuth, questionsHandler.StartQuiz)
@@ -95,7 +107,7 @@ func main() {
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
-		router.Get("/patient", middleware.UserAuth, patientInfoHandler.GetPatientInfo)
+		router.Get("/get", middleware.AdminAuth, patientInfoHandler.GetUserInfo)
 	})
 
 	log.Fatal(app.Listen(":8080"))

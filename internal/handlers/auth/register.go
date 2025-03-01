@@ -22,6 +22,7 @@ func (h *handler) RegisterAdmin(c *fiber.Ctx) error {
 		Username:   userIn.Username,
 		FirstName:  userIn.FirstName,
 		MiddleName: userIn.MiddleName,
+		LastName:   userIn.LastName,
 		Password:   userIn.Password,
 		IsAdmin:    true,
 	})

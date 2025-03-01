@@ -22,9 +22,9 @@ func (s *service) GetPatientInfo(userId model.UserId) (*model.PatientInfo, error
 	if user == nil {
 		return nil, errors.New("user is nil")
 	}
-	if user.IsAdmin {
-		return nil, errors.New("user is not a patient")
-	}
+	//if user.IsAdmin {
+	//	return nil, errors.New("user is not a patient")
+	//}
 
 	return &model.PatientInfo{
 		FirstName:  user.FirstName,

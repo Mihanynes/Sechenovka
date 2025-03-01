@@ -13,6 +13,10 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 		return err
 	}
 
+	if dtoUserId == "" || dtoPassNum < 1 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "no query params"})
+	}
+
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

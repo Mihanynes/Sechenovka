@@ -19,8 +19,9 @@ func NewHandler(patientInfoService patientInfoService) *handler {
 	return &handler{patientInfoService: patientInfoService}
 }
 
-func (h *handler) GetPatientInfo(c *fiber.Ctx) error {
+func (h *handler) GetUserInfo(c *fiber.Ctx) error {
 	userId := c.Query("UserId")
+
 	visitorId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
@@ -34,6 +35,14 @@ func (h *handler) GetPatientInfo(c *fiber.Ctx) error {
 	var patientInfo *model.PatientInfo
 
 	if !isAdmin {
+		patientInfo, err = h.patientInfoService.GetPatientInfo(visitorId)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+		return c.JSON(patientInfo)
+	}
+
+	if isAdmin && userId == "" {
 		patientInfo, err = h.patientInfoService.GetPatientInfo(visitorId)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

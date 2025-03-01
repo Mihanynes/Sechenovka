@@ -40,7 +40,11 @@ func IsAdminFromCtx(c *fiber.Ctx) (bool, error) {
 	return isAdmin, nil
 }
 func UserIdFromString(s string) UserId {
-	return UserId(uuid.MustParse(s))
+	res, err := uuid.Parse(s)
+	if err != nil {
+		return UserId(uuid.Nil)
+	}
+	return UserId(res)
 }
 
 func UserIdFromStrings(s []string) []UserId {
