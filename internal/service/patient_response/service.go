@@ -59,7 +59,7 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 	}
 
 	// Если пациент перешел порог, то надо отсылать уведомление
-	if question.ScoreToFail != nil && currentTotalScore >= *question.ScoreToFail {
+	if checkIsFailed(currentTotalScore, question.ScoreToFail) {
 		err = s.userResultStorage.SaveUserResult(userId, currentTotalScore, passNum, quizId, true)
 		if err != nil {
 			return false, err
@@ -92,4 +92,15 @@ func (s *service) countCurrentScore(prevUserResponses []user_respons_storage.Use
 		currentScore += respConf.Points
 	}
 	return currentScore, nil
+}
+
+func checkIsFailed(currentScore int, scoreToFail *int) bool {
+	if scoreToFail == nil || *scoreToFail == 0 {
+		return false
+	}
+	if *scoreToFail > 0 {
+		return currentScore >= *scoreToFail
+	} else {
+		return currentScore <= (-1)*(*scoreToFail)
+	}
 }

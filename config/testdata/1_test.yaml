@@ -1,6 +1,6 @@
 - question_text: "Есть ли у вас боль или дискомфорт в грудной клетке?"
   question_id: 1
-  score_to_fail: 2
+  score_to_fail: -2
   multiple_choice: true
   options:
     - answer_text: "да"

@@ -107,7 +107,7 @@ func main() {
 	})
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
-		router.Get("/get", middleware.AdminAuth, patientInfoHandler.GetUserInfo)
+		router.Get("/get", middleware.UserAuth, patientInfoHandler.GetUserInfo)
 	})
 
 	log.Fatal(app.Listen(":8080"))

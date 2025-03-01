@@ -4,7 +4,7 @@ type Option struct {
 	AnswerText     string `yaml:"answer_text"`
 	AnswerId       int    `yaml:"answer_id"`
 	QuestionId     int    `yaml:"question_id"`
-	Points         int    `yaml:"points"`
+	Points         int    `yaml:"points,omitempty"`
 	NextQuestionId int    `yaml:"next_question_id,omitempty"`
 	IsEnded        bool   `yaml:"is_ended,omitempty"`
 }

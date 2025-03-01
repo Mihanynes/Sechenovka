@@ -1,13 +1,22 @@
 package questions
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"strconv"
 )
 
 func (h *handler) GetQuestion(c *fiber.Ctx) error {
-	questionIdString := c.Params("QuestionId")
-	quizIdString := c.Params("QuizId")
+	questionIdString := c.Query("QuestionId")
+	quizIdString := c.Query("QuizId")
+
+	var err error
+	defer func() {
+		if err != nil {
+			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+		}
+	}()
 
 	if questionIdString == "" || quizIdString == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "QuestionId and QuizId are required"})

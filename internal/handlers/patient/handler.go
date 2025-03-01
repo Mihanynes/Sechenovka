@@ -2,6 +2,8 @@ package patient
 
 import (
 	"Sechenovka/internal/model"
+	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,6 +23,13 @@ func NewHandler(patientInfoService patientInfoService) *handler {
 
 func (h *handler) GetUserInfo(c *fiber.Ctx) error {
 	userId := c.Query("UserId")
+
+	var err error
+	defer func() {
+		if err != nil {
+			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+		}
+	}()
 
 	visitorId, err := model.UserIdFromCtx(c)
 	if err != nil {

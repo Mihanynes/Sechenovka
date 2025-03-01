@@ -2,7 +2,9 @@ package user_response
 
 import (
 	"Sechenovka/internal/model"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"strconv"
 )
 
@@ -10,6 +12,13 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 	dtoUserId := c.Query("UserId")
 	passNumString := c.Query("PassNum")
 	quizIdString := c.Query("QuizId")
+
+	var err error
+	defer func() {
+		if err != nil {
+			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+		}
+	}()
 
 	if dtoUserId == "" || passNumString == "" || quizIdString == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "no query params"})

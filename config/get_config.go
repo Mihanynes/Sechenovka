@@ -7,7 +7,9 @@ import (
 )
 
 var PathQuizIdMap = map[string]int{
-	"config/self_check.yaml": 1,
+	"config/self_check.yaml":         1,
+	"config/recomendations.yaml":     2,
+	"config/taking_medications.yaml": 3,
 }
 
 func GetQuestionsConfig() (map[int][]*model.Question, error) {

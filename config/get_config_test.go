@@ -6,7 +6,7 @@ import (
 )
 
 func Test_ParseYAML(t *testing.T) {
-	questions, err := parseYAML("./testdata/1_test.yaml")
+	questions, err := parseYAML("config/testdata/1_test.yaml")
 	if err != nil {
 		t.Fatalf("Ошибка при парсинге YAML: %v", err)
 	}
@@ -55,6 +55,6 @@ func Test_ParseYAML(t *testing.T) {
 	//	},
 	//}
 
-	fmt.Println(questions[1].IsMultipleChoice)
+	fmt.Println(*questions[0].ScoreToFail)
 	//require.ElementsMatch(t, expectedQuestions, questions)
 }

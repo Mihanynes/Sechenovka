@@ -1,0 +1,97 @@
+- question_text: "Курите ли вы?"
+  question_id: 1
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Да"
+      answer_id: 1
+      question_id: 1
+      next_question_id: 2
+    - answer_text: "Нет"
+      answer_id: 2
+      question_id: 1
+      next_question_id: 3
+
+- question_text: "Продолжаете ли вы курить?"
+  question_id: 2
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Да"
+      answer_id: 3
+      question_id: 2
+      next_question_id: 4
+    - answer_text: "Нет"
+      answer_id: 4
+      question_id: 2
+      next_question_id: 3
+
+- question_text: "Сколько вы выкуриваете сигарет в сутки?"
+  question_id: 4
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Менее 10"
+      answer_id: 5
+      question_id: 4
+      next_question_id: 3
+    - answer_text: "Около 10-20"
+      answer_id: 6
+      question_id: 4
+      next_question_id: 3
+    - answer_text: "Более 20 (более пачки)"
+      answer_id: 7
+      question_id: 4
+      next_question_id: 3
+
+- question_text: "Занимаетесь ли вы физической нагрузкой?"
+  question_id: 3
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Да"
+      answer_id: 8
+      question_id: 3
+      next_question_id: 5
+    - answer_text: "Нет"
+      answer_id: 9
+      question_id: 3
+      is_ended: true
+
+- question_text: "Какую нагрузку вы совершаете?"
+  question_id: 5
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Любой вид ходьбы"
+      answer_id: 10
+      question_id: 5
+      next_question_id: 6
+    - answer_text: "Любой вид бега"
+      answer_id: 11
+      question_id: 5
+      next_question_id: 6
+    - answer_text: "Фитнес"
+      answer_id: 12
+      question_id: 5
+      next_question_id: 6
+    - answer_text: "Занятия с утяжелениями"
+      answer_id: 13
+      question_id: 5
+      next_question_id: 6
+    - answer_text: "Иное"
+      answer_id: 14
+      question_id: 5
+      next_question_id: 6
+
+- question_text: "Как часто вы её совершаете?"
+  question_id: 6
+  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  options:
+    - answer_text: "Ежедневно"
+      answer_id: 15
+      question_id: 6
+      is_ended: true
+    - answer_text: "Несколько раз в неделю"
+      answer_id: 16
+      question_id: 6
+      is_ended: true
+    - answer_text: "Несколько раз в месяц"
+      answer_id: 17
+      question_id: 6
+      is_ended: true

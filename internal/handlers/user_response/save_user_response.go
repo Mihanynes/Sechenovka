@@ -3,12 +3,22 @@ package user_response
 import (
 	"Sechenovka/internal/model"
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 func (h *handler) SaveUserResponse(c *fiber.Ctx) error {
 	var dtoIn SaveUserResponseIn
-	err := json.Unmarshal(c.Body(), &dtoIn)
+
+	var err error
+	defer func() {
+		if err != nil {
+			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+		}
+	}()
+
+	err = json.Unmarshal(c.Body(), &dtoIn)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
