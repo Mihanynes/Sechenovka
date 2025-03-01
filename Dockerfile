@@ -8,6 +8,6 @@ COPY go.mod ./
 COPY . .
 
 # Выполните сборку
-RUN go build -o main main.go && go clean -cache -modcache
+RUN go build -o main main.go
 
 ENTRYPOINT ["./main"]
