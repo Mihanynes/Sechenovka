@@ -2,6 +2,7 @@ package user_result
 
 import (
 	"Sechenovka/internal/model"
+	"errors"
 	"gorm.io/gorm"
 )
 
@@ -37,4 +38,20 @@ func (s *UserResultStorage) GetUsersResults(userIds []model.UserId) ([]UserResul
 	}
 
 	return userResults, nil
+}
+
+func (s *UserResultStorage) GetUserResultByQuizId(userId model.UserId, quizId int) (*UserResult, error) {
+	var userResult UserResult
+	err := s.db.Where("user_id = ?", userId).
+		Where("quiz_id = ?", quizId).
+		Find(&userResult).Order("created_at DESC").
+		Limit(1).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &userResult, nil
 }

@@ -2,6 +2,18 @@ package config
 
 import "time"
 
+const (
+	SelfCheckQuiz         = 1
+	RecommendationsQuiz   = 2
+	TakingMedicationsQuiz = 3
+)
+
+var PathQuizIdMap = map[string]int{
+	"config/quiz_questions/self_check.yaml":         SelfCheckQuiz,
+	"config/quiz_questions/recommendations.yaml":    RecommendationsQuiz,
+	"config/quiz_questions/taking_medications.yaml": TakingMedicationsQuiz,
+}
+
 type Quiz struct {
 	QuizId          int
 	Name            string
@@ -16,14 +28,14 @@ var QuizInfo = map[int]Quiz{
 		Description:     "Зададим вопросы о вашем текущем состоянии здоровья",
 		TimeToPassAgain: 5 * time.Second,
 	},
-	RecommendationsQuiz: {
-		QuizId:          RecommendationsQuiz,
+	TakingMedicationsQuiz: {
+		QuizId:          TakingMedicationsQuiz,
 		Name:            "Уведомления о приеме препаратов",
 		Description:     "Спросим какие препараты вы принимаете",
 		TimeToPassAgain: 5 * time.Second,
 	},
-	TakingMedicationsQuiz: {
-		QuizId:          TakingMedicationsQuiz,
+	RecommendationsQuiz: {
+		QuizId:          RecommendationsQuiz,
 		Name:            "Уведомление о рекомендациях",
 		Description:     "Спросим о ваших привычках и дадим рекомендации",
 		TimeToPassAgain: 5 * time.Second,

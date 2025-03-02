@@ -2,6 +2,7 @@ package quiz
 
 import (
 	"Sechenovka/internal/model"
+	"Sechenovka/internal/storage/user_result"
 	"fmt"
 )
 
@@ -10,6 +11,7 @@ const firstQuestion = 1
 type Service struct {
 	quizConfig          map[int][]*model.Question
 	userResponseStorage userResponseStorage
+	userResultStorage   user_result.UserResultStorage
 }
 
 func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage) *Service {
@@ -48,12 +50,22 @@ func (s *Service) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *m
 		return res.PassNum, nextQuestion, nil
 	}
 
-	// Если текущий вопрос завершен, возвращаем первый вопрос с passNum + 1
 	question, err := s.GetQuestionByQuestionId(firstQuestion, quizId)
-
 	if err != nil {
 		return 0, nil, err
 	}
+
+	// Если текущий вопрос завершен досрочно по превышению баллов
+	result, err := s.userResultStorage.GetUserResultByQuizId(userId, quizId)
+	if err != nil {
+		return 0, nil, err
+	}
+
+	if result != nil && result.PassNum == res.PassNum {
+		return res.PassNum + 1, question, nil
+	}
+
+	// Если текущий вопрос завершен, возвращаем первый вопрос с passNum + 1
 	return res.PassNum + 1, question, nil
 }
 

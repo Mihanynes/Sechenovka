@@ -1,6 +1,6 @@
 - question_text: "Курите ли вы?"
   question_id: 1
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_1.png"
   options:
     - answer_text: "Да"
       answer_id: 1
@@ -13,7 +13,7 @@
 
 - question_text: "Продолжаете ли вы курить?"
   question_id: 2
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_1.png"
   options:
     - answer_text: "Да"
       answer_id: 3
@@ -26,7 +26,7 @@
 
 - question_text: "Сколько вы выкуриваете сигарет в сутки?"
   question_id: 4
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_1.png"
   options:
     - answer_text: "Менее 10"
       answer_id: 5
@@ -43,7 +43,7 @@
 
 - question_text: "Занимаетесь ли вы физической нагрузкой?"
   question_id: 3
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_2.png"
   options:
     - answer_text: "Да"
       answer_id: 8
@@ -56,7 +56,7 @@
 
 - question_text: "Какую нагрузку вы совершаете?"
   question_id: 5
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_2.png"
   options:
     - answer_text: "Любой вид ходьбы"
       answer_id: 10
@@ -81,7 +81,7 @@
 
 - question_text: "Как часто вы её совершаете?"
   question_id: 6
-  img_name: "Снимок экрана 2025-03-01 в 23.02.02.png"
+  img_name: "rec_2.png"
   options:
     - answer_text: "Ежедневно"
       answer_id: 15
