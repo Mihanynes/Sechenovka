@@ -44,6 +44,7 @@
   question_id: 2
   img_name: "tm_1.png"
   multiple_choice: true
+  score_to_fail: -4
   options:
     - answer_text: "Высокая стоимость"
       answer_id: 8

@@ -11,13 +11,14 @@ const firstQuestion = 1
 type Service struct {
 	quizConfig          map[int][]*model.Question
 	userResponseStorage userResponseStorage
-	userResultStorage   user_result.UserResultStorage
+	userResultStorage   *user_result.UserResultStorage
 }
 
-func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage) *Service {
+func New(quizConfig map[int][]*model.Question, userResponseStorage userResponseStorage, userResultStorage *user_result.UserResultStorage) *Service {
 	return &Service{
 		quizConfig:          quizConfig,
 		userResponseStorage: userResponseStorage,
+		userResultStorage:   userResultStorage,
 	}
 }
 
@@ -41,15 +42,6 @@ func (s *Service) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *m
 		return 0, nil, err
 	}
 
-	if !resp.IsEnded {
-		// Если текущий вопрос не завершен, возвращаем следующий вопрос с текущим passNum
-		nextQuestion, err := s.GetQuestionByQuestionId(resp.NextQuestionId, quizId)
-		if err != nil {
-			return 0, nil, err
-		}
-		return res.PassNum, nextQuestion, nil
-	}
-
 	question, err := s.GetQuestionByQuestionId(firstQuestion, quizId)
 	if err != nil {
 		return 0, nil, err
@@ -60,9 +52,17 @@ func (s *Service) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *m
 	if err != nil {
 		return 0, nil, err
 	}
-
-	if result != nil && result.PassNum == res.PassNum {
+	if result == nil || result.PassNum == res.PassNum {
 		return res.PassNum + 1, question, nil
+	}
+
+	if !resp.IsEnded {
+		// Если текущий вопрос не завершен, возвращаем следующий вопрос с текущим passNum
+		nextQuestion, err := s.GetQuestionByQuestionId(resp.NextQuestionId, quizId)
+		if err != nil {
+			return 0, nil, err
+		}
+		return res.PassNum, nextQuestion, nil
 	}
 
 	// Если текущий вопрос завершен, возвращаем первый вопрос с passNum + 1

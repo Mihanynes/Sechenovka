@@ -41,8 +41,8 @@ func (s *UserResultStorage) GetUsersResults(userIds []model.UserId) ([]UserResul
 }
 
 func (s *UserResultStorage) GetUserResultByQuizId(userId model.UserId, quizId int) (*UserResult, error) {
-	var userResult UserResult
-	err := s.db.Where("user_id = ?", userId).
+	userResult := UserResult{}
+	err := s.db.Where("user_id = ?", userId.String()).
 		Where("quiz_id = ?", quizId).
 		Find(&userResult).Order("created_at DESC").
 		Limit(1).Error

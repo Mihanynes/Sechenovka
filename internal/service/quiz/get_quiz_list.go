@@ -19,7 +19,7 @@ func (s *Service) GetQuizList(userId model.UserId) (quiz.QuizList, error) {
 
 		if lastUserQuiz == nil {
 			isAvailable = true
-			nextTimeCan = time.Now()
+			nextTimeCan = time.Time{}
 		} else {
 			isAvailable = time.Now().After(lastUserQuiz.UpdatedAt.Add(quizInfo.TimeToPassAgain))
 			nextTimeCan = lastUserQuiz.UpdatedAt.Add(quizInfo.TimeToPassAgain)

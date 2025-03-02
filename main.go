@@ -76,7 +76,7 @@ func main() {
 	patientInfoService := patient_info.New(userStorage)
 	patientInfoHandler := patient.NewHandler(patientInfoService)
 
-	questionsConfigService := question_service.New(initConfig, userResponseStorage)
+	questionsConfigService := question_service.New(initConfig, userResponseStorage, userResultStorage)
 	questionsHandler := questions_handler.New(questionsConfigService)
 
 	authHandler := authhandler.New(authService, doctorPatientStorage)
