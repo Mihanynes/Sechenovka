@@ -30,7 +30,7 @@ func (s *Service) GetQuizList(userId model.UserId) (quiz.QuizList, error) {
 			Name:            quizInfo.Name,
 			Description:     quizInfo.Description,
 			IsAvailable:     isAvailable,
-			TimeToPassAgain: quizInfo.TimeToPassAgain,
+			TimeToPassAgain: quizInfo.TimeToPassAgain.Milliseconds(),
 			NextTimeCan:     nextTimeCan,
 		})
 	}
