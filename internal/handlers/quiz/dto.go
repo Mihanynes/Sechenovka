@@ -22,9 +22,10 @@ type QuizList struct {
 }
 
 type Quiz struct {
-	QuizId      int       `json:"quiz_id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	IsAvailable bool      `json:"is_available"`
-	NextTimeCan time.Time `json:"next_time_can,omitempty"`
+	QuizId          int           `json:"quiz_id"`
+	Name            string        `json:"name"`
+	Description     string        `json:"description"`
+	IsAvailable     bool          `json:"is_available"`
+	TimeToPassAgain time.Duration `json:"time_to_pass_again"`
+	NextTimeCan     time.Time     `json:"next_time_can,omitempty"`
 }

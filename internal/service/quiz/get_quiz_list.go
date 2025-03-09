@@ -26,11 +26,12 @@ func (s *Service) GetQuizList(userId model.UserId) (quiz.QuizList, error) {
 		}
 
 		quizList.List = append(quizList.List, quiz.Quiz{
-			QuizId:      quizInfo.QuizId,
-			Name:        quizInfo.Name,
-			Description: quizInfo.Description,
-			IsAvailable: isAvailable,
-			NextTimeCan: nextTimeCan,
+			QuizId:          quizInfo.QuizId,
+			Name:            quizInfo.Name,
+			Description:     quizInfo.Description,
+			IsAvailable:     isAvailable,
+			TimeToPassAgain: quizInfo.TimeToPassAgain,
+			NextTimeCan:     nextTimeCan,
 		})
 	}
 	return quizList, nil
