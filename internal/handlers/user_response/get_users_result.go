@@ -6,27 +6,15 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"log"
-	"strconv"
 )
 
 func (h *handler) GetUsersResult(c *fiber.Ctx) error {
-	quizIdString := c.Query("QuizId")
-
 	var err error
 	defer func() {
 		if err != nil {
 			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
 		}
 	}()
-
-	if quizIdString == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "QuizId is required"})
-	}
-
-	quizId, err := strconv.Atoi(quizIdString)
-	if err != nil || quizId <= 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "QuizId is invalid"})
-	}
 
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {
