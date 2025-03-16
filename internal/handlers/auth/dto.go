@@ -21,7 +21,6 @@ type RegisterUserIn struct {
 	LastName        string `json:"last_name"`
 	Phone           string `json:"phone"`
 	Email           string `json:"email"`
-	Snils           string `json:"snils"`
 	Password        string `json:"password"`
 	PasswordConfirm string `json:"password_confirm"`
 }

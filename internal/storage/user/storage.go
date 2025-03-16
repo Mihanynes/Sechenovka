@@ -55,7 +55,6 @@ func (s *UserStorage) SaveUser(user *model.User, userId model.UserId) error {
 		LastName:   user.LastName,
 		MiddleName: user.MiddleName,
 		Phone:      user.Phone,
-		Snils:      user.Snils,
 		Email:      user.Email,
 		Password:   user.Password,
 		IsAdmin:    user.IsAdmin,

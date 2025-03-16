@@ -69,7 +69,6 @@ func DtoUserToModel(user RegisterUserIn) *model.User {
 		MiddleName: user.MiddleName,
 		LastName:   user.LastName,
 		Phone:      user.Phone,
-		Snils:      user.Snils,
 		Email:      user.Email,
 		Password:   user.Password,
 		IsAdmin:    false,

@@ -12,7 +12,6 @@ type User struct {
 	MiddleName string
 	LastName   string
 	Phone      string
-	Snils      string
 	Email      string
 	Password   string
 	IsAdmin    bool
