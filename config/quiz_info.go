@@ -15,10 +15,10 @@ var PathQuizIdMap = map[string]int{
 }
 
 type Quiz struct {
-	QuizId          int
-	Name            string
-	Description     string
-	TimeToPassAgain time.Duration
+	QuizId          int           `json:"quiz_id"`
+	Name            string        `json:"name"`
+	Description     string        `json:"description"`
+	TimeToPassAgain time.Duration `json:"time_to_pass_again"`
 }
 
 var QuizInfo = map[int]Quiz{

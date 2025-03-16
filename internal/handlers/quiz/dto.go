@@ -29,3 +29,6 @@ type Quiz struct {
 	TimeToPassAgain int64     `json:"time_to_pass_again"`
 	NextTimeCan     time.Time `json:"next_time_can,omitempty"`
 }
+
+type QuizInfo struct {
+}

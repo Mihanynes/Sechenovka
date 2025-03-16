@@ -110,13 +110,14 @@ func main() {
 		router.Get("/patient/result", middleware.AdminAuth, userResponseHandler.GetUserResult)
 		router.Get("/patient/list", middleware.AdminAuth, userResponseHandler.GetPatientList)
 		router.Get("/patient/info", middleware.AdminAuth, patientInfoHandler.GetPatientInfo)
+		router.Get("/quiz/info", middleware.AdminAuth, questionsHandler.GetQuizInfo)
 	})
 
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
 		router.Get("/get", middleware.UserAuth, patientInfoHandler.GetUserInfo)
 	})
-	micro.Get("/quiz/list", middleware.UserAuth, questionsHandler.GetQuizList)
+	micro.Get("/quiz/list", middleware.UserAuth, questionsHandler.GetQuizListForUser)
 
 	log.Fatal(app.Listen(":8080"))
 }
