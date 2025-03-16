@@ -50,3 +50,7 @@ type GetUsersResultOut struct {
 	PassNum   int       `json:"pass_num"`
 	PassTime  time.Time `json:"pass_time"`
 }
+
+type PatientIdList struct {
+	PatientIds []string `json:"patient_ids"`
+}

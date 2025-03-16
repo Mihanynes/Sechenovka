@@ -12,28 +12,20 @@ func (h *handler) GetUsersResult(c *fiber.Ctx) error {
 	var err error
 	defer func() {
 		if err != nil {
-			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+			log.Print(fmt.Errorf("Handler[GetUsersResult] error: %v", err))
 		}
 	}()
 
-	userId, err := model.UserIdFromCtx(c)
+	adminId, err := model.UserIdFromCtx(c)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	var patientIds []model.UserId
-	isAdmin, err := model.IsAdminFromCtx(c)
+
+	patientIds, err = h.doctorPatientsStorage.GetPatientsIdsByDoctorId(adminId)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	if isAdmin {
-		patientIds, err = h.doctorPatientsStorage.GetPatientsIdsByDoctorId(userId)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-		}
-	} else {
-		patientIds = append(patientIds, userId)
 	}
 
 	userResults, err := h.userResultStorage.GetUsersResults(patientIds)

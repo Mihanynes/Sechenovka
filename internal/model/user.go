@@ -47,7 +47,7 @@ func UserIdFromString(s string) UserId {
 	return UserId(res)
 }
 
-func UserIdFromStrings(s []string) []UserId {
+func UserIdsFromStrings(s []string) []UserId {
 	res := make([]UserId, len(s))
 	for i, user := range s {
 		res[i] = UserIdFromString(user)

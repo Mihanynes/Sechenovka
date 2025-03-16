@@ -24,7 +24,13 @@ func (s *DoctorPatientsStorage) GetPatientsIdsByDoctorId(doctorID model.UserId) 
 	if err != nil {
 		return nil, err
 	}
-	return model.UserIdFromStrings(patients), nil
+	return model.UserIdsFromStrings(patients), nil
+}
+
+func (s *DoctorPatientsStorage) CheckPatientLinkedToDoctor(doctorId, patientId model.UserId) bool {
+	var link DoctorPatient
+	result := s.db.Where("doctor_id = ? AND patient_id = ?", doctorId.String(), patientId.String()).First(&link)
+	return result.Error == nil
 }
 
 func (s *DoctorPatientsStorage) SaveDoctorPatientLink(doctorId, patientId model.UserId) error {

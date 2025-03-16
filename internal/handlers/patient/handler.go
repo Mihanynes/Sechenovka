@@ -67,6 +67,26 @@ func (h *handler) GetUserInfo(c *fiber.Ctx) error {
 	return c.JSON(patientInfo)
 }
 
+func (h *handler) GetPatientInfo(c *fiber.Ctx) error {
+	userId := c.Query("UserId")
+
+	var err error
+	defer func() {
+		if err != nil {
+			log.Print(fmt.Errorf("Handler[GetPatientInfo] error: %v", err))
+		}
+	}()
+
+	var patientInfo *model.PatientInfo
+
+	patientInfo, err = h.patientInfoService.GetPatientInfo(model.UserIdFromString(userId))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(patientInfo)
+}
+
 func (h *handler) UploadAvatar(c *fiber.Ctx) error {
 	userId, err := model.UserIdFromCtx(c)
 	if err != nil {

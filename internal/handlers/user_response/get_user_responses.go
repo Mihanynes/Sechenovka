@@ -16,7 +16,7 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 	var err error
 	defer func() {
 		if err != nil {
-			log.Print(fmt.Errorf("Handler[GetUserInfo] error: %v", err))
+			log.Print(fmt.Errorf("Handler[GetUserResponses] error: %v", err))
 		}
 	}()
 
