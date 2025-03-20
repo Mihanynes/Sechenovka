@@ -1,6 +1,7 @@
 package user_response
 
 import (
+	"Sechenovka/config"
 	"Sechenovka/internal/model"
 	"Sechenovka/internal/storage/user_result"
 	"fmt"
@@ -48,7 +49,9 @@ func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutL
 			UserId:    userResult.UserID,
 			FirstName: userInfo.FirstName,
 			LastName:  userInfo.LastName,
+			AvatarUrl: userInfo.UserID + ".png",
 			QuizId:    userResult.QuizId,
+			QuizName:  config.QuizInfo[userResult.QuizId].Name,
 			UserScore: userResult.TotalScore,
 			IsFailed:  userResult.IsFailed,
 			PassNum:   userResult.PassNum,

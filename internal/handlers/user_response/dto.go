@@ -44,7 +44,9 @@ type GetUsersResultOut struct {
 	UserId    string    `json:"user_id"`
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
+	AvatarUrl string    `json:"avatar_url"`
 	QuizId    int       `json:"quiz_id"`
+	QuizName  string    `json:"quiz_name"`
 	UserScore int       `json:"user_score"`
 	IsFailed  bool      `json:"is_failed"`
 	PassNum   int       `json:"pass_num"`
