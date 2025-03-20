@@ -24,7 +24,19 @@ func (h *handler) GetPatientList(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(PatientIdList{
-		PatientIds: model.ConvertUserIdsToStrings(res),
-	})
+	patients := make([]PatientInfo, 0, len(res))
+	for _, patientId := range res {
+		user, err := h.userInfoStorage.GetUserByUserId(patientId.String())
+		if err != nil || user == nil {
+			log.Println("error while getting user info", err)
+		}
+		patients = append(patients, PatientInfo{
+			UserId:    user.UserID,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			AvatarUrl: user.UserID + ".png",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(PatientIdList{Patients: patients})
 }

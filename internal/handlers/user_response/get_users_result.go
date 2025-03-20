@@ -46,10 +46,12 @@ func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutL
 		}
 
 		results[i] = GetUsersResultOut{
-			UserId:    userResult.UserID,
-			FirstName: userInfo.FirstName,
-			LastName:  userInfo.LastName,
-			AvatarUrl: userInfo.UserID + ".png",
+			PatientInfo: PatientInfo{
+				UserId:    userResult.UserID,
+				FirstName: userInfo.FirstName,
+				LastName:  userInfo.LastName,
+				AvatarUrl: userInfo.UserID + ".png",
+			},
 			QuizId:    userResult.QuizId,
 			QuizName:  config.QuizInfo[userResult.QuizId].Name,
 			UserScore: userResult.TotalScore,
