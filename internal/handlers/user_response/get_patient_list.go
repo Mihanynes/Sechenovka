@@ -29,6 +29,7 @@ func (h *handler) GetPatientList(c *fiber.Ctx) error {
 		user, err := h.userInfoStorage.GetUserByUserId(patientId)
 		if err != nil || user == nil {
 			log.Println("error while getting user info", err)
+			continue
 		}
 		patients = append(patients, PatientInfo{
 			UserId:    user.UserID,
