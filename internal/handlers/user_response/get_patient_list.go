@@ -26,7 +26,7 @@ func (h *handler) GetPatientList(c *fiber.Ctx) error {
 
 	patients := make([]PatientInfo, 0, len(res))
 	for _, patientId := range res {
-		user, err := h.userInfoStorage.GetUserByUserId(patientId.String())
+		user, err := h.userInfoStorage.GetUserByUserId(patientId)
 		if err != nil || user == nil {
 			log.Println("error while getting user info", err)
 		}
