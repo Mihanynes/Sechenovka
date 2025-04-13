@@ -58,6 +58,7 @@ func (h *handler) toDto(usersResult []user_result.UserResult) GetUsersResultOutL
 			IsFailed:  userResult.IsFailed,
 			PassNum:   userResult.PassNum,
 			PassTime:  userResult.UpdatedAt,
+			IsViewed:  userResult.IsViewed,
 		}
 	}
 	return GetUsersResultOutList{

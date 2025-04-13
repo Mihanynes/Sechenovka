@@ -6,8 +6,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"log/slog"
 )
+
+var ErrUserAlreadyExists = errors.New("User already exists")
 
 type service struct {
 	userStorage userStorage
@@ -44,9 +47,9 @@ func (s *service) Register(user *model.User) (*model.UserId, error) {
 	user.Password = string(userWithHashedPassword)
 	generatedUserId := model.UserId(uuid.New())
 
-	if err := s.userStorage.SaveUser(user, generatedUserId); err != nil {
-		err = fmt.Errorf("error while saving user %v", err.Error())
-		return nil, err
+	err = s.userStorage.SaveUser(user, generatedUserId)
+	if errors.Is(err, gorm.ErrDuplicatedKey) {
+		return nil, ErrUserAlreadyExists
 	}
 	return &generatedUserId, nil
 }

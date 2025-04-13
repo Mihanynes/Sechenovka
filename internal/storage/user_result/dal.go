@@ -13,4 +13,5 @@ type UserResult struct {
 	TotalScore int       `gorm:"type:int"`
 	IsFailed   bool      `gorm:"type:boolean"`
 	User       user.User `gorm:"references:UserID"`
+	IsViewed   bool      `gorm:"type:boolean"`
 }

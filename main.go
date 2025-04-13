@@ -16,29 +16,22 @@ import (
 	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	httpLogger "github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"log"
 	slog "log/slog"
 	"os"
-	"runtime/debug"
+	"time"
 )
 
 func main() {
 	var err error
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
-	defer func() {
-		if panicErr := recover(); panicErr != nil {
-			logger.Error(fmt.Sprintf("recover panic: %+v\n%s", panicErr, debug.Stack()))
-
-		}
-
-		if err != nil {
-			logger.Error(err.Error())
-		}
-	}()
 
 	app := fiber.New()
 
@@ -57,6 +50,7 @@ func main() {
 	}))
 	app.Mount("/api", micro)
 	app.Use(httpLogger.New())
+	app.Use(recover.New(recover.ConfigDefault))
 
 	db := db.ConnectDB()
 
@@ -111,6 +105,7 @@ func main() {
 		router.Get("/patient/list", middleware.AdminAuth, userResponseHandler.GetPatientList)
 		router.Get("/patient/info", middleware.AdminAuth, patientInfoHandler.GetPatientInfo)
 		router.Get("/quiz/info", middleware.AdminAuth, questionsHandler.GetQuizInfo)
+		router.Get("/patient/results/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResultAsViewed)
 	})
 
 	micro.Route("/user/info", func(router fiber.Router) {
@@ -119,5 +114,36 @@ func main() {
 	})
 	micro.Get("/quiz/list", middleware.UserAuth, questionsHandler.GetQuizListForUser)
 
+	// Маршрут для метрик Prometheus
+	app.Get("/metrics", monitor.New())
 	log.Fatal(app.Listen(":8080"))
+}
+
+var (
+	httpRequestsTotal = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "http_requests_total",
+		Help: "Total number of HTTP requests.",
+	}, []string{"method", "path", "status"})
+	httpRequestDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name: "http_request_duration_seconds",
+		Help: "Duration of HTTP requests.",
+	}, []string{"method", "path", "status"})
+)
+
+func handlerWrapper(h func(c *fiber.Ctx) error) func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
+		start := time.Now()
+
+		err := h(c)
+		if err != nil {
+			log.Printf("error: %v", err)
+			httpRequestsTotal.WithLabelValues(c.Method(), c.Path(), "500").Inc()
+			httpRequestDuration.WithLabelValues(c.Method(), c.Path(), "500").Observe(time.Since(start).Seconds())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+
+		httpRequestsTotal.WithLabelValues(c.Method(), c.Path(), "200").Inc()
+		httpRequestDuration.WithLabelValues(c.Method(), c.Path(), "200").Observe(time.Since(start).Seconds())
+		return nil
+	}
 }

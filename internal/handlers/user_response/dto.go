@@ -48,6 +48,7 @@ type GetUsersResultOut struct {
 	IsFailed    bool        `json:"is_failed"`
 	PassNum     int         `json:"pass_num"`
 	PassTime    time.Time   `json:"pass_time"`
+	IsViewed    bool        `json:"is_viewed"`
 }
 
 type PatientIdList struct {
@@ -59,4 +60,10 @@ type PatientInfo struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	AvatarUrl string `json:"avatar_url"`
+}
+
+type MarkResultAsViewedIn struct {
+	PatientId string `json:"patient_id"`
+	QuizId    int    `json:"quiz_id"`
+	PassNum   int    `json:"pass_num"`
 }

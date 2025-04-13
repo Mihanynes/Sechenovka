@@ -2,18 +2,11 @@ package user_response
 
 import (
 	"Sechenovka/internal/model"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"log"
 )
 
 func (h *handler) GetUserResult(c *fiber.Ctx) error {
 	var err error
-	defer func() {
-		if err != nil {
-			log.Print(fmt.Errorf("Handler[GetUserResult] error: %v", err))
-		}
-	}()
 
 	dtoUserId := c.Query("UserId")
 	if dtoUserId == "" {
