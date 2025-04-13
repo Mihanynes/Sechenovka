@@ -45,10 +45,10 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 //	return int(totalScore), nil
 //}
 
-func (s *UserResponseStorage) UpdateIsViewed(userId model.UserId, quizId int, passNum int, responseId int) error {
+func (s *UserResponseStorage) UpdateIsViewed(userId model.UserId, quizId int, passNum int, responseId int, isViewed bool) error {
 	return s.db.Model(&UserResponse{}).
 		Where("user_id = ? AND quiz_id = ? AND pass_num = ? and response_id = ?", userId.String(), quizId, passNum, responseId).
-		Update("is_viewed", true).Error
+		Update("is_viewed", isViewed).Error
 }
 
 func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int, quizId int) ([]UserResponse, error) {

@@ -69,6 +69,7 @@ type MarkResultAsViewedIn struct {
 	PatientId string `json:"patient_id"`
 	QuizId    int    `json:"quiz_id"`
 	PassNum   int    `json:"pass_num"`
+	IsViewed  bool   `json:"is_viewed"`
 }
 
 type MarkResponseAsViewedIn struct {
@@ -76,4 +77,5 @@ type MarkResponseAsViewedIn struct {
 	QuizId     int    `json:"quiz_id"`
 	PassNum    int    `json:"pass_num"`
 	ResponseId int    `json:"response_id"`
+	IsViewed   bool   `json:"is_viewed"`
 }

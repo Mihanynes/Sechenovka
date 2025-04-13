@@ -13,7 +13,7 @@ func (h *handler) MarkResultAsViewed(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	err := h.userResultStorage.UpdateIsViewed(model.UserIdFromString(dtoIn.PatientId), dtoIn.QuizId, dtoIn.PassNum)
+	err := h.userResultStorage.UpdateIsViewed(model.UserIdFromString(dtoIn.PatientId), dtoIn.QuizId, dtoIn.PassNum, dtoIn.IsViewed)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
