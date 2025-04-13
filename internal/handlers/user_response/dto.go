@@ -26,6 +26,9 @@ type GetUserResponsesOut struct {
 	QuestionText  string `json:"question_text"`
 	AnswerText    string `json:"answer_text"`
 	ResponseScore int    `json:"response_score"`
+	PassNum       int    `json:"pass_num"`
+	ResponseId    int    `json:"response_id"`
+	IsViewed      bool   `json:"is_viewed"`
 }
 
 type GetUserResponsesOutList struct {
@@ -66,4 +69,11 @@ type MarkResultAsViewedIn struct {
 	PatientId string `json:"patient_id"`
 	QuizId    int    `json:"quiz_id"`
 	PassNum   int    `json:"pass_num"`
+}
+
+type MarkResponseAsViewedIn struct {
+	PatientId  string `json:"patient_id"`
+	QuizId     int    `json:"quiz_id"`
+	PassNum    int    `json:"pass_num"`
+	ResponseId int    `json:"response_id"`
 }

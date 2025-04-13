@@ -13,4 +13,5 @@ type UserResponse struct {
 	PassNum    int       `gorm:"type:int"`
 	QuizId     int       `gorm:"type:int"`
 	User       user.User `gorm:"references:UserID"`
+	IsViewed   bool      `gorm:"type:boolean"`
 }

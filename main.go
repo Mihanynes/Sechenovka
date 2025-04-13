@@ -106,6 +106,7 @@ func main() {
 		router.Get("/patient/info", middleware.AdminAuth, patientInfoHandler.GetPatientInfo)
 		router.Get("/quiz/info", middleware.AdminAuth, questionsHandler.GetQuizInfo)
 		router.Patch("/patient/results/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResultAsViewed)
+		router.Patch("/patient/response/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResponseAsViewed)
 	})
 
 	micro.Route("/user/info", func(router fiber.Router) {

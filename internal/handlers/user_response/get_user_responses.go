@@ -73,6 +73,9 @@ func (h *handler) GetUserResponses(c *fiber.Ctx) error {
 			QuestionText:  questionConfig.QuestionText,
 			AnswerText:    responseConfig.AnswerText,
 			ResponseScore: responseConfig.Points,
+			PassNum:       response.PassNum,
+			ResponseId:    response.ResponseId,
+			IsViewed:      response.IsViewed,
 		})
 	}
 	return c.Status(fiber.StatusOK).JSON(dtoOut)

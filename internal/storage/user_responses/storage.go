@@ -45,6 +45,14 @@ func (s *UserResponseStorage) SaveUserResponse(userId model.UserId, responseId, 
 //	return int(totalScore), nil
 //}
 
+func (s *UserResponseStorage) UpdateIsViewed(userId model.UserId, quizId int, passNum int) error {
+	err := s.db.Model(&UserResponse{}).Where("user_id = ? AND quiz_id = ? AND pass_num = ?", userId, quizId, passNum).Update("is_viewed", true).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return err
+}
+
 func (s *UserResponseStorage) GetUserResponsesByPassNum(userId model.UserId, passNum int, quizId int) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0)
 	err := s.db.Where("user_id = ?", userId.String()).
