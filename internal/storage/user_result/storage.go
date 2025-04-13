@@ -17,11 +17,9 @@ func New(db *gorm.DB) *UserResultStorage {
 }
 
 func (s *UserResultStorage) UpdateIsViewed(userId model.UserId, quizId int, passNum int) error {
-	err := s.db.Model(&UserResult{}).Where("user_id = ? AND quiz_id = ? AND pass_num = ?", userId, quizId, passNum).Update("is_viewed", true).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
-	return err
+	return s.db.Model(&UserResult{}).
+		Where("user_id = ? AND quiz_id = ? AND pass_num = ?", userId.String(), quizId, passNum).
+		Update("is_viewed", true).Error
 }
 
 func (s *UserResultStorage) SaveUserResult(userId model.UserId, userScore int, passNum int, quizId int, isFailed bool) error {
