@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"github.com/google/uuid"
 )
 
 type LoginIn struct {
@@ -11,7 +10,8 @@ type LoginIn struct {
 }
 
 type LoginOut struct {
-	UserId uuid.UUID `json:"userId"  validate:"required"`
+	UserId  string `json:"userId" `
+	IsAdmin bool   `json:"isAdmin"`
 }
 
 type RegisterUserIn struct {

@@ -3,7 +3,9 @@ package auth
 import (
 	"Sechenovka/internal/model"
 	"encoding/json"
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 func (h *handler) RegisterAdmin(c *fiber.Ctx) error {
@@ -26,6 +28,11 @@ func (h *handler) RegisterAdmin(c *fiber.Ctx) error {
 		Password:   userIn.Password,
 		IsAdmin:    true,
 	})
+
+	if errors.Is(err, gorm.ErrDuplicatedKey) {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": "user already exists"})
+	}
+
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}

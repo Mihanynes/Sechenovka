@@ -12,10 +12,10 @@ func (h *handler) Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
-	userId, err := h.authService.Login(userIn.Username, userIn.Password)
+	user, err := h.authService.Login(userIn.Username, userIn.Password)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "signed in successfully", "userId": userId})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "signed in successfully", "data": user})
 }

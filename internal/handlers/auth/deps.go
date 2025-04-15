@@ -5,7 +5,7 @@ import (
 )
 
 type authService interface {
-	Login(username string, password string) (string, error)
+	Login(username string, password string) (*LoginOut, error)
 	Register(user *model.User) (*model.UserId, error)
 }
 
