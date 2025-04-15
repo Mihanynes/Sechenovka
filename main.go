@@ -3,6 +3,7 @@ package main
 import (
 	"Sechenovka/config"
 	"Sechenovka/db"
+	"Sechenovka/internal/handlers/admin"
 	authhandler "Sechenovka/internal/handlers/auth"
 	"Sechenovka/internal/handlers/middleware"
 	"Sechenovka/internal/handlers/patient"
@@ -107,6 +108,12 @@ func main() {
 		router.Get("/quiz/info", middleware.AdminAuth, questionsHandler.GetQuizInfo)
 		router.Patch("/patient/results/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResultAsViewed)
 		router.Patch("/patient/response/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResponseAsViewed)
+	})
+
+	superAdminHandler := admin.New(userStorage)
+	micro.Route("/superAdmin", func(router fiber.Router) {
+		router.Get("/getAllUsers", superAdminHandler.GetAllUsers)
+		router.Post("/deleteUser/:id", superAdminHandler.DeleteUser)
 	})
 
 	micro.Route("/user/info", func(router fiber.Router) {

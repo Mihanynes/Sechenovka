@@ -33,6 +33,26 @@ func (s *UserStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 	return &userFromDB, nil
 }
 
+func (s *UserStorage) GetAllUsers() ([]User, error) {
+	var users []User
+	result := s.db.Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
+}
+
+func (s *UserStorage) DeleteUserByID(userID string) error {
+	result := s.db.Where("user_id = ?", userID).Delete(&User{})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return model.ErrUserNotFound // Возвращаем ошибку, если пользователь не найден
+	}
+	return nil
+}
+
 //func (s *UserStorage) GetPatientsByDoctorId(doctorID model.UserID) ([]User, error) {
 //	var patients []User
 //	err := s.db.Table("users").
