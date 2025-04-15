@@ -11,8 +11,6 @@ import (
 	"log/slog"
 )
 
-var ErrUserAlreadyExists = errors.New("User already exists")
-
 type service struct {
 	userStorage userStorage
 	log         *slog.Logger
@@ -53,7 +51,7 @@ func (s *service) Register(user *model.User) (*model.UserId, error) {
 
 	err = s.userStorage.SaveUser(user, generatedUserId)
 	if errors.Is(err, gorm.ErrDuplicatedKey) {
-		return nil, ErrUserAlreadyExists
+		return nil, model.ErrUserAlreadyExists
 	}
 	return &generatedUserId, nil
 }

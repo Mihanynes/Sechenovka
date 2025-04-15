@@ -61,9 +61,6 @@ func (s *UserStorage) SaveUser(user *model.User, userId model.UserId) error {
 	}
 	result := s.db.Create(&userToSave)
 
-	if result.Error != nil && errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-		return errors.New("user already exists")
-	}
 	if result.Error != nil {
 		return result.Error
 	}

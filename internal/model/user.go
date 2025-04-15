@@ -6,6 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var ErrUserAlreadyExists = errors.New("User already exists")
+
 type User struct {
 	Username   string
 	FirstName  string
