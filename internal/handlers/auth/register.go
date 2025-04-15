@@ -2,7 +2,6 @@ package auth
 
 import (
 	"Sechenovka/internal/model"
-	"Sechenovka/internal/service/auth"
 	"encoding/json"
 	"errors"
 	"github.com/gofiber/fiber/v2"
