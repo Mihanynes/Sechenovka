@@ -49,6 +49,11 @@ func (s *service) Register(user *model.User) (*model.UserId, error) {
 	user.Password = string(userWithHashedPassword)
 	generatedUserId := model.UserId(uuid.New())
 
+	_, err = s.userStorage.GetUserByUsername(user.Username)
+	if !errors.Is(err, model.ErrUserNotFound) {
+		return nil, model.ErrUserAlreadyExists
+	}
+
 	err = s.userStorage.SaveUser(user, generatedUserId)
 	if errors.Is(err, gorm.ErrDuplicatedKey) {
 		return nil, model.ErrUserAlreadyExists

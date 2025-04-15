@@ -2,7 +2,6 @@ package user
 
 import (
 	"Sechenovka/internal/model"
-	"errors"
 	"gorm.io/gorm"
 )
 
@@ -20,7 +19,7 @@ func (s *UserStorage) GetUserByUsername(username string) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "username = ?", username)
 	if result.Error != nil {
-		return nil, errors.New("user not found")
+		return nil, model.ErrUserNotFound
 	}
 	return &userFromDB, nil
 }
@@ -29,7 +28,7 @@ func (s *UserStorage) GetUserByUserId(userId model.UserId) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "user_id = ?", userId.String())
 	if result.Error != nil {
-		return nil, errors.New("user not found")
+		return nil, model.ErrUserNotFound
 	}
 	return &userFromDB, nil
 }
