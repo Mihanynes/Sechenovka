@@ -57,7 +57,7 @@ func (h *handler) RegisterUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
-	if errors.Is(err, auth.ErrUserAlreadyExists) {
+	if errors.Is(err, model.ErrUserAlreadyExists) {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": "user already exists"})
 	}
 
