@@ -9,4 +9,4 @@ COPY . .
 
 # Выполните сборку
 RUN go build -o ${GOPATH}/bin/service ./cmd/service
-RUN go build -o ${GOPATH}/bin/push_sender ./cmd/push_dender && go clean -cache -modcache
+RUN go build -o ${GOPATH}/bin/push_sender ./cmd/push_sender && go clean -cache -modcache
