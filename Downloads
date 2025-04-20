@@ -25,7 +25,6 @@ services:
     container_name: go_app
     build:
       context: ./Sechenovka
-    command: ./service  # Явно запускаем основной сервис
     volumes:
       - ./data:/app/data
       - ./public:/app/public
@@ -33,20 +32,6 @@ services:
       - DATABASE_PATH=/app/data/storage.db
     ports:
       - "3010:8080"
-    networks:
-      - dev
-    restart: always
-
-  push_sender:
-    container_name: push_sender
-    build:
-      context: ./Sechenovka
-    command: ./push_sender  # Явно запускаем push-сервис
-    volumes:
-      - ./data:/app/data
-      - ./public:/app/public
-    ports:
-      - "3011:8081"
     networks:
       - dev
     restart: always
