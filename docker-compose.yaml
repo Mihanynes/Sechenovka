@@ -29,8 +29,9 @@ services:
     volumes:
       - ./data:/app/data
       - ./public:/app/public
+      - ./db/storage:/app/data
     environment:
-      - DATABASE_PATH=/app/data/storage.db
+      - DATABASE_PATH=/app/data/master.db
     ports:
       - "3010:8080"
     networks:
@@ -42,9 +43,6 @@ services:
     build:
       context: ./Sechenovka
     command: ./push_sender  # Явно запускаем push-сервис
-    volumes:
-      - ./data:/app/data
-      - ./public:/app/public
     ports:
       - "3011:8081"
     networks:

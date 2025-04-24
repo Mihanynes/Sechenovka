@@ -14,7 +14,7 @@ import (
 )
 
 func ConnectDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("./db/master.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("./db/storage/master.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database! \n", err.Error())
 		os.Exit(1)
