@@ -28,9 +28,9 @@ services:
     command: ./service  # Явно запускаем основной сервис
     volumes:
       - ./public:/app/public
-      - ./db/storage:/app/data
+      - db_data:/app/data  # Том для БД
     environment:
-      - DATABASE_PATH=/app/data/master.db
+        - DATABASE_PATH=/app/data/master.db
     ports:
       - "3010:8080"
     networks:
@@ -60,4 +60,5 @@ services:
 
 
 volumes:
+  db_data:
   node_modules:
