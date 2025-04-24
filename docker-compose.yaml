@@ -27,7 +27,6 @@ services:
       context: ./Sechenovka
     command: ./service  # Явно запускаем основной сервис
     volumes:
-      - ./data:/app/data
       - ./public:/app/public
       - ./db/storage:/app/data
     environment:
