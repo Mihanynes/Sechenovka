@@ -110,17 +110,17 @@ func main() {
 		router.Patch("/patient/response/mark_as_viewed", middleware.AdminAuth, userResponseHandler.MarkResponseAsViewed)
 	})
 
-	superAdminHandler := admin.New(userStorage)
-	micro.Route("/superAdmin", func(router fiber.Router) {
-		router.Get("/getAllUsers", superAdminHandler.GetAllUsers)
-		router.Post("/deleteUser/:id", superAdminHandler.DeleteUser)
-	})
-
 	micro.Route("/user/info", func(router fiber.Router) {
 		router.Post("/uploadAvatar", middleware.UserAuth, patientInfoHandler.UploadAvatar)
 		router.Get("/get", middleware.UserAuth, patientInfoHandler.GetUserInfo)
 	})
 	micro.Get("/quiz/list", middleware.UserAuth, questionsHandler.GetQuizListForUser)
+
+	superAdminHandler := admin.New(userStorage)
+	micro.Route("/superAdmin", func(router fiber.Router) {
+		router.Get("/getAllUsers", superAdminHandler.GetAllUsers)
+		router.Post("/deleteUser/:id", superAdminHandler.DeleteUser)
+	})
 
 	// Маршрут для метрик Prometheus
 	app.Get("/metrics", monitor.New())

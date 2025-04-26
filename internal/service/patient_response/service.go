@@ -5,7 +5,11 @@ import (
 	question_service "Sechenovka/internal/service/quiz"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
+	"bytes"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"net/http"
 )
 
 type service struct {
@@ -64,8 +68,23 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 		if err != nil {
 			return false, err
 		}
+
+		// Отправляем уведомление врачу
+		go func() {
+			payload := map[string]string{
+				"title": "Тревога",
+				"body":  "Пациенту стало плохо. Срочно проверьте его состояние!",
+			}
+			body, _ := json.Marshal(payload)
+
+			resp, err := http.Post("http://push_sender:8080/api/notify", "application/json", bytes.NewReader(body))
+			if err != nil {
+				fmt.Println("Ошибка при отправке уведомления:", err)
+				return
+			}
+			defer resp.Body.Close()
+		}()
 		return true, nil
-		// TODO: тут бы послать уведомление врачу, что пациенту плохо
 	}
 
 	// Если пациент завершил тест

@@ -24,8 +24,8 @@ func main() {
 	http.HandleFunc("/api/subscribe", handleSubscribe)
 	http.HandleFunc("/api/notify", handleNotify)
 
-	fmt.Println("Сервер запущен на http://localhost:8081")
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	fmt.Println("Сервер запущен на http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleSubscribe(w http.ResponseWriter, r *http.Request) {
