@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/SherClockHolmes/webpush-go"
@@ -14,18 +15,12 @@ import (
 var subscriptions = make([]*webpush.Subscription, 0)
 var mu sync.Mutex
 
-// Твоя почта + VAPID ключи (можно вынести в env)
-var (
-	vapidPublicKey  = "BHaXfDEPFHgdWTWGe8ldGP2YIZgE37VEn8zWEGFP7gA5fXfCftHa92UanMkn2bLeSx4CI4Cf4oUnfMk4fco58r0"
-	vapidPrivateKey = "5rvpzmWK_V95QDLtQEd0CN3-z8qnNDrrHlJC6jT9Fq8"
-)
-
 func main() {
 	http.HandleFunc("/api/subscribe", handleSubscribe)
 	http.HandleFunc("/api/notify", handleNotify)
 
 	fmt.Println("Сервер запущен на http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 func handleSubscribe(w http.ResponseWriter, r *http.Request) {
@@ -56,8 +51,8 @@ func handleNotify(w http.ResponseWriter, r *http.Request) {
 	for _, sub := range subscriptions {
 		resp, err := webpush.SendNotification(body, sub, &webpush.Options{
 			TTL:             60,
-			VAPIDPublicKey:  vapidPublicKey,
-			VAPIDPrivateKey: vapidPrivateKey,
+			VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
+			VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
 			Subscriber:      "mailto:you@example.com",
 		})
 		if err != nil {
