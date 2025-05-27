@@ -26,18 +26,18 @@ var QuizInfo = map[int]Quiz{
 		QuizId:          SelfCheckQuiz,
 		Name:            "Опрос состояния здоровья",
 		Description:     "Зададим вопросы о вашем текущем состоянии здоровья",
-		TimeToPassAgain: 5 * time.Second,
+		TimeToPassAgain: 7 * 24 * time.Hour,
 	},
 	TakingMedicationsQuiz: {
 		QuizId:          TakingMedicationsQuiz,
 		Name:            "Уведомления о приеме препаратов",
 		Description:     "Спросим какие препараты вы принимаете",
-		TimeToPassAgain: 5 * time.Second,
+		TimeToPassAgain: 24 * time.Hour,
 	},
 	RecommendationsQuiz: {
 		QuizId:          RecommendationsQuiz,
 		Name:            "Уведомление о рекомендациях",
 		Description:     "Спросим о ваших привычках и дадим рекомендации",
-		TimeToPassAgain: 5 * time.Second,
+		TimeToPassAgain: 14 * 24 * time.Hour,
 	},
 }
