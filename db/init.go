@@ -13,8 +13,10 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+const path = "/app/data/master.db"
+
 func ConnectDB() *gorm.DB {
-	dbPath := os.Getenv("DATABASE_PATH")
+	dbPath := path
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database! \n", err.Error())

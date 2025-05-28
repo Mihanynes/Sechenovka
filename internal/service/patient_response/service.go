@@ -77,7 +77,7 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 			}
 			body, _ := json.Marshal(payload)
 
-			resp, err := http.Post("http://push_sender:8080/api/notify", "application/json", bytes.NewReader(body))
+			resp, err := http.Post("http://push_sender:8081/api/notify", "application/json", bytes.NewReader(body))
 			if err != nil {
 				fmt.Println("Ошибка при отправке уведомления:", err)
 				return

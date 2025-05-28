@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"sync"
 
 	"github.com/SherClockHolmes/webpush-go"
@@ -19,7 +18,7 @@ func main() {
 	http.HandleFunc("/api/subscribe", handleSubscribe)
 	http.HandleFunc("/api/notify", handleNotify)
 
-	fmt.Println("Сервер запущен на http://localhost:8080")
+	fmt.Println("Сервер запущен на http://localhost:8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
@@ -51,17 +50,17 @@ func handleNotify(w http.ResponseWriter, r *http.Request) {
 	for _, sub := range subscriptions {
 		resp, err := webpush.SendNotification(body, sub, &webpush.Options{
 			TTL:             60,
-			VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
-			VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
+			VAPIDPublicKey:  "BHaXfDEPFHgdWTWGe8ldGP2YIZgE37VEn8zWEGFP7gA5fXfCftHa92UanMkn2bLeSx4CI4Cf4oUnfMk4fco58r0",
+			VAPIDPrivateKey: "5rvpzmWK_V95QDLtQEd0CN3",
 			Subscriber:      "mailto:you@example.com",
 		})
 		if err != nil {
 			fmt.Println("Ошибка отправки:", err)
 			continue
 		}
+		fmt.Println("Уведомления отправлены!")
 		defer resp.Body.Close()
 	}
 
-	fmt.Println("Уведомления отправлены!")
 	w.Write([]byte("ОК"))
 }
