@@ -78,39 +78,41 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 		if err != nil {
 			return false, err
 		}
-		log.Info("Пациент %s %s %s завершил тест с плохим результатом")
-		// Отправляем уведомление врачу
-		go func() {
-			doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
-			if err != nil {
-				log.Error(err.Error())
-				return
-			}
-			doctor, err := s.userStorage.GetUserByUserId(*doctorId)
-			if err != nil {
-				log.Error(err.Error())
-				return
-			}
-			if doctor.ChatId != nil {
-				return
-			}
-			patient, err := s.userStorage.GetUserByUserId(userId)
-			if err != nil {
-				log.Error(err.Error())
-				return
-			}
+		log.Info("Пациент завершил тест с плохим результатом")
 
-			message := fmt.Sprintf("Пациент %s %s %s завершил тест с плохим результатом. Свяжитесь с ним для проверки здоровья.", patient.FirstName, patient.LastName, patient.MiddleName)
-			params := url.Values{}
-			params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
-			params.Set("message", message)
-			requestUrl := "http://telegram_producer:8082/send" + "?" + params.Encode()
-			_, err = http.Post(requestUrl, "application/x-www-form-urlencoded", strings.NewReader(""))
-			if err != nil {
-				log.Error(fmt.Sprintf("Ошибка при отправке уведомления: %v", err))
-				return
-			}
-		}()
+		doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
+		if err != nil {
+			log.Error(err.Error())
+			return true, nil
+
+		}
+		doctor, err := s.userStorage.GetUserByUserId(*doctorId)
+		if err != nil {
+			log.Error(err.Error())
+			return true, nil
+
+		}
+		if doctor.ChatId != nil {
+			return true, nil
+		}
+		patient, err := s.userStorage.GetUserByUserId(userId)
+		if err != nil {
+			log.Error(err.Error())
+			return true, nil
+		}
+
+		message := fmt.Sprintf("Пациент %s %s %s завершил тест с плохим результатом. Свяжитесь с ним для проверки здоровья.", patient.FirstName, patient.LastName, patient.MiddleName)
+		params := url.Values{}
+		params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
+		params.Set("message", message)
+		requestUrl := "http://telegram_producer:8082/send" + "?" + params.Encode()
+		_, err = http.Post(requestUrl, "application/x-www-form-urlencoded", strings.NewReader(""))
+		if err != nil {
+			log.Error(fmt.Sprintf("Ошибка при отправке уведомления: %v", err))
+			return true, nil
+
+		}
+
 		return true, nil
 	}
 
