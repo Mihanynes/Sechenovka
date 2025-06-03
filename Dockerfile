@@ -4,7 +4,12 @@ FROM golang:1.23
 RUN apt-get update && apt-get install -y libsqlite3-dev gcc
 
 WORKDIR /app
-COPY go.mod ./
+# Копируем только файлы зависимостей сначала
+COPY go.mod go.sum ./
+
+# Скачиваем зависимости (кэшируется отдельно)
+RUN go mod download
+
 COPY . .
 
 # Выполните сборку
