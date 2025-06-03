@@ -3,30 +3,40 @@ package patient_response
 import (
 	"Sechenovka/internal/model"
 	question_service "Sechenovka/internal/service/quiz"
+	"Sechenovka/internal/storage/doctor_patient"
+	"Sechenovka/internal/storage/user"
 	user_respons_storage "Sechenovka/internal/storage/user_responses"
 	"Sechenovka/internal/storage/user_result"
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gofiber/fiber/v2/log"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 type service struct {
-	userResponsesStorage *user_respons_storage.UserResponseStorage
-	userResultStorage    *user_result.UserResultStorage
-	questionsConfig      *question_service.Service
+	userResponsesStorage  *user_respons_storage.UserResponseStorage
+	userResultStorage     *user_result.UserResultStorage
+	questionsConfig       *question_service.Service
+	doctorPatientsStorage *doctor_patient.DoctorPatientsStorage
+	userStorage           *user.UserStorage
 }
 
 func New(
 	storage *user_respons_storage.UserResponseStorage,
 	userResultStorage *user_result.UserResultStorage,
 	questionsConfig *question_service.Service,
+	doctorPatientsStorage *doctor_patient.DoctorPatientsStorage,
+	userStorage *user.UserStorage,
 ) *service {
 	return &service{
-		userResponsesStorage: storage,
-		questionsConfig:      questionsConfig,
-		userResultStorage:    userResultStorage,
+		userResponsesStorage:  storage,
+		questionsConfig:       questionsConfig,
+		userResultStorage:     userResultStorage,
+		doctorPatientsStorage: doctorPatientsStorage,
+		userStorage:           userStorage,
 	}
 }
 
@@ -71,13 +81,31 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 
 		// Отправляем уведомление врачу
 		go func() {
-			payload := map[string]string{
-				"title": "Тревога",
-				"body":  "Пациенту стало плохо. Срочно проверьте его состояние!",
+			doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
+			if err != nil {
+				log.Error(err.Error())
+				return
 			}
-			body, _ := json.Marshal(payload)
+			doctor, err := s.userStorage.GetUserByUserId(*doctorId)
+			if err != nil {
+				log.Error(err.Error())
+				return
+			}
+			if doctor.ChatId != nil {
+				return
+			}
+			patient, err := s.userStorage.GetUserByUserId(userId)
+			if err != nil {
+				log.Error(err.Error())
+				return
+			}
 
-			resp, err := http.Post("http://push_sender:8081/api/notify", "application/json", bytes.NewReader(body))
+			message := fmt.Sprintf("Пациент %s %s %s завершил тест с плохим результатом. Свяжитесь с ним для проверки здоровья.", patient.FirstName, patient.LastName, patient.MiddleName)
+
+			params := url.Values{}
+			params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
+			params.Set("message", message)
+			resp, err := http.Post("http://telegram_producer:8082/send", "application/x-www-form-urlencoded", strings.NewReader(""))
 			if err != nil {
 				fmt.Println("Ошибка при отправке уведомления:", err)
 				return

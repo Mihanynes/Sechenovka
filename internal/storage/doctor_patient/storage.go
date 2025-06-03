@@ -2,6 +2,7 @@ package doctor_patient
 
 import (
 	"Sechenovka/internal/model"
+	"Sechenovka/internal/utils/pointer"
 	"gorm.io/gorm"
 )
 
@@ -25,6 +26,18 @@ func (s *DoctorPatientsStorage) GetPatientsIdsByDoctorId(doctorID model.UserId) 
 		return nil, err
 	}
 	return model.UserIdsFromStrings(patients), nil
+}
+
+func (s *DoctorPatientsStorage) GetDoctorIdByPatientId(patientId model.UserId) (*model.UserId, error) {
+	var doctorId string
+	err := s.db.Model(DoctorPatient{}).
+		Select("doctor_id").
+		Where("patient_id = ?", patientId.String()).
+		Find(&doctorId).Error
+	if err != nil {
+		return nil, err
+	}
+	return pointer.Get(model.UserIdFromString(doctorId)), nil
 }
 
 func (s *DoctorPatientsStorage) CheckPatientLinkedToDoctor(doctorId, patientId model.UserId) bool {

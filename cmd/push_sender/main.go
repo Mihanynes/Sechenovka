@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"sync"
@@ -41,11 +42,8 @@ func handleNotify(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	payload := map[string]string{
-		"title": "ЧекАп напоминает",
-		"body":  "Самое время проверить своё здоровье! 💊",
-	}
-	body, _ := json.Marshal(payload)
+	body, _ := io.ReadAll(r.Body)
+	defer r.Body.Close()
 
 	for _, sub := range subscriptions {
 		resp, err := webpush.SendNotification(body, sub, &webpush.Options{

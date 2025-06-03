@@ -15,6 +15,14 @@ func New(db *gorm.DB) *UserStorage {
 	}
 }
 
+func (s *UserStorage) SetField(field string, value interface{}, userID string) error {
+	err := s.db.Model(&User{}).Where("user_id = ?", userID).Update(field, value).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *UserStorage) GetUserByUsername(username string) (*User, error) {
 	userFromDB := User{}
 	result := s.db.First(&userFromDB, "username = ?", username)

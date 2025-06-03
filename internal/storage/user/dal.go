@@ -11,4 +11,5 @@ type User struct {
 	Email      string `gorm:"type:varchar(100);not null"`
 	Password   string `gorm:"type:varchar(100);not null"`
 	IsAdmin    bool   `gorm:"default:false;not null"`
+	ChatId     *int64 `gorm:"type:bigint"`
 }

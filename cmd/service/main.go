@@ -8,6 +8,7 @@ import (
 	"Sechenovka/internal/handlers/middleware"
 	"Sechenovka/internal/handlers/patient"
 	questions_handler "Sechenovka/internal/handlers/quiz"
+	"Sechenovka/internal/handlers/telegram"
 	user_response_handler "Sechenovka/internal/handlers/user_response"
 	auth_service "Sechenovka/internal/service/auth"
 	"Sechenovka/internal/service/patient_info"
@@ -75,8 +76,10 @@ func main() {
 	questionsHandler := questions_handler.New(questionsConfigService)
 
 	authHandler := authhandler.New(authService, doctorPatientStorage)
-	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService)
+	userResponseService := user_response_service.New(userResponseStorage, userResultStorage, questionsConfigService, doctorPatientStorage, userStorage)
 	userResponseHandler := user_response_handler.New(userResponseService, userResponseStorage, questionsConfigService, doctorPatientStorage, userResultStorage, userStorage)
+
+	telegramHandeler := telegram.NewHandler(userStorage, authService)
 
 	middleware := middleware.New(db)
 
@@ -90,6 +93,8 @@ func main() {
 		router.Post("/register/user", middleware.AdminAuth, authHandler.RegisterUser)
 		router.Post("/register/admin", authHandler.RegisterAdmin)
 		router.Post("/login", authHandler.Login)
+		router.Post("/telegram/login", telegramHandeler.SetChatId)
+
 	})
 	micro.Route("/questions", func(router fiber.Router) {
 		router.Post("/start", middleware.UserAuth, questionsHandler.StartQuiz)

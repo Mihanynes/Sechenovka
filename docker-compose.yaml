@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   dev:
 
@@ -48,6 +46,25 @@ services:
       - dev
     restart: always
 
+  telegram_consumer:
+    container_name: telegram_consumer
+    build:
+      context: ./Sechenovka
+    command: ./telegram_consumer
+    networks:
+      - dev
+    restart: always
+
+  telegram_producer:
+    container_name: telegram_producer
+    build:
+      context: ./Sechenovka
+    command: ./telegram_producer
+    ports:
+      - "3012:8082"
+    networks:
+      - dev
+    restart: always
 
   frontend:
     container_name: frontend
