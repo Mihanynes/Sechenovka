@@ -92,7 +92,8 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 			return true, nil
 
 		}
-		if doctor.ChatId != nil {
+		if doctor.ChatId == nil {
+			log.Error("Нет чата для врача")
 			return true, nil
 		}
 		patient, err := s.userStorage.GetUserByUserId(userId)
