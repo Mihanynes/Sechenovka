@@ -78,7 +78,7 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 		if err != nil {
 			return false, err
 		}
-
+		log.Info("Пациент %s %s %s завершил тест с плохим результатом")
 		// Отправляем уведомление врачу
 		go func() {
 			doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
@@ -101,16 +101,15 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 			}
 
 			message := fmt.Sprintf("Пациент %s %s %s завершил тест с плохим результатом. Свяжитесь с ним для проверки здоровья.", patient.FirstName, patient.LastName, patient.MiddleName)
-
 			params := url.Values{}
 			params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
 			params.Set("message", message)
-			resp, err := http.Post("http://telegram_producer:8082/send", "application/x-www-form-urlencoded", strings.NewReader(""))
+			requestUrl := "http://telegram_producer:8082/send" + "?" + params.Encode()
+			_, err = http.Post(requestUrl, "application/x-www-form-urlencoded", strings.NewReader(""))
 			if err != nil {
-				fmt.Println("Ошибка при отправке уведомления:", err)
+				log.Error(fmt.Sprintf("Ошибка при отправке уведомления: %v", err))
 				return
 			}
-			defer resp.Body.Close()
 		}()
 		return true, nil
 	}
