@@ -10,7 +10,7 @@ servers:
 paths:
   /auth/login:
     post:
-      summary: User login
+      summary: Аутентификация пользователя.
       description: Аутентификация пользователя.
       tags:
         - Auth
@@ -36,7 +36,7 @@ paths:
 
   /auth/logout:
     post:
-      summary: User logout
+      summary: Завершение сессии пользователя.
       description: Завершение сессии пользователя.
       tags:
         - Auth
@@ -54,7 +54,7 @@ paths:
 
   /auth/register/user:
     post:
-      summary: User registration
+      summary: Регистрация нового пользователя.
       description: Регистрация нового пользователя.
       tags:
         - Auth
@@ -84,7 +84,7 @@ paths:
 
   /auth/register/admin:
     post:
-      summary: Admin registration
+      summary: Регистрация нового администратора(врача).
       description: Регистрация нового администратора.
       tags:
         - Auth
@@ -112,10 +112,42 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /user/info/patient:
-    post:
-      summary: Get patient info
+  /user/info/get:
+    get:
+      summary: Получает информацию о пациенте по его идентификатору.
       description: Получает информацию о пациенте по его идентификатору.
+      tags:
+        - Patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPatientInfoIn'
+      responses:
+        '200':
+          description: Успешный ответ с данными пациента.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPatientInfoOut'
+        '400':
+          description: Ошибка запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Ошибка сервера.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/info/uploadAvatar:
+    get:
+      summary: Загрузка аватара
+      description: Ручка для загрузки аватара пользователя.
       tags:
         - Patient
       requestBody:
@@ -146,7 +178,7 @@ paths:
 
   /questions/start:
     post:
-      summary: Start a new quiz
+      summary: Инициализирует новую сессию викторины и возвращает первый вопрос.
       description: Инициализирует новую сессию викторины и возвращает первый вопрос.
       tags:
         - Quiz
@@ -165,9 +197,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /questions/get:
-    post:
-      summary: Get next question
-      description: Возвращает следующий вопрос викторины.
+    get:
+      summary: Возвращает вопрос викторины по его идентификатору.
+      description: Возвращает вопрос викторины по его идентификатору.
       tags:
         - Quiz
       requestBody:
@@ -198,10 +230,10 @@ paths:
 
   /user/response/save:
     post:
-      summary: Save user's response
+      summary:  Сохраняет ответ пользователя на вопрос викторины.
       description: Сохраняет ответ пользователя на вопрос викторины.
       tags:
-        - User
+        - Quiz
       requestBody:
         required: true
         content:
@@ -235,10 +267,10 @@ paths:
 
   /user/response/get:
     post:
-      summary: Get user's responses
+      summary: Получает ответы пользователя на вопросы викторины.
       description: Получает ответы пользователя на вопросы викторины.
       tags:
-        - User
+        - Doctor
       requestBody:
         required: true
         content:
@@ -265,12 +297,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /user/response/results:
-    post:
-      summary: Get users' results
+  /admin/patient/results:
+    get:
+      summary: Получает результаты пациентов прохождения викторины.
       description: Получает результаты пациентов прохождения викторины.
       tags:
-        - User
+        - Doctor
       responses:
         '200':
           description: Успешный ответ с результатами пользователей.
@@ -290,6 +322,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /admin/patient/list:
+    get:
+      summary: Получает список пациентов.
+      description: Получает список пациентов.
+      tags:
+        - Doctor
+      responses:
+        '200':
+          description: Успешный ответ с результатами пользователей.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersResultOutList'
+        '400':
+          description: Ошибка запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Ошибка сервера при получении результатов.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 
 components:
   securitySchemes:
@@ -467,13 +525,17 @@ components:
     SaveUserResponseIn:
       type: object
       properties:
-        response_id:
-          type: integer
+        response_ids:
+          type: array
           description: Идентификатор ответа.
-          example: 1
+          example: [5,10,11]
         pass_num:
           type: integer
           description: Номер прохождения викторины.
+          example: 2
+        quiz_id:
+          type: integer
+          description: Идентификатор опросника.
           example: 1
       required:
         - response_id

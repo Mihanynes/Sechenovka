@@ -1,44 +1,87 @@
 - question_text: "Какие препараты вы принимаете? (МНОЖЕСТВЕННЫЙ ВЫБОР)"
   question_id: 1
   img_name: "tm_1.png"
-  score_to_fail: -4
   multiple_choice: true
   options:
     - answer_text: "Бета-блокаторы (бисопролол/метопролол)"
       answer_id: 1
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Аспирин (кардиомагнил/ТромбоАСС)"
       answer_id: 2
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Другие противотромботические препараты (клопидогрел/прасугрел/тикагрелор)"
       answer_id: 3
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Ингибиторы АПФ (эналаприл/периндоприл/лизиноприл/фозиноприл и т.д.)"
       answer_id: 4
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Антагонисты ренин-ангиотензиновых рецепторов (Лозартан/Валсартан/Телмисартан и т.д.)"
       answer_id: 5
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Юперио (валсартан+сакубитрил)"
       answer_id: 6
       question_id: 1
       points: 1
-      next_question_id: 2
+      next_question_id: 3
     - answer_text: "Статины (аторвастатин/розувастатин/питувастатин/симвастатин)"
       answer_id: 7
       question_id: 1
       points: 1
       next_question_id: 2
+
+- question_text: "Какие препараты вы принимаете? (МНОЖЕСТВЕННЫЙ ВЫБОР)"
+  question_id: 3
+  img_name: "tm_1.png"
+  multiple_choice: true
+  options:
+    - answer_text: "Аспирин (Кардиомагнил / ТромбоАСС)"
+      answer_id: 14
+      question_id: 3
+      points: 1
+      next_question_id: 4
+    - answer_text: "Клопидогрел / Прасугрел / Тикагрелор "
+      answer_id: 15
+      question_id: 3
+      points: 1
+      next_question_id: 4
+
+- question_text: "Какие препараты вы принимаете? (МНОЖЕСТВЕННЫЙ ВЫБОР)"
+  question_id: 4
+  img_name: "tm_1.png"
+  multiple_choice: true
+  score_to_fail: -4
+  options:
+    - answer_text: "Варфарин"
+      answer_id: 16
+      question_id: 4
+      points: 0
+      next_question_id: 2
+    - answer_text: "Дабигатран (Прадакса / Аксартобан и др.)"
+      answer_id: 17
+      question_id: 4
+      points: 0
+      next_question_id: 2
+    - answer_text: "Ривароксабан (Ксарелто / Аровабан / Зинакорен и др.)"
+      answer_id: 18
+      question_id: 4
+      points: 0
+      next_question_id: 2
+    - answer_text: "Апиксабан (Эликвис / Апиклис и др.)"
+      answer_id: 19
+      question_id: 4
+      points: 0
+      next_question_id: 2
+
 
 - question_text: "Выберете причины, почему их (…) не принимаете: (МНОЖЕСТВЕННЫЙ ВЫБОР)"
   question_id: 2
@@ -60,13 +103,13 @@
       is_ended: true
     - answer_text: "Кровоточивость"
       answer_id: 11
-      question_id: 2
+      question_id: 4
       is_ended: true
     - answer_text: "Не выдали в поликлинике/аптеке"
       answer_id: 12
-      question_id: 2
+      question_id: 4
       is_ended: true
     - answer_text: "Любые другие причины"
       answer_id: 13
-      question_id: 2
+      question_id: 4
       is_ended: true

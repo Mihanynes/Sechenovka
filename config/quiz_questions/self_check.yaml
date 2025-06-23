@@ -56,28 +56,28 @@
 - question_text: "Как часто они возникают?"
   question_id: 4
   img_name: "1.png"
-  score_to_fail: 3
+  score_to_fail: 4
   options:
     - answer_text: "Несколько раз в месяц"
       answer_id: 9
       question_id: 4
       points: 1
-      is_ended: true
+      next_question_id: 5
     - answer_text: "Несколько раз в неделю"
       answer_id: 10
       question_id: 4
       points: 2
-      is_ended: true
+      next_question_id: 5
     - answer_text: "Почти каждый день"
       answer_id: 11
       question_id: 4
       points: 3
-      is_ended: true
+      next_question_id: 5
     - answer_text: "Однократно"
       answer_id: 12
       question_id: 4
       points: 1
-      is_ended: true
+      next_question_id: 5
 
 - question_text: "Есть ли у вас одышка?"
   question_id: 5

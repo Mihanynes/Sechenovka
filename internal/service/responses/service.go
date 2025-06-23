@@ -1,6 +1,7 @@
-package patient_response
+package responses
 
 import (
+	"Sechenovka/config"
 	"Sechenovka/internal/model"
 	question_service "Sechenovka/internal/service/quiz"
 	"Sechenovka/internal/storage/doctor_patient"
@@ -15,6 +16,18 @@ import (
 	"strconv"
 	"strings"
 )
+
+const tgProducerPath = "http://telegram_producer:8082/send"
+
+const (
+	selfCheckMessage         = "Пациент %s %s %s завершил тест о состоянии здоровья c плохим результатом. Свяжитесь с ним."
+	takingMedicationsMessage = "Пациент %s %s %s завершил тест о приеме препаратов c плохим результатом. Свяжитесь с ним."
+)
+
+var quizToMessage = map[int]string{
+	config.SelfCheckQuiz:         selfCheckMessage,
+	config.TakingMedicationsQuiz: takingMedicationsMessage,
+}
 
 type service struct {
 	userResponsesStorage  *user_respons_storage.UserResponseStorage
@@ -80,39 +93,38 @@ func (s *service) SaveUserResponses(userId model.UserId, responseIds []int, pass
 		}
 		log.Info("Пациент завершил тест с плохим результатом")
 
-		doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
-		if err != nil {
-			log.Error(err.Error())
-			return true, nil
+		go func() {
+			doctorId, err := s.doctorPatientsStorage.GetDoctorIdByPatientId(userId)
+			if err != nil {
+				log.Error(err.Error())
 
-		}
-		doctor, err := s.userStorage.GetUserByUserId(*doctorId)
-		if err != nil {
-			log.Error(err.Error())
-			return true, nil
+			}
+			doctor, err := s.userStorage.GetUserByUserId(*doctorId)
+			if err != nil {
+				log.Error(err.Error())
 
-		}
-		if doctor.ChatId == nil {
-			log.Error("Нет чата для врача")
-			return true, nil
-		}
-		patient, err := s.userStorage.GetUserByUserId(userId)
-		if err != nil {
-			log.Error(err.Error())
-			return true, nil
-		}
+			}
+			if doctor.ChatId == nil {
+				log.Error("Нет чата для врача")
 
-		message := fmt.Sprintf("Пациент %s %s %s завершил тест с плохим результатом. Свяжитесь с ним для проверки здоровья.", patient.FirstName, patient.LastName, patient.MiddleName)
-		params := url.Values{}
-		params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
-		params.Set("message", message)
-		requestUrl := "http://telegram_producer:8082/send" + "?" + params.Encode()
-		_, err = http.Post(requestUrl, "application/x-www-form-urlencoded", strings.NewReader(""))
-		if err != nil {
-			log.Error(fmt.Sprintf("Ошибка при отправке уведомления: %v", err))
-			return true, nil
+			}
+			patient, err := s.userStorage.GetUserByUserId(userId)
+			if err != nil {
+				log.Error(err.Error())
 
-		}
+			}
+			message := fmt.Sprintf(quizToMessage[quizId], patient.FirstName, patient.LastName, patient.MiddleName)
+			params := url.Values{}
+			params.Set("chatId", strconv.FormatInt(*doctor.ChatId, 10))
+			params.Set("message", message)
+			requestUrl := tgProducerPath + "?" + params.Encode()
+			_, err = http.Post(requestUrl, "application/x-www-form-urlencoded", strings.NewReader(""))
+			if err != nil {
+				log.Error(fmt.Sprintf("Ошибка при отправке уведомления: %v", err))
+				return
+
+			}
+		}()
 
 		return true, nil
 	}

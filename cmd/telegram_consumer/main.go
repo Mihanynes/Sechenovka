@@ -62,7 +62,7 @@ func main() {
 				userStates[chatID] = &UserState{
 					WaitingForLogin: true,
 				}
-				msg := tgbotapi.NewMessage(chatID, "Введите логин, который вы использовали при регистрации на сайте💻:")
+				msg := tgbotapi.NewMessage(chatID, "Введите логин, который вы использовали при регистрации на сайте 💻:")
 				bot.Send(msg)
 			default:
 				msg := tgbotapi.NewMessage(chatID, welcomeMessage)
@@ -84,7 +84,7 @@ func handleUserState(chatID int64, text string, state *UserState) {
 		state.WaitingForLogin = false
 		state.WaitingForPassword = true
 
-		msg := tgbotapi.NewMessage(chatID, "Введите пароль, который вы использовали при регистрации на сайте💻:")
+		msg := tgbotapi.NewMessage(chatID, "Введите пароль, который вы использовали при регистрации на сайте 💻:")
 		bot.Send(msg)
 		return
 	}
