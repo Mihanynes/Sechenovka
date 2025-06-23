@@ -82,7 +82,6 @@
       points: 0
       next_question_id: 2
 
-
 - question_text: "Выберете причины, почему их (…) не принимаете: (МНОЖЕСТВЕННЫЙ ВЫБОР)"
   question_id: 2
   img_name: "tm_1.png"
@@ -103,13 +102,13 @@
       is_ended: true
     - answer_text: "Кровоточивость"
       answer_id: 11
-      question_id: 4
+      question_id: 2
       is_ended: true
     - answer_text: "Не выдали в поликлинике/аптеке"
       answer_id: 12
-      question_id: 4
+      question_id: 2
       is_ended: true
     - answer_text: "Любые другие причины"
       answer_id: 13
-      question_id: 4
+      question_id: 2
       is_ended: true

@@ -73,7 +73,7 @@ func (s *Service) GetFirstUserQuestion(userId model.UserId, quizId int) (int, *m
 func (s *Service) GetQuestionByQuestionId(questionId int, quizId int) (*model.Question, error) {
 	questions, ok := s.quizConfig[quizId]
 	if !ok {
-		return nil, fmt.Errorf("тест с id '%v' не найден", quizId)
+		return nil, fmt.Errorf("тест с quizId '%v' не найден", quizId)
 	}
 
 	for _, question := range questions {
@@ -81,7 +81,7 @@ func (s *Service) GetQuestionByQuestionId(questionId int, quizId int) (*model.Qu
 			return question, nil
 		}
 	}
-	return nil, fmt.Errorf("вопрос с текстом '%v' не найден", questionId)
+	return nil, fmt.Errorf("вопрос с questionId '%v' не найден", questionId)
 }
 
 func (s *Service) GetQuestionByResponseId(responseId int, quizId int) (*model.Question, error) {
